@@ -1,0 +1,2090 @@
+{
+  "BULBASAUR": [
+    {
+      "to": "IVYSAUR",
+      "method": "Level",
+      "param": 16,
+      "text": "Level 16"
+    }
+  ],
+  "IVYSAUR": [
+    {
+      "to": "VENUSAUR",
+      "method": "Level",
+      "param": 32,
+      "text": "Level 32"
+    }
+  ],
+  "CHARMANDER": [
+    {
+      "to": "CHARMELEON",
+      "method": "Level",
+      "param": 16,
+      "text": "Level 16"
+    }
+  ],
+  "CHARMELEON": [
+    {
+      "to": "CHARIZARD",
+      "method": "Level",
+      "param": 36,
+      "text": "Level 36"
+    }
+  ],
+  "SQUIRTLE": [
+    {
+      "to": "WARTORTLE",
+      "method": "Level",
+      "param": 16,
+      "text": "Level 16"
+    }
+  ],
+  "WARTORTLE": [
+    {
+      "to": "BLASTOISE",
+      "method": "Level",
+      "param": 36,
+      "text": "Level 36"
+    }
+  ],
+  "CATERPIE": [
+    {
+      "to": "METAPOD",
+      "method": "Level",
+      "param": 7,
+      "text": "Level 7"
+    }
+  ],
+  "METAPOD": [
+    {
+      "to": "BUTTERFREE",
+      "method": "Level",
+      "param": 10,
+      "text": "Level 10"
+    }
+  ],
+  "WEEDLE": [
+    {
+      "to": "KAKUNA",
+      "method": "Level",
+      "param": 7,
+      "text": "Level 7"
+    }
+  ],
+  "KAKUNA": [
+    {
+      "to": "BEEDRILL",
+      "method": "Level",
+      "param": 10,
+      "text": "Level 10"
+    }
+  ],
+  "PIDGEY": [
+    {
+      "to": "PIDGEOTTO",
+      "method": "Level",
+      "param": 18,
+      "text": "Level 18"
+    }
+  ],
+  "PIDGEOTTO": [
+    {
+      "to": "PIDGEOT",
+      "method": "Level",
+      "param": 36,
+      "text": "Level 36"
+    }
+  ],
+  "RATTATA": [
+    {
+      "to": "RATICATE",
+      "method": "Level",
+      "param": 20,
+      "text": "Level 20"
+    }
+  ],
+  "SPEAROW": [
+    {
+      "to": "FEAROW",
+      "method": "Level",
+      "param": 20,
+      "text": "Level 20"
+    }
+  ],
+  "EKANS": [
+    {
+      "to": "ARBOK",
+      "method": "Level",
+      "param": 22,
+      "text": "Level 22"
+    }
+  ],
+  "PIKACHU": [
+    {
+      "to": "RAICHU",
+      "method": "Item",
+      "param": "THUNDERSTONE",
+      "text": "Use Thunderstone"
+    }
+  ],
+  "SANDSHREW": [
+    {
+      "to": "SANDSLASH",
+      "method": "Level",
+      "param": 22,
+      "text": "Level 22"
+    }
+  ],
+  "NIDORANfE": [
+    {
+      "to": "NIDORINA",
+      "method": "Level",
+      "param": 16,
+      "text": "Level 16"
+    }
+  ],
+  "NIDORINA": [
+    {
+      "to": "NIDOQUEEN",
+      "method": "Item",
+      "param": "MOONSTONE",
+      "text": "Use Moonstone"
+    }
+  ],
+  "NIDORANmA": [
+    {
+      "to": "NIDORINO",
+      "method": "Level",
+      "param": 16,
+      "text": "Level 16"
+    }
+  ],
+  "NIDORINO": [
+    {
+      "to": "NIDOKING",
+      "method": "Item",
+      "param": "MOONSTONE",
+      "text": "Use Moonstone"
+    }
+  ],
+  "CLEFAIRY": [
+    {
+      "to": "CLEFABLE",
+      "method": "Item",
+      "param": "MOONSTONE",
+      "text": "Use Moonstone"
+    }
+  ],
+  "VULPIX": [
+    {
+      "to": "NINETALES",
+      "method": "Item",
+      "param": "FIRESTONE",
+      "text": "Use Firestone"
+    }
+  ],
+  "JIGGLYPUFF": [
+    {
+      "to": "WIGGLYTUFF",
+      "method": "Item",
+      "param": "MOONSTONE",
+      "text": "Use Moonstone"
+    }
+  ],
+  "ZUBAT": [
+    {
+      "to": "GOLBAT",
+      "method": "Level",
+      "param": 22,
+      "text": "Level 22"
+    }
+  ],
+  "GOLBAT": [
+    {
+      "to": "CROBAT",
+      "method": "Level",
+      "param": 40,
+      "text": "Level 40"
+    }
+  ],
+  "ODDISH": [
+    {
+      "to": "GLOOM",
+      "method": "Level",
+      "param": 21,
+      "text": "Level 21"
+    }
+  ],
+  "GLOOM": [
+    {
+      "to": "VILEPLUME",
+      "method": "Item",
+      "param": "LEAFSTONE",
+      "text": "Use Leafstone"
+    },
+    {
+      "to": "BELLOSSOM",
+      "method": "Item",
+      "param": "SUNSTONE",
+      "text": "Use Sunstone"
+    }
+  ],
+  "PARAS": [
+    {
+      "to": "PARASECT",
+      "method": "Level",
+      "param": 24,
+      "text": "Level 24"
+    }
+  ],
+  "VENONAT": [
+    {
+      "to": "VENOMOTH",
+      "method": "Level",
+      "param": 31,
+      "text": "Level 31"
+    }
+  ],
+  "DIGLETT": [
+    {
+      "to": "DUGTRIO",
+      "method": "Level",
+      "param": 26,
+      "text": "Level 26"
+    }
+  ],
+  "MEOWTH": [
+    {
+      "to": "PERSIAN",
+      "method": "Level",
+      "param": 28,
+      "text": "Level 28"
+    }
+  ],
+  "PSYDUCK": [
+    {
+      "to": "GOLDUCK",
+      "method": "Level",
+      "param": 33,
+      "text": "Level 33"
+    }
+  ],
+  "MANKEY": [
+    {
+      "to": "PRIMEAPE",
+      "method": "Level",
+      "param": 28,
+      "text": "Level 28"
+    }
+  ],
+  "GROWLITHE": [
+    {
+      "to": "ARCANINE",
+      "method": "Item",
+      "param": "FIRESTONE",
+      "text": "Use Firestone"
+    }
+  ],
+  "POLIWAG": [
+    {
+      "to": "POLIWHIRL",
+      "method": "Level",
+      "param": 25,
+      "text": "Level 25"
+    }
+  ],
+  "POLIWHIRL": [
+    {
+      "to": "POLIWRATH",
+      "method": "Item",
+      "param": "WATERSTONE",
+      "text": "Use Waterstone"
+    },
+    {
+      "to": "POLITOED",
+      "method": "Level",
+      "param": 37,
+      "text": "Level 37"
+    },
+    {
+      "to": "POLITOED",
+      "method": "Item",
+      "param": "KINGSROCK",
+      "text": "Use Kingsrock"
+    }
+  ],
+  "ABRA": [
+    {
+      "to": "KADABRA",
+      "method": "Level",
+      "param": 16,
+      "text": "Level 16"
+    }
+  ],
+  "KADABRA": [
+    {
+      "to": "ALAKAZAM",
+      "method": "Level",
+      "param": 40,
+      "text": "Level 40"
+    },
+    {
+      "to": "ALAKAZAM",
+      "method": "Item",
+      "param": "LINKINGCORD",
+      "text": "Use Linkingcord"
+    }
+  ],
+  "MACHOP": [
+    {
+      "to": "MACHOKE",
+      "method": "Level",
+      "param": 28,
+      "text": "Level 28"
+    }
+  ],
+  "MACHOKE": [
+    {
+      "to": "MACHAMP",
+      "method": "Level",
+      "param": 40,
+      "text": "Level 40"
+    },
+    {
+      "to": "MACHAMP",
+      "method": "Item",
+      "param": "LINKINGCORD",
+      "text": "Use Linkingcord"
+    }
+  ],
+  "BELLSPROUT": [
+    {
+      "to": "WEEPINBELL",
+      "method": "Level",
+      "param": 21,
+      "text": "Level 21"
+    }
+  ],
+  "WEEPINBELL": [
+    {
+      "to": "VICTREEBEL",
+      "method": "Item",
+      "param": "LEAFSTONE",
+      "text": "Use Leafstone"
+    }
+  ],
+  "TENTACOOL": [
+    {
+      "to": "TENTACRUEL",
+      "method": "Level",
+      "param": 30,
+      "text": "Level 30"
+    }
+  ],
+  "GEODUDE": [
+    {
+      "to": "GRAVELER",
+      "method": "Level",
+      "param": 25,
+      "text": "Level 25"
+    }
+  ],
+  "GRAVELER": [
+    {
+      "to": "GOLEM",
+      "method": "Level",
+      "param": 40,
+      "text": "Level 40"
+    },
+    {
+      "to": "GOLEM",
+      "method": "Item",
+      "param": "LINKINGCORD",
+      "text": "Use Linkingcord"
+    }
+  ],
+  "PONYTA": [
+    {
+      "to": "RAPIDASH",
+      "method": "Level",
+      "param": 40,
+      "text": "Level 40"
+    }
+  ],
+  "SLOWPOKE": [
+    {
+      "to": "SLOWBRO",
+      "method": "Level",
+      "param": 37,
+      "text": "Level 37"
+    },
+    {
+      "to": "SLOWKING",
+      "method": "Item",
+      "param": "WATERSTONE",
+      "text": "Use Waterstone"
+    },
+    {
+      "to": "SLOWKING",
+      "method": "Item",
+      "param": "KINGSROCK",
+      "text": "Use Kingsrock"
+    }
+  ],
+  "MAGNEMITE": [
+    {
+      "to": "MAGNETON",
+      "method": "Level",
+      "param": 30,
+      "text": "Level 30"
+    }
+  ],
+  "MAGNETON": [
+    {
+      "to": "MAGNEZONE",
+      "method": "Item",
+      "param": "MAGNETSTONE",
+      "text": "Use Magnetstone"
+    }
+  ],
+  "DODUO": [
+    {
+      "to": "DODRIO",
+      "method": "Level",
+      "param": 31,
+      "text": "Level 31"
+    }
+  ],
+  "SEEL": [
+    {
+      "to": "DEWGONG",
+      "method": "Level",
+      "param": 34,
+      "text": "Level 34"
+    }
+  ],
+  "GRIMER": [
+    {
+      "to": "MUK",
+      "method": "Level",
+      "param": 38,
+      "text": "Level 38"
+    }
+  ],
+  "SHELLDER": [
+    {
+      "to": "CLOYSTER",
+      "method": "Item",
+      "param": "WATERSTONE",
+      "text": "Use Waterstone"
+    }
+  ],
+  "GASTLY": [
+    {
+      "to": "HAUNTER",
+      "method": "Level",
+      "param": 25,
+      "text": "Level 25"
+    }
+  ],
+  "HAUNTER": [
+    {
+      "to": "GENGAR",
+      "method": "Level",
+      "param": 40,
+      "text": "Level 40"
+    },
+    {
+      "to": "GENGAR",
+      "method": "Item",
+      "param": "LINKINGCORD",
+      "text": "Use Linkingcord"
+    }
+  ],
+  "ONIX": [
+    {
+      "to": "STEELIX",
+      "method": "Level",
+      "param": 40,
+      "text": "Level 40"
+    },
+    {
+      "to": "STEELIX",
+      "method": "Item",
+      "param": "METALCOAT",
+      "text": "Use Metalcoat"
+    }
+  ],
+  "DROWZEE": [
+    {
+      "to": "HYPNO",
+      "method": "Level",
+      "param": 26,
+      "text": "Level 26"
+    }
+  ],
+  "KRABBY": [
+    {
+      "to": "KINGLER",
+      "method": "Level",
+      "param": 28,
+      "text": "Level 28"
+    }
+  ],
+  "VOLTORB": [
+    {
+      "to": "ELECTRODE",
+      "method": "Level",
+      "param": 30,
+      "text": "Level 30"
+    }
+  ],
+  "EXEGGCUTE": [
+    {
+      "to": "EXEGGUTOR",
+      "method": "Item",
+      "param": "LEAFSTONE",
+      "text": "Use Leafstone"
+    }
+  ],
+  "CUBONE": [
+    {
+      "to": "MAROWAK",
+      "method": "Level",
+      "param": 28,
+      "text": "Level 28"
+    }
+  ],
+  "LICKITUNG": [
+    {
+      "to": "LICKILICKY",
+      "method": "HasMove",
+      "param": "ROLLOUT",
+      "text": "Level up knowing Rollout"
+    }
+  ],
+  "KOFFING": [
+    {
+      "to": "WEEZING",
+      "method": "Level",
+      "param": 35,
+      "text": "Level 35"
+    }
+  ],
+  "RHYHORN": [
+    {
+      "to": "RHYDON",
+      "method": "Level",
+      "param": 42,
+      "text": "Level 42"
+    }
+  ],
+  "RHYDON": [
+    {
+      "to": "RHYPERIOR",
+      "method": "Level",
+      "param": 55,
+      "text": "Level 55"
+    },
+    {
+      "to": "RHYPERIOR",
+      "method": "Item",
+      "param": "PROTECTOR",
+      "text": "Use Protector"
+    }
+  ],
+  "CHANSEY": [
+    {
+      "to": "BLISSEY",
+      "method": "Level",
+      "param": 42,
+      "text": "Level 42"
+    }
+  ],
+  "TANGELA": [
+    {
+      "to": "TANGROWTH",
+      "method": "HasMove",
+      "param": "ANCIENTPOWER",
+      "text": "Level up knowing Ancientpower"
+    }
+  ],
+  "HORSEA": [
+    {
+      "to": "SEADRA",
+      "method": "Level",
+      "param": 32,
+      "text": "Level 32"
+    }
+  ],
+  "SEADRA": [
+    {
+      "to": "KINGDRA",
+      "method": "Level",
+      "param": 50,
+      "text": "Level 50"
+    },
+    {
+      "to": "KINGDRA",
+      "method": "Item",
+      "param": "DRAGONSCALE",
+      "text": "Use Dragonscale"
+    }
+  ],
+  "GOLDEEN": [
+    {
+      "to": "SEAKING",
+      "method": "Level",
+      "param": 33,
+      "text": "Level 33"
+    }
+  ],
+  "STARYU": [
+    {
+      "to": "STARMIE",
+      "method": "Item",
+      "param": "WATERSTONE",
+      "text": "Use Waterstone"
+    }
+  ],
+  "SCYTHER": [
+    {
+      "to": "SCIZOR",
+      "method": "Level",
+      "param": 40,
+      "text": "Level 40"
+    },
+    {
+      "to": "SCIZOR",
+      "method": "Item",
+      "param": "METALCOAT",
+      "text": "Use Metalcoat"
+    }
+  ],
+  "ELECTABUZZ": [
+    {
+      "to": "ELECTIVIRE",
+      "method": "Level",
+      "param": 50,
+      "text": "Level 50"
+    },
+    {
+      "to": "ELECTIVIRE",
+      "method": "Item",
+      "param": "ELECTIRIZER",
+      "text": "Use Electirizer"
+    }
+  ],
+  "MAGMAR": [
+    {
+      "to": "MAGMORTAR",
+      "method": "Level",
+      "param": 50,
+      "text": "Level 50"
+    },
+    {
+      "to": "MAGMORTAR",
+      "method": "Item",
+      "param": "MAGMARIZER",
+      "text": "Use Magmarizer"
+    }
+  ],
+  "MAGIKARP": [
+    {
+      "to": "GYARADOS",
+      "method": "Level",
+      "param": 20,
+      "text": "Level 20"
+    }
+  ],
+  "EEVEE": [
+    {
+      "to": "VAPOREON",
+      "method": "Item",
+      "param": "WATERSTONE",
+      "text": "Use Waterstone"
+    },
+    {
+      "to": "JOLTEON",
+      "method": "Item",
+      "param": "THUNDERSTONE",
+      "text": "Use Thunderstone"
+    },
+    {
+      "to": "FLAREON",
+      "method": "Item",
+      "param": "FIRESTONE",
+      "text": "Use Firestone"
+    },
+    {
+      "to": "ESPEON",
+      "method": "Item",
+      "param": "SUNSTONE",
+      "text": "Use Sunstone"
+    },
+    {
+      "to": "UMBREON",
+      "method": "Item",
+      "param": "MOONSTONE",
+      "text": "Use Moonstone"
+    },
+    {
+      "to": "LEAFEON",
+      "method": "Item",
+      "param": "LEAFSTONE",
+      "text": "Use Leafstone"
+    },
+    {
+      "to": "GLACEON",
+      "method": "Item",
+      "param": "ICESTONE",
+      "text": "Use Icestone"
+    },
+    {
+      "to": "SYLVEON",
+      "method": "Item",
+      "param": "SHINYSTONE",
+      "text": "Use Shinystone"
+    }
+  ],
+  "PORYGON": [
+    {
+      "to": "PORYGON2",
+      "method": "Item",
+      "param": "UPGRADE",
+      "text": "Use Upgrade"
+    }
+  ],
+  "OMANYTE": [
+    {
+      "to": "OMASTAR",
+      "method": "Level",
+      "param": 40,
+      "text": "Level 40"
+    }
+  ],
+  "KABUTO": [
+    {
+      "to": "KABUTOPS",
+      "method": "Level",
+      "param": 40,
+      "text": "Level 40"
+    }
+  ],
+  "DRATINI": [
+    {
+      "to": "DRAGONAIR",
+      "method": "Level",
+      "param": 30,
+      "text": "Level 30"
+    }
+  ],
+  "DRAGONAIR": [
+    {
+      "to": "DRAGONITE",
+      "method": "Level",
+      "param": 55,
+      "text": "Level 55"
+    }
+  ],
+  "CHIKORITA": [
+    {
+      "to": "BAYLEEF",
+      "method": "Level",
+      "param": 16,
+      "text": "Level 16"
+    }
+  ],
+  "BAYLEEF": [
+    {
+      "to": "MEGANIUM",
+      "method": "Level",
+      "param": 32,
+      "text": "Level 32"
+    }
+  ],
+  "CYNDAQUIL": [
+    {
+      "to": "QUILAVA",
+      "method": "Level",
+      "param": 14,
+      "text": "Level 14"
+    }
+  ],
+  "QUILAVA": [
+    {
+      "to": "TYPHLOSION",
+      "method": "Level",
+      "param": 36,
+      "text": "Level 36"
+    }
+  ],
+  "TOTODILE": [
+    {
+      "to": "CROCONAW",
+      "method": "Level",
+      "param": 18,
+      "text": "Level 18"
+    }
+  ],
+  "CROCONAW": [
+    {
+      "to": "FERALIGATR",
+      "method": "Level",
+      "param": 30,
+      "text": "Level 30"
+    }
+  ],
+  "SENTRET": [
+    {
+      "to": "FURRET",
+      "method": "Level",
+      "param": 15,
+      "text": "Level 15"
+    }
+  ],
+  "HOOTHOOT": [
+    {
+      "to": "NOCTOWL",
+      "method": "Level",
+      "param": 20,
+      "text": "Level 20"
+    }
+  ],
+  "LEDYBA": [
+    {
+      "to": "LEDIAN",
+      "method": "Level",
+      "param": 18,
+      "text": "Level 18"
+    }
+  ],
+  "SPINARAK": [
+    {
+      "to": "ARIADOS",
+      "method": "Level",
+      "param": 22,
+      "text": "Level 22"
+    }
+  ],
+  "CHINCHOU": [
+    {
+      "to": "LANTURN",
+      "method": "Level",
+      "param": 27,
+      "text": "Level 27"
+    }
+  ],
+  "PICHU": [
+    {
+      "to": "PIKACHU",
+      "method": "Level",
+      "param": 15,
+      "text": "Level 15"
+    }
+  ],
+  "CLEFFA": [
+    {
+      "to": "CLEFAIRY",
+      "method": "Level",
+      "param": 15,
+      "text": "Level 15"
+    }
+  ],
+  "IGGLYBUFF": [
+    {
+      "to": "JIGGLYPUFF",
+      "method": "Level",
+      "param": 15,
+      "text": "Level 15"
+    }
+  ],
+  "TOGEPI": [
+    {
+      "to": "TOGETIC",
+      "method": "Level",
+      "param": 15,
+      "text": "Level 15"
+    }
+  ],
+  "TOGETIC": [
+    {
+      "to": "TOGEKISS",
+      "method": "Item",
+      "param": "SHINYSTONE",
+      "text": "Use Shinystone"
+    }
+  ],
+  "NATU": [
+    {
+      "to": "XATU",
+      "method": "Level",
+      "param": 25,
+      "text": "Level 25"
+    }
+  ],
+  "MAREEP": [
+    {
+      "to": "FLAAFFY",
+      "method": "Level",
+      "param": 15,
+      "text": "Level 15"
+    }
+  ],
+  "FLAAFFY": [
+    {
+      "to": "AMPHAROS",
+      "method": "Level",
+      "param": 30,
+      "text": "Level 30"
+    }
+  ],
+  "MARILL": [
+    {
+      "to": "AZUMARILL",
+      "method": "Level",
+      "param": 18,
+      "text": "Level 18"
+    }
+  ],
+  "HOPPIP": [
+    {
+      "to": "SKIPLOOM",
+      "method": "Level",
+      "param": 18,
+      "text": "Level 18"
+    }
+  ],
+  "SKIPLOOM": [
+    {
+      "to": "JUMPLUFF",
+      "method": "Level",
+      "param": 27,
+      "text": "Level 27"
+    }
+  ],
+  "AIPOM": [
+    {
+      "to": "AMBIPOM",
+      "method": "HasMove",
+      "param": "DOUBLEHIT",
+      "text": "Level up knowing Doublehit"
+    }
+  ],
+  "SUNKERN": [
+    {
+      "to": "SUNFLORA",
+      "method": "Item",
+      "param": "SUNSTONE",
+      "text": "Use Sunstone"
+    }
+  ],
+  "YANMA": [
+    {
+      "to": "YANMEGA",
+      "method": "HasMove",
+      "param": "ANCIENTPOWER",
+      "text": "Level up knowing Ancientpower"
+    }
+  ],
+  "WOOPER": [
+    {
+      "to": "QUAGSIRE",
+      "method": "Level",
+      "param": 20,
+      "text": "Level 20"
+    }
+  ],
+  "MURKROW": [
+    {
+      "to": "HONCHKROW",
+      "method": "Item",
+      "param": "DUSKSTONE",
+      "text": "Use Duskstone"
+    }
+  ],
+  "MISDREAVUS": [
+    {
+      "to": "MISMAGIUS",
+      "method": "Item",
+      "param": "DUSKSTONE",
+      "text": "Use Duskstone"
+    }
+  ],
+  "PINECO": [
+    {
+      "to": "FORRETRESS",
+      "method": "Level",
+      "param": 31,
+      "text": "Level 31"
+    }
+  ],
+  "GLIGAR": [
+    {
+      "to": "GLISCOR",
+      "method": "Item",
+      "param": "DUSKSTONE",
+      "text": "Use Duskstone"
+    }
+  ],
+  "SNUBBULL": [
+    {
+      "to": "GRANBULL",
+      "method": "Level",
+      "param": 23,
+      "text": "Level 23"
+    }
+  ],
+  "SNEASEL": [
+    {
+      "to": "WEAVILE",
+      "method": "Item",
+      "param": "ICESTONE",
+      "text": "Use Icestone"
+    }
+  ],
+  "TEDDIURSA": [
+    {
+      "to": "URSARING",
+      "method": "Level",
+      "param": 30,
+      "text": "Level 30"
+    }
+  ],
+  "SLUGMA": [
+    {
+      "to": "MAGCARGO",
+      "method": "Level",
+      "param": 38,
+      "text": "Level 38"
+    }
+  ],
+  "SWINUB": [
+    {
+      "to": "PILOSWINE",
+      "method": "Level",
+      "param": 33,
+      "text": "Level 33"
+    }
+  ],
+  "PILOSWINE": [
+    {
+      "to": "MAMOSWINE",
+      "method": "HasMove",
+      "param": "ANCIENTPOWER",
+      "text": "Level up knowing Ancientpower"
+    }
+  ],
+  "REMORAID": [
+    {
+      "to": "OCTILLERY",
+      "method": "Level",
+      "param": 25,
+      "text": "Level 25"
+    }
+  ],
+  "HOUNDOUR": [
+    {
+      "to": "HOUNDOOM",
+      "method": "Level",
+      "param": 24,
+      "text": "Level 24"
+    }
+  ],
+  "PHANPY": [
+    {
+      "to": "DONPHAN",
+      "method": "Level",
+      "param": 25,
+      "text": "Level 25"
+    }
+  ],
+  "PORYGON2": [
+    {
+      "to": "PORYGONZ",
+      "method": "Item",
+      "param": "DUBIOUSDISC",
+      "text": "Use Dubiousdisc"
+    }
+  ],
+  "TYROGUE": [
+    {
+      "to": "HITMONLEE",
+      "method": "AttackGreater",
+      "param": 20,
+      "text": "Level 20 with Atk > Def"
+    },
+    {
+      "to": "HITMONCHAN",
+      "method": "DefenseGreater",
+      "param": 20,
+      "text": "Level 20 with Def > Atk"
+    },
+    {
+      "to": "HITMONTOP",
+      "method": "AtkDefEqual",
+      "param": 20,
+      "text": "Level 20 with Atk = Def"
+    }
+  ],
+  "SMOOCHUM": [
+    {
+      "to": "JYNX",
+      "method": "Level",
+      "param": 21,
+      "text": "Level 21"
+    }
+  ],
+  "ELEKID": [
+    {
+      "to": "ELECTABUZZ",
+      "method": "Level",
+      "param": 21,
+      "text": "Level 21"
+    }
+  ],
+  "MAGBY": [
+    {
+      "to": "MAGMAR",
+      "method": "Level",
+      "param": 21,
+      "text": "Level 21"
+    }
+  ],
+  "LARVITAR": [
+    {
+      "to": "PUPITAR",
+      "method": "Level",
+      "param": 30,
+      "text": "Level 30"
+    }
+  ],
+  "PUPITAR": [
+    {
+      "to": "TYRANITAR",
+      "method": "Level",
+      "param": 55,
+      "text": "Level 55"
+    }
+  ],
+  "AZURILL": [
+    {
+      "to": "MARILL",
+      "method": "Level",
+      "param": 15,
+      "text": "Level 15"
+    }
+  ],
+  "WYNAUT": [
+    {
+      "to": "WOBBUFFET",
+      "method": "Level",
+      "param": 15,
+      "text": "Level 15"
+    }
+  ],
+  "BONSLY": [
+    {
+      "to": "SUDOWOODO",
+      "method": "HasMove",
+      "param": "MIMIC",
+      "text": "Level up knowing Mimic"
+    }
+  ],
+  "MIMEJR": [
+    {
+      "to": "MRMIME",
+      "method": "HasMove",
+      "param": "MIMIC",
+      "text": "Level up knowing Mimic"
+    }
+  ],
+  "HAPPINY": [
+    {
+      "to": "CHANSEY",
+      "method": "DayHoldItem",
+      "param": "OVALSTONE",
+      "text": "Level up holding Ovalstone (Day)"
+    }
+  ],
+  "MUNCHLAX": [
+    {
+      "to": "SNORLAX",
+      "method": "Level",
+      "param": 30,
+      "text": "Level 30"
+    }
+  ],
+  "MANTYKE": [
+    {
+      "to": "MANTINE",
+      "method": "Level",
+      "param": 20,
+      "text": "Level 20"
+    }
+  ],
+  "TREECKO": [
+    {
+      "to": "GROVYLE",
+      "method": "Level",
+      "param": 16,
+      "text": "Level 16"
+    }
+  ],
+  "GROVYLE": [
+    {
+      "to": "SCEPTILE",
+      "method": "Level",
+      "param": 36,
+      "text": "Level 36"
+    }
+  ],
+  "TORCHIC": [
+    {
+      "to": "COMBUSKEN",
+      "method": "Level",
+      "param": 16,
+      "text": "Level 16"
+    }
+  ],
+  "COMBUSKEN": [
+    {
+      "to": "BLAZIKEN",
+      "method": "Level",
+      "param": 36,
+      "text": "Level 36"
+    }
+  ],
+  "MUDKIP": [
+    {
+      "to": "MARSHTOMP",
+      "method": "Level",
+      "param": 16,
+      "text": "Level 16"
+    }
+  ],
+  "MARSHTOMP": [
+    {
+      "to": "SWAMPERT",
+      "method": "Level",
+      "param": 36,
+      "text": "Level 36"
+    }
+  ],
+  "RALTS": [
+    {
+      "to": "KIRLIA",
+      "method": "Level",
+      "param": 20,
+      "text": "Level 20"
+    }
+  ],
+  "KIRLIA": [
+    {
+      "to": "GARDEVOIR",
+      "method": "Level",
+      "param": 30,
+      "text": "Level 30"
+    },
+    {
+      "to": "GALLADE",
+      "method": "Item",
+      "param": "DAWNSTONE",
+      "text": "Use Dawnstone"
+    }
+  ],
+  "BELDUM": [
+    {
+      "to": "METANG",
+      "method": "Level",
+      "param": 20,
+      "text": "Level 20"
+    }
+  ],
+  "METANG": [
+    {
+      "to": "METAGROSS",
+      "method": "Level",
+      "param": 45,
+      "text": "Level 45"
+    }
+  ],
+  "BIDOOF": [
+    {
+      "to": "BIBAREL",
+      "method": "Level",
+      "param": 15,
+      "text": "Level 15"
+    }
+  ],
+  "GIBLE": [
+    {
+      "to": "GABITE",
+      "method": "Level",
+      "param": 24,
+      "text": "Level 24"
+    }
+  ],
+  "GABITE": [
+    {
+      "to": "GARCHOMP",
+      "method": "Level",
+      "param": 48,
+      "text": "Level 48"
+    }
+  ],
+  "LILEEP": [
+    {
+      "to": "CRADILY",
+      "method": "Level",
+      "param": 40,
+      "text": "Level 40"
+    }
+  ],
+  "ANORITH": [
+    {
+      "to": "ARMALDO",
+      "method": "Level",
+      "param": 40,
+      "text": "Level 40"
+    }
+  ],
+  "CRANIDOS": [
+    {
+      "to": "RAMPARDOS",
+      "method": "Level",
+      "param": 30,
+      "text": "Level 30"
+    }
+  ],
+  "SHIELDON": [
+    {
+      "to": "BASTIODON",
+      "method": "Level",
+      "param": 30,
+      "text": "Level 30"
+    }
+  ],
+  "DUSKULL": [
+    {
+      "to": "DUSCLOPS",
+      "method": "Level",
+      "param": 37,
+      "text": "Level 37"
+    }
+  ],
+  "DUSCLOPS": [
+    {
+      "to": "DUSKNOIR",
+      "method": "Level",
+      "param": 50,
+      "text": "Level 50"
+    },
+    {
+      "to": "DUSKNOIR",
+      "method": "Item",
+      "param": "REAPERCLOTH",
+      "text": "Use Reapercloth"
+    }
+  ],
+  "TURTWIG": [
+    {
+      "to": "GROTLE",
+      "method": "Level",
+      "param": 18,
+      "text": "Level 18"
+    }
+  ],
+  "GROTLE": [
+    {
+      "to": "TORTERRA",
+      "method": "Level",
+      "param": 32,
+      "text": "Level 32"
+    }
+  ],
+  "CHIMCHAR": [
+    {
+      "to": "MONFERNO",
+      "method": "Level",
+      "param": 14,
+      "text": "Level 14"
+    }
+  ],
+  "MONFERNO": [
+    {
+      "to": "INFERNAPE",
+      "method": "Level",
+      "param": 36,
+      "text": "Level 36"
+    }
+  ],
+  "PIPLUP": [
+    {
+      "to": "PRINPLUP",
+      "method": "Level",
+      "param": 16,
+      "text": "Level 16"
+    }
+  ],
+  "PRINPLUP": [
+    {
+      "to": "EMPOLEON",
+      "method": "Level",
+      "param": 36,
+      "text": "Level 36"
+    }
+  ],
+  "NOSEPASS": [
+    {
+      "to": "PROBOPASS",
+      "method": "Item",
+      "param": "MAGNETSTONE",
+      "text": "Use Magnetstone"
+    }
+  ],
+  "HONEDGE": [
+    {
+      "to": "DOUBLADE",
+      "method": "Level",
+      "param": 35,
+      "text": "Level 35"
+    }
+  ],
+  "DOUBLADE": [
+    {
+      "to": "AEGISLASH",
+      "method": "Item",
+      "param": "DUSKSTONE",
+      "text": "Use Duskstone"
+    }
+  ],
+  "PAWNIARD": [
+    {
+      "to": "BISHARP",
+      "method": "Level",
+      "param": 52,
+      "text": "Level 52"
+    }
+  ],
+  "LITWICK": [
+    {
+      "to": "LAMPENT",
+      "method": "Level",
+      "param": 41,
+      "text": "Level 41"
+    }
+  ],
+  "LAMPENT": [
+    {
+      "to": "CHANDELURE",
+      "method": "Item",
+      "param": "DUSKSTONE",
+      "text": "Use Duskstone"
+    }
+  ],
+  "DEINO": [
+    {
+      "to": "ZWEILOUS",
+      "method": "Level",
+      "param": 50,
+      "text": "Level 50"
+    }
+  ],
+  "ZWEILOUS": [
+    {
+      "to": "HYDREIGON",
+      "method": "Level",
+      "param": 64,
+      "text": "Level 64"
+    }
+  ],
+  "NINCADA": [
+    {
+      "to": "NINJASK",
+      "method": "Ninjask",
+      "param": 20,
+      "text": "Level 20"
+    },
+    {
+      "to": "SHEDINJA",
+      "method": "Shedinja",
+      "param": 20,
+      "text": "Level 20 with empty party slot + Pok\u00e9 Ball"
+    }
+  ],
+  "RIOLU": [
+    {
+      "to": "LUCARIO",
+      "method": "Level",
+      "param": 20,
+      "text": "Level 20"
+    }
+  ],
+  "SLAKOTH": [
+    {
+      "to": "VIGOROTH",
+      "method": "Level",
+      "param": 18,
+      "text": "Level 18"
+    }
+  ],
+  "VIGOROTH": [
+    {
+      "to": "SLAKING",
+      "method": "Level",
+      "param": 36,
+      "text": "Level 36"
+    }
+  ],
+  "WAILMER": [
+    {
+      "to": "WAILORD",
+      "method": "Level",
+      "param": 40,
+      "text": "Level 40"
+    }
+  ],
+  "SHINX": [
+    {
+      "to": "LUXIO",
+      "method": "Level",
+      "param": 15,
+      "text": "Level 15"
+    }
+  ],
+  "LUXIO": [
+    {
+      "to": "LUXRAY",
+      "method": "Level",
+      "param": 30,
+      "text": "Level 30"
+    }
+  ],
+  "ARON": [
+    {
+      "to": "LAIRON",
+      "method": "Level",
+      "param": 32,
+      "text": "Level 32"
+    }
+  ],
+  "LAIRON": [
+    {
+      "to": "AGGRON",
+      "method": "Level",
+      "param": 42,
+      "text": "Level 42"
+    }
+  ],
+  "TRAPINCH": [
+    {
+      "to": "VIBRAVA",
+      "method": "Level",
+      "param": 35,
+      "text": "Level 35"
+    }
+  ],
+  "VIBRAVA": [
+    {
+      "to": "FLYGON",
+      "method": "Level",
+      "param": 45,
+      "text": "Level 45"
+    }
+  ],
+  "FEEBAS": [
+    {
+      "to": "MILOTIC",
+      "method": "Level",
+      "param": 35,
+      "text": "Level 35"
+    },
+    {
+      "to": "MILOTIC",
+      "method": "Item",
+      "param": "PRISMSCALE",
+      "text": "Use Prismscale"
+    }
+  ],
+  "BAGON": [
+    {
+      "to": "SHELGON",
+      "method": "Level",
+      "param": 30,
+      "text": "Level 30"
+    }
+  ],
+  "SHELGON": [
+    {
+      "to": "SALAMENCE",
+      "method": "Level",
+      "param": 50,
+      "text": "Level 50"
+    }
+  ],
+  "KLINK": [
+    {
+      "to": "KLANG",
+      "method": "Level",
+      "param": 38,
+      "text": "Level 38"
+    }
+  ],
+  "KLANG": [
+    {
+      "to": "KLINKLANG",
+      "method": "Level",
+      "param": 49,
+      "text": "Level 49"
+    }
+  ],
+  "ZORUA": [
+    {
+      "to": "ZOROARK",
+      "method": "Level",
+      "param": 30,
+      "text": "Level 30"
+    }
+  ],
+  "BUDEW": [
+    {
+      "to": "ROSELIA",
+      "method": "Level",
+      "param": 15,
+      "text": "Level 15"
+    }
+  ],
+  "ROSELIA": [
+    {
+      "to": "ROSERADE",
+      "method": "Item",
+      "param": "SHINYSTONE",
+      "text": "Use Shinystone"
+    }
+  ],
+  "DRIFLOON": [
+    {
+      "to": "DRIFBLIM",
+      "method": "Level",
+      "param": 28,
+      "text": "Level 28"
+    }
+  ],
+  "BUNEARY": [
+    {
+      "to": "LOPUNNY",
+      "method": "Level",
+      "param": 22,
+      "text": "Level 22"
+    }
+  ],
+  "SHROOMISH": [
+    {
+      "to": "BRELOOM",
+      "method": "Level",
+      "param": 23,
+      "text": "Level 23"
+    }
+  ],
+  "SHUPPET": [
+    {
+      "to": "BANETTE",
+      "method": "Level",
+      "param": 37,
+      "text": "Level 37"
+    }
+  ],
+  "SOLOSIS": [
+    {
+      "to": "DUOSION",
+      "method": "Level",
+      "param": 32,
+      "text": "Level 32"
+    }
+  ],
+  "DUOSION": [
+    {
+      "to": "REUNICLUS",
+      "method": "Level",
+      "param": 41,
+      "text": "Level 41"
+    }
+  ],
+  "COTTONEE": [
+    {
+      "to": "WHIMSICOTT",
+      "method": "Item",
+      "param": "SUNSTONE",
+      "text": "Use Sunstone"
+    }
+  ],
+  "SANDILE": [
+    {
+      "to": "KROKOROK",
+      "method": "Level",
+      "param": 29,
+      "text": "Level 29"
+    }
+  ],
+  "KROKOROK": [
+    {
+      "to": "KROOKODILE",
+      "method": "Level",
+      "param": 40,
+      "text": "Level 40"
+    }
+  ],
+  "YAMASK": [
+    {
+      "to": "COFAGRIGUS",
+      "method": "Level",
+      "param": 34,
+      "text": "Level 34"
+    }
+  ],
+  "JOLTIK": [
+    {
+      "to": "GALVANTULA",
+      "method": "Level",
+      "param": 36,
+      "text": "Level 36"
+    }
+  ],
+  "FERROSEED": [
+    {
+      "to": "FERROTHORN",
+      "method": "Level",
+      "param": 40,
+      "text": "Level 40"
+    }
+  ],
+  "AXEW": [
+    {
+      "to": "FRAXURE",
+      "method": "Level",
+      "param": 38,
+      "text": "Level 38"
+    }
+  ],
+  "FRAXURE": [
+    {
+      "to": "HAXORUS",
+      "method": "Level",
+      "param": 48,
+      "text": "Level 48"
+    }
+  ],
+  "GOLETT": [
+    {
+      "to": "GOLURK",
+      "method": "Level",
+      "param": 43,
+      "text": "Level 43"
+    }
+  ],
+  "FLETCHLING": [
+    {
+      "to": "FLETCHINDER",
+      "method": "Level",
+      "param": 17,
+      "text": "Level 17"
+    }
+  ],
+  "FLETCHINDER": [
+    {
+      "to": "TALONFLAME",
+      "method": "Level",
+      "param": 35,
+      "text": "Level 35"
+    }
+  ],
+  "LARVESTA": [
+    {
+      "to": "VOLCARONA",
+      "method": "Level",
+      "param": 59,
+      "text": "Level 59"
+    }
+  ],
+  "VENIPEDE": [
+    {
+      "to": "WHIRLIPEDE",
+      "method": "Level",
+      "param": 22,
+      "text": "Level 22"
+    }
+  ],
+  "WHIRLIPEDE": [
+    {
+      "to": "SCOLIPEDE",
+      "method": "Level",
+      "param": 30,
+      "text": "Level 30"
+    }
+  ],
+  "TYRUNT": [
+    {
+      "to": "TYRANTRUM",
+      "method": "LevelDay",
+      "param": 39,
+      "text": "Level 39 (Day)"
+    }
+  ],
+  "SNORUNT": [
+    {
+      "to": "GLALIE",
+      "method": "Level",
+      "param": 42,
+      "text": "Level 42"
+    },
+    {
+      "to": "FROSLASS",
+      "method": "Item",
+      "param": "DAWNSTONE",
+      "text": "Use Dawnstone"
+    }
+  ],
+  "TRUBBISH": [
+    {
+      "to": "GARBODOR",
+      "method": "Level",
+      "param": 36,
+      "text": "Level 36"
+    }
+  ],
+  "CARVANHA": [
+    {
+      "to": "SHARPEDO",
+      "method": "Level",
+      "param": 30,
+      "text": "Level 30"
+    }
+  ],
+  "PHANTUMP": [
+    {
+      "to": "TREVENANT",
+      "method": "Level",
+      "param": 40,
+      "text": "Level 40"
+    },
+    {
+      "to": "TREVENANT",
+      "method": "Item",
+      "param": "LINKINGCORD",
+      "text": "Use Linkingcord"
+    }
+  ],
+  "NOIBAT": [
+    {
+      "to": "NOIVERN",
+      "method": "Level",
+      "param": 48,
+      "text": "Level 48"
+    }
+  ],
+  "SWABLU": [
+    {
+      "to": "ALTARIA",
+      "method": "Level",
+      "param": 35,
+      "text": "Level 35"
+    }
+  ],
+  "GOOMY": [
+    {
+      "to": "SLIGGOO",
+      "method": "Level",
+      "param": 40,
+      "text": "Level 40"
+    }
+  ],
+  "SLIGGOO": [
+    {
+      "to": "GOODRA",
+      "method": "Level",
+      "param": 50,
+      "text": "Level 50"
+    }
+  ],
+  "STUFFUL": [
+    {
+      "to": "BEWEAR",
+      "method": "Level",
+      "param": 27,
+      "text": "Level 27"
+    }
+  ],
+  "MAREANIE": [
+    {
+      "to": "TOXAPEX",
+      "method": "Level",
+      "param": 38,
+      "text": "Level 38"
+    }
+  ],
+  "CACNEA": [
+    {
+      "to": "CACTURNE",
+      "method": "Level",
+      "param": 32,
+      "text": "Level 32"
+    }
+  ],
+  "SANDYGAST": [
+    {
+      "to": "PALOSSAND",
+      "method": "Level",
+      "param": 42,
+      "text": "Level 42"
+    }
+  ],
+  "AMAURA": [
+    {
+      "to": "AURORUS",
+      "method": "LevelNight",
+      "param": 39,
+      "text": "Level 39 (Night)"
+    }
+  ],
+  "ROCKRUFF": [
+    {
+      "to": "LYCANROC_N",
+      "method": "LevelNight",
+      "param": 25,
+      "text": "Level 25 (Night)"
+    },
+    {
+      "to": "LYCANROC_D",
+      "method": "LevelDay",
+      "param": 25,
+      "text": "Level 25 (Day)"
+    }
+  ],
+  "JANGMOO": [
+    {
+      "to": "HAKAMOO",
+      "method": "Level",
+      "param": 35,
+      "text": "Level 35"
+    }
+  ],
+  "HAKAMOO": [
+    {
+      "to": "KOMMOO",
+      "method": "Level",
+      "param": 45,
+      "text": "Level 45"
+    }
+  ],
+  "WIMPOD": [
+    {
+      "to": "GOLISOPOD",
+      "method": "Level",
+      "param": 30,
+      "text": "Level 30"
+    }
+  ],
+  "FOMANTIS": [
+    {
+      "to": "LURANTIS",
+      "method": "LevelDay",
+      "param": 34,
+      "text": "Level 34 (Day)"
+    }
+  ],
+  "CHESPIN": [
+    {
+      "to": "QUILLADIN",
+      "method": "Level",
+      "param": 16,
+      "text": "Level 16"
+    }
+  ],
+  "QUILLADIN": [
+    {
+      "to": "CHESNAUGHT",
+      "method": "Level",
+      "param": 36,
+      "text": "Level 36"
+    }
+  ],
+  "FENNEKIN": [
+    {
+      "to": "BRAIXEN",
+      "method": "Level",
+      "param": 16,
+      "text": "Level 16"
+    }
+  ],
+  "BRAIXEN": [
+    {
+      "to": "DELPHOX",
+      "method": "Level",
+      "param": 36,
+      "text": "Level 36"
+    }
+  ],
+  "FROAKIE": [
+    {
+      "to": "FROGADIER",
+      "method": "Level",
+      "param": 16,
+      "text": "Level 16"
+    }
+  ],
+  "FROGADIER": [
+    {
+      "to": "GRENINJA",
+      "method": "Level",
+      "param": 36,
+      "text": "Level 36"
+    }
+  ],
+  "PUMPKABOO": [
+    {
+      "to": "GOURGEIST",
+      "method": "Level",
+      "param": 40,
+      "text": "Level 40"
+    },
+    {
+      "to": "GOURGEIST",
+      "method": "Item",
+      "param": "LINKINGCORD",
+      "text": "Use Linkingcord"
+    }
+  ],
+  "SWIRLIX": [
+    {
+      "to": "SLURPUFF",
+      "method": "Level",
+      "param": 35,
+      "text": "Level 35"
+    }
+  ],
+  "SCRAGGY": [
+    {
+      "to": "SCRAFTY",
+      "method": "Level",
+      "param": 39,
+      "text": "Level 39"
+    }
+  ],
+  "LOTAD": [
+    {
+      "to": "LOMBRE",
+      "method": "Level",
+      "param": 14,
+      "text": "Level 14"
+    }
+  ],
+  "LOMBRE": [
+    {
+      "to": "LUDICOLO",
+      "method": "Item",
+      "param": "WATERSTONE",
+      "text": "Use Waterstone"
+    }
+  ]
+}

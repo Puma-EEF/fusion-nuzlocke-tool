@@ -36,6 +36,8 @@ export default function App() {
           Fusion Calculator
         </button>
         <button onClick={() => setPage("box/Team")} style={{ padding: "8px 12px" }}>
+          Box/Team
+        </button>
       </header>
 
       {page === "pokedex" && (

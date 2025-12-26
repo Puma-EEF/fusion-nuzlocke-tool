@@ -7,7 +7,7 @@ import BoxTeamPage from "./pages/BoxTeamPage";
 
 
 
-import type { SortBy, SortDir } from "./types/pokedexFilters";
+import type { SortBy, SortDir } from "./lib/types/pokedexFilters";
 
 type Page = "pokedex" | "fusion" | "box/Team";
 

@@ -64,7 +64,7 @@ export default function App() {
       )}
 
       <div style={{ flex: 1, minHeight: 0 }}>
-        {page === "pokedex" ? (
+        {page === "pokedex" && (
           <Pokedex
             nameQuery={nameQuery}
             setNameQuery={setNameQuery}
@@ -85,9 +85,8 @@ export default function App() {
             excludeSubLegendary={excludeSubLegendary}
             setExcludeSubLegendary={setExcludeSubLegendary}
           />
-        ) : (
-          <FusionCalculator />
         )}
+        {page === "fusion" && <FusionCalculator />}
         {page === "box/Team" && <BoxTeamPage />}
       </div>
     </div>

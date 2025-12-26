@@ -80,6 +80,24 @@ export default function PokedexFilterBar(props: PokedexFiltersState) {
           {movesList.map((m) => <option key={m.ID} value={m.Name} />)}
         </datalist>
       </div>
+      <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+  <span style={{ opacity: 0.75 }}>Apply to:</span>
+  <button
+    type="button"
+    onClick={() => props.setFilterTarget("pokedex")}
+    aria-pressed={props.filterTarget === "pokedex"}
+  >
+    Pokedex
+  </button>
+  <button
+    type="button"
+    onClick={() => props.setFilterTarget("box")}
+    aria-pressed={props.filterTarget === "box"}
+  >
+    Box
+  </button>
+</div>
+
 
       {/* Row 2: Stage 2 arrange */}
       <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center", marginTop: 10 }}>

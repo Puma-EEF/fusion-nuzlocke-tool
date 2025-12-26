@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import speciesRaw from "../data/species.json";
-import type { Species } from "../types/species";
+import type { Species } from "../lib/types/species";
 import { fusePokemon } from "../lib/fusion";
 import SpriteTile from "../components/SpriteTile";
 

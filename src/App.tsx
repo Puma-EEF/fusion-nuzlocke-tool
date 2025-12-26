@@ -2,17 +2,19 @@ import { useState } from "react";
 import Pokedex from "./pages/Pokedex";
 import FusionCalculator from "./pages/FusionCalculator";
 import PokedexFilterBar from "./components/PokedexFilterBar";
-import movePoolsRaw from "./data/move_pools_if.json";
 import BoxTeamPage from "./pages/BoxTeamPage";
 
 
 
 import type { SortBy, SortDir } from "./lib/types/pokedexFilters";
 
-type Page = "pokedex" | "fusion" | "box/Team";
+type Page = "pokedex" | "fusion" | "boxTeam";
 
 export default function App() {
   const [page, setPage] = useState<Page>("pokedex");
+  type FilterTarget = "pokedex" | "box";
+  const [filterTarget, setFilterTarget] = useState<FilterTarget>("pokedex");
+
 
   // Pokedex filter state lives here now
   const [nameQuery, setNameQuery] = useState("");
@@ -35,37 +37,44 @@ export default function App() {
         <button onClick={() => setPage("fusion")} style={{ padding: "8px 12px" }}>
           Fusion Calculator
         </button>
-        <button onClick={() => setPage("box/Team")} style={{ padding: "8px 12px" }}>
+        <button onClick={() => setPage("boxTeam")} style={{ padding: "8px 12px" }}>
           Box/Team
         </button>
       </header>
 
-      {page === "pokedex" && (
-        <PokedexFilterBar
-          nameQuery={nameQuery}
-          setNameQuery={setNameQuery}
-          typeA={typeA}
-          setTypeA={setTypeA}
-          typeB={typeB}
-          setTypeB={setTypeB}
-          abilityText={abilityText}
-          setAbilityText={setAbilityText}
-          moveText={moveText}
-          setMoveText={setMoveText}
-          sortBy={sortBy}
-          setSortBy={setSortBy}
-          sortDir={sortDir}
-          setSortDir={setSortDir}
-          excludeLegendary={excludeLegendary}
-          setExcludeLegendary={setExcludeLegendary}
-          excludeSubLegendary={excludeSubLegendary}
-          setExcludeSubLegendary={setExcludeSubLegendary}
-        />
-      )}
+      {(page === "pokedex" || page === "boxTeam") && (
+  <PokedexFilterBar
+    // NEW: pass target + setter
+    filterTarget={filterTarget}
+    setFilterTarget={setFilterTarget}
+
+    nameQuery={nameQuery}
+    setNameQuery={setNameQuery}
+    typeA={typeA}
+    setTypeA={setTypeA}
+    typeB={typeB}
+    setTypeB={setTypeB}
+    abilityText={abilityText}
+    setAbilityText={setAbilityText}
+    moveText={moveText}
+    setMoveText={setMoveText}
+    sortBy={sortBy}
+    setSortBy={setSortBy}
+    sortDir={sortDir}
+    setSortDir={setSortDir}
+    excludeLegendary={excludeLegendary}
+    setExcludeLegendary={setExcludeLegendary}
+    excludeSubLegendary={excludeSubLegendary}
+    setExcludeSubLegendary={setExcludeSubLegendary}
+  />
+)}
+
 
       <div style={{ flex: 1, minHeight: 0 }}>
         {page === "pokedex" && (
           <Pokedex
+            filterTarget={filterTarget}
+            setFilterTarget={setFilterTarget}
             nameQuery={nameQuery}
             setNameQuery={setNameQuery}
             typeA={typeA}
@@ -87,7 +96,7 @@ export default function App() {
           />
         )}
         {page === "fusion" && <FusionCalculator />}
-        {page === "box/Team" && <BoxTeamPage />}
+        {page === "boxTeam" && <BoxTeamPage />}
       </div>
     </div>
   );

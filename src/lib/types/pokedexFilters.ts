@@ -6,6 +6,9 @@ export type PokedexFiltersState = {
   nameQuery: string;
   setNameQuery: (v: string) => void;
 
+  filterTarget: "pokedex" | "box";
+  setFilterTarget: (t: "pokedex" | "box") => void;
+
   typeA: string;
   setTypeA: (v: string) => void;
 

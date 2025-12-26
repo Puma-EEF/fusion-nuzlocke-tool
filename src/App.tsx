@@ -3,11 +3,13 @@ import Pokedex from "./pages/Pokedex";
 import FusionCalculator from "./pages/FusionCalculator";
 import PokedexFilterBar from "./components/PokedexFilterBar";
 import movePoolsRaw from "./data/move_pools_if.json";
+import BoxTeamPage from "./pages/BoxTeamPage";
+
 
 
 import type { SortBy, SortDir } from "./types/pokedexFilters";
 
-type Page = "pokedex" | "fusion";
+type Page = "pokedex" | "fusion" | "box/Team";
 
 export default function App() {
   const [page, setPage] = useState<Page>("pokedex");
@@ -33,6 +35,7 @@ export default function App() {
         <button onClick={() => setPage("fusion")} style={{ padding: "8px 12px" }}>
           Fusion Calculator
         </button>
+        <button onClick={() => setPage("box/Team")} style={{ padding: "8px 12px" }}>
       </header>
 
       {page === "pokedex" && (
@@ -83,6 +86,7 @@ export default function App() {
         ) : (
           <FusionCalculator />
         )}
+        {page === "box/Team" && <BoxTeamPage />}
       </div>
     </div>
   );

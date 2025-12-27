@@ -249,7 +249,13 @@ function Section({
   );
 }
 
-export default function Pokedex(props: PokedexFiltersState) {
+type PokedexProps = PokedexFiltersState & {
+  /** When false, show the full dex without applying any filter/sort/exclusions. */
+  applyFilters?: boolean;
+};
+
+export default function Pokedex(props: PokedexProps) {
+
   const [selectedKey, setSelectedKey] = useState<string>("1-0");
 
   const learnsetIndex = useMemo(() => buildLearnsetMoveIndex(learnsetsList), []);
@@ -265,6 +271,14 @@ export default function Pokedex(props: PokedexFiltersState) {
   );
 
   const filtered = useMemo(() => {
+    const apply = props.applyFilters ?? true;
+if (!apply) {
+  // full dex, stable default ordering
+  return speciesList
+    .slice()
+    .sort((a, b) => (a.ID - b.ID) || ((a.Form ?? 0) - (b.Form ?? 0)));
+}
+
     const q = normalize(props.nameQuery);
 
     const result = speciesList

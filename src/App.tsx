@@ -14,6 +14,7 @@ export default function App() {
   const [page, setPage] = useState<Page>("pokedex");
   type FilterTarget = "pokedex" | "box";
   const [filterTarget, setFilterTarget] = useState<FilterTarget>("pokedex");
+  const [boxIds, setBoxIds] = useState<number[]>([]);
 
 
   // Pokedex filter state lives here now
@@ -96,7 +97,33 @@ export default function App() {
           />
         )}
         {page === "fusion" && <FusionCalculator />}
-        {page === "boxTeam" && <BoxTeamPage />}
+        {page === "boxTeam" && (
+          <BoxTeamPage
+            filterTarget={filterTarget}
+            setFilterTarget={setFilterTarget}
+            boxIds={boxIds}
+            setBoxIds={setBoxIds}
+            nameQuery={nameQuery}
+            setNameQuery={setNameQuery}
+            typeA={typeA}
+            setTypeA={setTypeA}
+            typeB={typeB}
+            setTypeB={setTypeB}
+            abilityText={abilityText}
+            setAbilityText={setAbilityText}
+            moveText={moveText}
+            setMoveText={setMoveText}
+            sortBy={sortBy}
+            setSortBy={setSortBy}
+            sortDir={sortDir}
+            setSortDir={setSortDir}
+            excludeLegendary={excludeLegendary}
+            setExcludeLegendary={setExcludeLegendary}
+            excludeSubLegendary={excludeSubLegendary}
+            setExcludeSubLegendary={setExcludeSubLegendary}
+          />
+        )}
+
       </div>
     </div>
   );

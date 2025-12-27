@@ -1,80 +1,49 @@
-import { useMemo, useState } from "react";
+import type { SortBy, SortDir } from "../lib/types/pokedexFilters";
 
 type FilterTarget = "pokedex" | "box";
 
-export default function BoxTeamPage() {
-  // Phase 1: the key state — filters exist once, but apply to *one list at a time*
-  const [filterTarget, setFilterTarget] = useState<FilterTarget>("pokedex");
-  const [search, setSearch] = useState("");
+type BoxTeamPageProps = {
+  filterTarget: FilterTarget;
+  setFilterTarget: (t: FilterTarget) => void;
 
-  // Temporary mock lists so we can prove the toggle works BEFORE wiring real data
-  const pokedexMock = useMemo(
-    () => ["Bulbasaur", "Charmander", "Squirtle", "Pikachu", "Eevee"],
-    []
-  );
-  const boxMock = useMemo(
-    () => ["Geodude", "Gastly", "Magikarp", "Snorlax"],
-    []
-  );
+  boxIds: number[];
+  setBoxIds: (v: number[]) => void;
 
-  const filteredDex = useMemo(() => {
-    if (filterTarget !== "pokedex") return pokedexMock; // filters not applied here
-    const q = search.trim().toLowerCase();
-    return q ? pokedexMock.filter((x) => x.toLowerCase().includes(q)) : pokedexMock;
-  }, [filterTarget, search, pokedexMock]);
+  // same filter props Pokedex already uses
+  nameQuery: string;
+  setNameQuery: (v: string) => void;
 
-  const filteredBox = useMemo(() => {
-    if (filterTarget !== "box") return boxMock; // filters not applied here
-    const q = search.trim().toLowerCase();
-    return q ? boxMock.filter((x) => x.toLowerCase().includes(q)) : boxMock;
-  }, [filterTarget, search, boxMock]);
+  typeA: string;
+  setTypeA: (v: string) => void;
+
+  typeB: string;
+  setTypeB: (v: string) => void;
+
+  abilityText: string;
+  setAbilityText: (v: string) => void;
+
+  moveText: string;
+  setMoveText: (v: string) => void;
+
+  sortBy: SortBy;
+  setSortBy: (v: SortBy) => void;
+
+  sortDir: SortDir;
+  setSortDir: (v: SortDir) => void;
+
+  excludeLegendary: boolean;
+  setExcludeLegendary: (v: boolean) => void;
+
+  excludeSubLegendary: boolean;
+  setExcludeSubLegendary: (v: boolean) => void;
+};
+
+export default function BoxTeamPage(props: BoxTeamPageProps) {
+  // TODO: Implement actual filtering logic
+  const filteredDex: string[] = [];
 
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
-      {/* FILTER BAR (Shared) */}
-      <div
-        style={{
-          display: "flex",
-          gap: 12,
-          alignItems: "center",
-          padding: "10px 12px",
-          borderBottom: "1px solid rgba(255,255,255,0.12)",
-        }}
-      >
-        <strong style={{ whiteSpace: "nowrap" }}>Filters</strong>
-
-        <input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search (temp)"
-          style={{
-            flex: 1,
-            minWidth: 160,
-            padding: "8px 10px",
-            borderRadius: 8,
-            border: "1px solid rgba(255,255,255,0.18)",
-            background: "transparent",
-            color: "inherit",
-          }}
-        />
-
-        {/* Apply-to toggle */}
-        <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
-          <span style={{ opacity: 0.8, whiteSpace: "nowrap" }}>Apply to:</span>
-
-          <TogglePill
-            active={filterTarget === "pokedex"}
-            onClick={() => setFilterTarget("pokedex")}
-            label="Pokedex"
-          />
-          <TogglePill
-            active={filterTarget === "box"}
-            onClick={() => setFilterTarget("box")}
-            label="Box"
-          />
-        </div>
-      </div>
-
       {/* 3-panel layout */}
       <div
         style={{
@@ -86,10 +55,10 @@ export default function BoxTeamPage() {
           minHeight: 0,
         }}
       >
-        {/* POKEDEX (collapsible later) */}
-        <Panel title="Pokedex (Phase 2)">
+        {/* POKEDEX */}
+        <Panel title="Pokedex">
           <SmallHint>
-            Right now this is mocked — we just need to prove the filter target toggle works.
+            Filters apply only when target is “Pokedex”. (When target is “Box”, dex shows unfiltered.)
           </SmallHint>
           <ul style={{ margin: 0, paddingLeft: 18 }}>
             {filteredDex.map((name) => (
@@ -100,50 +69,30 @@ export default function BoxTeamPage() {
 
         {/* BOX */}
         <Panel title="Box (Phase 3)">
-          <ul style={{ margin: 0, paddingLeft: 18 }}>
-            {filteredBox.map((name) => (
-              <li key={name}>{name}</li>
-            ))}
-          </ul>
+          <SmallHint>Next: real Box list + drag/drop + party.</SmallHint>
+          <div style={{ opacity: 0.7 }}><div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+  <div style={{ opacity: 0.8 }}>Box size: {props.boxIds.length}</div>
+
+  {props.boxIds.length === 0 ? (
+    <div style={{ opacity: 0.7 }}>No Pokémon in box yet.</div>
+  ) : (
+    <ul style={{ margin: 0, paddingLeft: 18 }}>
+      {props.boxIds.map((id) => (
+        <li key={id}>Dex ID: {id}</li>
+      ))}
+    </ul>
+  )}
+</div>
+</div>
         </Panel>
 
         {/* INFO */}
         <Panel title="Info (Phase 4+)">
-          <SmallHint>
-            This will become Fusion / Stats / Team / Compare. For now: empty Snorlax placeholder.
-          </SmallHint>
+          <SmallHint>Later: Fusion / Stats / Team / Compare.</SmallHint>
           <div style={{ opacity: 0.7 }}>Select something later → show details here.</div>
         </Panel>
       </div>
     </div>
-  );
-}
-
-function TogglePill({
-  active,
-  onClick,
-  label,
-}: {
-  active: boolean;
-  onClick: () => void;
-  label: string;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      style={{
-        padding: "6px 10px",
-        borderRadius: 999,
-        border: "1px solid rgba(255,255,255,0.18)",
-        background: active ? "rgba(255,255,255,0.16)" : "transparent",
-        color: "inherit",
-        cursor: "pointer",
-      }}
-      aria-pressed={active}
-    >
-      {label}
-    </button>
   );
 }
 
@@ -168,7 +117,7 @@ function Panel({ title, children }: { title: string; children: React.ReactNode }
       >
         {title}
       </div>
-      <div style={{ padding: 12, overflow: "auto" }}>{children}</div>
+      <div style={{ padding: 12, overflow: "auto", minHeight: 0 }}>{children}</div>
     </section>
   );
 }

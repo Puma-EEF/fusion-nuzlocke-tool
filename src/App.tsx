@@ -1,7 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Pokedex from "./pages/Pokedex";
 import FusionCalculator from "./pages/FusionCalculator";
 import PokedexFilterBar from "./components/PokedexFilterBar";
+import BoxTeamPage from "./pages/BoxTeamPage";
+import type { BoxMon } from "./lib/types/box";
+import { loadBox, saveBox } from "./lib/boxStorage";
+
 
 import type { SortBy, SortDir } from "./lib/types/pokedexFilters";
 
@@ -24,7 +28,12 @@ export default function App() {
   // === Box Team State ===
   type FilterTarget = "pokedex" | "box";
   const [filterTarget, setFilterTarget] = useState<FilterTarget>("pokedex");
-  const [boxIds, setBoxIds] = useState<number[]>([]);
+  const [box, setBox] = useState<BoxMon[]>(() => loadBox());
+
+  useEffect(() => {
+  saveBox(box);
+  }, [box]);
+
 
   // === Stage 1 Filter State (shared across pages) ===
   const [nameQuery, setNameQuery] = useState("");
@@ -114,8 +123,8 @@ export default function App() {
           <BoxTeamPage
             filterTarget={filterTarget}
             setFilterTarget={setFilterTarget}
-            boxIds={boxIds}
-            setBoxIds={setBoxIds}
+            box={box}
+            setBox={setBox}
             nameQuery={nameQuery}
             setNameQuery={setNameQuery}
             typeA={typeA}
@@ -136,6 +145,7 @@ export default function App() {
             setExcludeSubLegendary={setExcludeSubLegendary}
           />
         )}
+
 
       </div>
     </div>

@@ -1,0 +1,1194 @@
+{
+  "tms": [
+    {
+      "itemId": "TM00",
+      "itemNumber": 658,
+      "move": "FAKEMOVE",
+      "name": "TM00",
+      "pocket": 4,
+      "price": 20000,
+      "description": "It looks just like a regular TM, but it doesn't do anything."
+    },
+    {
+      "itemId": "TM01",
+      "itemNumber": 288,
+      "move": "HONECLAWS",
+      "name": "TM01",
+      "pocket": 4,
+      "price": 30000,
+      "description": "The user sharpens its claws to boost its Attack stat and accuracy."
+    },
+    {
+      "itemId": "TM02",
+      "itemNumber": 289,
+      "move": "DRAGONCLAW",
+      "name": "TM02",
+      "pocket": 4,
+      "price": 30000,
+      "description": "The user slashes the target with huge, sharp claws."
+    },
+    {
+      "itemId": "TM03",
+      "itemNumber": 290,
+      "move": "PSYSHOCK",
+      "name": "TM03",
+      "pocket": 4,
+      "price": 30000,
+      "description": "The user materializes an odd psychic wave to attack the target. This attack does physical damage."
+    },
+    {
+      "itemId": "TM04",
+      "itemNumber": 291,
+      "move": "CALMMIND",
+      "name": "TM04",
+      "pocket": 4,
+      "price": 15000,
+      "description": "The user quietly focuses its mind and calms its spirit to raise its Sp. Atk and Sp. Def stats."
+    },
+    {
+      "itemId": "TM05",
+      "itemNumber": 292,
+      "move": "ROAR",
+      "name": "TM05",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The target is scared off and replaced by another Pokémon in its party. In the wild, the battle ends."
+    },
+    {
+      "itemId": "TM06",
+      "itemNumber": 293,
+      "move": "TOXIC",
+      "name": "TM06",
+      "pocket": 4,
+      "price": 30000,
+      "description": "A move that leaves the target badly poisoned. Its poison damage worsens every turn."
+    },
+    {
+      "itemId": "TM07",
+      "itemNumber": 294,
+      "move": "HAIL",
+      "name": "TM07",
+      "pocket": 4,
+      "price": 30000,
+      "description": "Summons a hailstorm that lasts for five turns. The hailstorm damages all types except Ice."
+    },
+    {
+      "itemId": "TM08",
+      "itemNumber": 295,
+      "move": "BULKUP",
+      "name": "TM08",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user tenses its muscles to bulk up its body, boosting both its Attack and Defense stats."
+    },
+    {
+      "itemId": "TM09",
+      "itemNumber": 296,
+      "move": "VENOSHOCK",
+      "name": "TM09",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user drenches the target in a special poisonous liquid. Its power is doubled if the target is poisoned."
+    },
+    {
+      "itemId": "TM10",
+      "itemNumber": 297,
+      "move": "HIDDENPOWER",
+      "name": "TM10",
+      "pocket": 4,
+      "price": 10000,
+      "description": "A unique attack that varies in type and intensity depending on the Pokémon using it."
+    },
+    {
+      "itemId": "TM11",
+      "itemNumber": 298,
+      "move": "SUNNYDAY",
+      "name": "TM11",
+      "pocket": 4,
+      "price": 50000,
+      "description": "The user intensifies the sun for five turns, powering up Fire-type moves."
+    },
+    {
+      "itemId": "TM12",
+      "itemNumber": 299,
+      "move": "TAUNT",
+      "name": "TM12",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The target is taunted into a rage that allows it to use only attack moves for three turns."
+    },
+    {
+      "itemId": "TM13",
+      "itemNumber": 300,
+      "move": "ICEBEAM",
+      "name": "TM13",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The target is struck with an icy-cold beam of energy. It may also freeze the target solid."
+    },
+    {
+      "itemId": "TM14",
+      "itemNumber": 301,
+      "move": "BLIZZARD",
+      "name": "TM14",
+      "pocket": 4,
+      "price": 30000,
+      "description": "A howling blizzard is summoned to strike the opposing team. It may also freeze them solid."
+    },
+    {
+      "itemId": "TM15",
+      "itemNumber": 302,
+      "move": "HYPERBEAM",
+      "name": "TM15",
+      "pocket": 4,
+      "price": 50000,
+      "description": "The target is attacked with a powerful beam. The user must rest on the next turn to regain its energy."
+    },
+    {
+      "itemId": "TM16",
+      "itemNumber": 303,
+      "move": "LIGHTSCREEN",
+      "name": "TM16",
+      "pocket": 4,
+      "price": 10000,
+      "description": "A wondrous wall of light is put up to suppress damage from special attacks for five turns."
+    },
+    {
+      "itemId": "TM17",
+      "itemNumber": 304,
+      "move": "PROTECT",
+      "name": "TM17",
+      "pocket": 4,
+      "price": 10000,
+      "description": "It enables the user to evade all attacks. Its chance of failing rises if it is used in succession."
+    },
+    {
+      "itemId": "TM18",
+      "itemNumber": 305,
+      "move": "RAINDANCE",
+      "name": "TM18",
+      "pocket": 4,
+      "price": 50000,
+      "description": "The user summons a heavy rain that falls for five turns, powering up Water-type moves."
+    },
+    {
+      "itemId": "TM19",
+      "itemNumber": 306,
+      "move": "TELEKINESIS",
+      "name": "TM19",
+      "pocket": 4,
+      "price": 30000,
+      "description": "The user makes the target float with its psychic power. The target is easier to hit for three turns."
+    },
+    {
+      "itemId": "TM20",
+      "itemNumber": 307,
+      "move": "SAFEGUARD",
+      "name": "TM20",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user creates a protective field that prevents status problems for five turns."
+    },
+    {
+      "itemId": "TM21",
+      "itemNumber": 308,
+      "move": "FRUSTRATION",
+      "name": "TM21",
+      "pocket": 4,
+      "price": 10000,
+      "description": "A full-power attack that grows more powerful the less the user likes its Trainer."
+    },
+    {
+      "itemId": "TM22",
+      "itemNumber": 309,
+      "move": "SOLARBEAM",
+      "name": "TM22",
+      "pocket": 4,
+      "price": 10000,
+      "description": "A two-turn attack. The user gathers light, then blasts a bundled beam on the second turn."
+    },
+    {
+      "itemId": "TM23",
+      "itemNumber": 310,
+      "move": "SMACKDOWN",
+      "name": "TM23",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user throws a stone or similar projectile to attack a foe. A flying Pokémon will fall to the ground if hit."
+    },
+    {
+      "itemId": "TM24",
+      "itemNumber": 311,
+      "move": "THUNDERBOLT",
+      "name": "TM24",
+      "pocket": 4,
+      "price": 10000,
+      "description": "A strong electric blast is loosed at the target. It may also leave the target with paralysis."
+    },
+    {
+      "itemId": "TM25",
+      "itemNumber": 312,
+      "move": "THUNDER",
+      "name": "TM25",
+      "pocket": 4,
+      "price": 30000,
+      "description": "A wicked thunderbolt is dropped on the target to inflict damage. It may also leave the target with paralysis."
+    },
+    {
+      "itemId": "TM26",
+      "itemNumber": 313,
+      "move": "EARTHQUAKE",
+      "name": "TM26",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user sets off an earthquake that strikes every Pokémon around it."
+    },
+    {
+      "itemId": "TM27",
+      "itemNumber": 314,
+      "move": "RETURN",
+      "name": "TM27",
+      "pocket": 4,
+      "price": 10000,
+      "description": "A full-power attack that grows more powerful the more the user likes its Trainer."
+    },
+    {
+      "itemId": "TM28",
+      "itemNumber": 315,
+      "move": "DIG",
+      "name": "TM28",
+      "pocket": 4,
+      "price": 20000,
+      "description": "The user burrows, then attacks on the second turn. It can also be used to exit dungeons."
+    },
+    {
+      "itemId": "TM29",
+      "itemNumber": 316,
+      "move": "PSYCHIC",
+      "name": "TM29",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The target is hit by a strong telekinetic force. It may also reduce the target's Sp. Def stat."
+    },
+    {
+      "itemId": "TM30",
+      "itemNumber": 317,
+      "move": "SHADOWBALL",
+      "name": "TM30",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user hurls a shadowy blob at the target. It may also lower the target's Sp. Def stat."
+    },
+    {
+      "itemId": "TM31",
+      "itemNumber": 318,
+      "move": "BRICKBREAK",
+      "name": "TM31",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user attacks with tough fists, etc. It can also break any barrier such as Light Screen and Reflect."
+    },
+    {
+      "itemId": "TM32",
+      "itemNumber": 319,
+      "move": "DOUBLETEAM",
+      "name": "TM32",
+      "pocket": 4,
+      "price": 10000,
+      "description": "By moving rapidly, the user makes illusory copies of itself to raise its evasiveness."
+    },
+    {
+      "itemId": "TM33",
+      "itemNumber": 320,
+      "move": "REFLECT",
+      "name": "TM33",
+      "pocket": 4,
+      "price": 10000,
+      "description": "A wondrous wall of light is put up to suppress damage from physical attacks for five turns."
+    },
+    {
+      "itemId": "TM34",
+      "itemNumber": 321,
+      "move": "SLUDGEWAVE",
+      "name": "TM34",
+      "pocket": 4,
+      "price": 10000,
+      "description": "It swamps the area around the user with a giant sludge wave. It may also poison those hit."
+    },
+    {
+      "itemId": "TM35",
+      "itemNumber": 322,
+      "move": "FLAMETHROWER",
+      "name": "TM35",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The target is scorched with an intense blast of fire. It may also leave the target with a burn."
+    },
+    {
+      "itemId": "TM36",
+      "itemNumber": 323,
+      "move": "SLUDGEBOMB",
+      "name": "TM36",
+      "pocket": 4,
+      "price": 10000,
+      "description": "Unsanitary sludge is hurled at the target. It may also poison the target."
+    },
+    {
+      "itemId": "TM37",
+      "itemNumber": 324,
+      "move": "SANDSTORM",
+      "name": "TM37",
+      "pocket": 4,
+      "price": 50000,
+      "description": "A five-turn sandstorm is summoned to hurt all combatants except the Rock, Ground, and Steel types."
+    },
+    {
+      "itemId": "TM38",
+      "itemNumber": 325,
+      "move": "FIREBLAST",
+      "name": "TM38",
+      "pocket": 4,
+      "price": 30000,
+      "description": "The foe is attacked with an intense blast of all-consuming fire. It may also leave the target with a burn."
+    },
+    {
+      "itemId": "TM39",
+      "itemNumber": 326,
+      "move": "ROCKTOMB",
+      "name": "TM39",
+      "pocket": 4,
+      "price": 10000,
+      "description": "Boulders are hurled at the target. It also lowers the target's Speed by preventing its movement."
+    },
+    {
+      "itemId": "TM40",
+      "itemNumber": 327,
+      "move": "AERIALACE",
+      "name": "TM40",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user confounds the target with speed, then slashes. The attack lands without fail."
+    },
+    {
+      "itemId": "TM41",
+      "itemNumber": 328,
+      "move": "TORMENT",
+      "name": "TM41",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user torments and enrages the target, making it incapable of using the same move twice in a row."
+    },
+    {
+      "itemId": "TM42",
+      "itemNumber": 329,
+      "move": "FACADE",
+      "name": "TM42",
+      "pocket": 4,
+      "price": 10000,
+      "description": "An attack move that doubles its power if the user is poisoned, paralyzed, or has a burn."
+    },
+    {
+      "itemId": "TM43",
+      "itemNumber": 330,
+      "move": "FLAMECHARGE",
+      "name": "TM43",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user cloaks itself with flame and attacks. Building up more power, it raises the user's Speed stat."
+    },
+    {
+      "itemId": "TM44",
+      "itemNumber": 331,
+      "move": "REST",
+      "name": "TM44",
+      "pocket": 4,
+      "price": 1000,
+      "description": "The user goes to sleep for two turns. It fully restores the user's HP and heals any status problem."
+    },
+    {
+      "itemId": "TM45",
+      "itemNumber": 332,
+      "move": "ATTRACT",
+      "name": "TM45",
+      "pocket": 4,
+      "price": 10000,
+      "description": "If it is the opposite gender of the user, the target becomes infatuated and less likely to attack."
+    },
+    {
+      "itemId": "TM46",
+      "itemNumber": 333,
+      "move": "THIEF",
+      "name": "TM46",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user attacks and steals the target's held item simultaneously. It can't steal if the user holds an item."
+    },
+    {
+      "itemId": "TM47",
+      "itemNumber": 334,
+      "move": "LOWSWEEP",
+      "name": "TM47",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user attacks the target's legs swiftly, reducing the target's Speed stat."
+    },
+    {
+      "itemId": "TM48",
+      "itemNumber": 335,
+      "move": "ROUND",
+      "name": "TM48",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user attacks the target with a song. Others can join in the Round to increase the power of the attack."
+    },
+    {
+      "itemId": "TM49",
+      "itemNumber": 336,
+      "move": "ECHOEDVOICE",
+      "name": "TM49",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user attacks the target with an echoing voice. If this move is used every turn, it does greater damage."
+    },
+    {
+      "itemId": "TM50",
+      "itemNumber": 337,
+      "move": "OVERHEAT",
+      "name": "TM50",
+      "pocket": 4,
+      "price": 80000,
+      "description": "The user attacks the target at full power. The attack's recoil sharply reduces the user's Sp. Atk stat."
+    },
+    {
+      "itemId": "TM51",
+      "itemNumber": 338,
+      "move": "ALLYSWITCH",
+      "name": "TM51",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user teleports using a strange power and switches its place with one of its allies."
+    },
+    {
+      "itemId": "TM52",
+      "itemNumber": 339,
+      "move": "FOCUSBLAST",
+      "name": "TM52",
+      "pocket": 4,
+      "price": 30000,
+      "description": "The user heightens its mental focus and unleashes its power. It may also lower the target's Sp. Def."
+    },
+    {
+      "itemId": "TM53",
+      "itemNumber": 340,
+      "move": "ENERGYBALL",
+      "name": "TM53",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user draws power from nature and fires it at the target. It may also lower the target's Sp. Def."
+    },
+    {
+      "itemId": "TM54",
+      "itemNumber": 341,
+      "move": "FALSESWIPE",
+      "name": "TM54",
+      "pocket": 4,
+      "price": 10000,
+      "description": "A restrained attack that prevents the target from fainting. The target is left with at least 1 HP."
+    },
+    {
+      "itemId": "TM55",
+      "itemNumber": 342,
+      "move": "WATERPULSE",
+      "name": "TM55",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user attacks the target with a pulsing blast of water. It may also confuse the target."
+    },
+    {
+      "itemId": "TM56",
+      "itemNumber": 343,
+      "move": "FLING",
+      "name": "TM56",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user flings its held item at the target as an attack. Its power and effects depend on the item."
+    },
+    {
+      "itemId": "TM57",
+      "itemNumber": 344,
+      "move": "CHARGEBEAM",
+      "name": "TM57",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user fires a concentrated bundle of electricity. It may also raise the user's Sp. Atk stat."
+    },
+    {
+      "itemId": "TM58",
+      "itemNumber": 345,
+      "move": "SKYDROP",
+      "name": "TM58",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user hurls the foe into the sky, then drops it on the next turn. The foe cannot attack while in the sky."
+    },
+    {
+      "itemId": "TM59",
+      "itemNumber": 346,
+      "move": "INCINERATE",
+      "name": "TM59",
+      "pocket": 4,
+      "price": 15000,
+      "description": "The user attacks the target with fire. If the target is holding a Berry, the Berry becomes burnt up and unusable."
+    },
+    {
+      "itemId": "TM60",
+      "itemNumber": 347,
+      "move": "QUASH",
+      "name": "TM60",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user suppresses the target and makes its move go last."
+    },
+    {
+      "itemId": "TM61",
+      "itemNumber": 348,
+      "move": "WILLOWISP",
+      "name": "TM61",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user shoots a sinister, bluish-white flame at the target to inflict a burn."
+    },
+    {
+      "itemId": "TM62",
+      "itemNumber": 349,
+      "move": "ACROBATICS",
+      "name": "TM62",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user nimbly strikes the target. If the user is not holding an item, this attack inflicts massive damage."
+    },
+    {
+      "itemId": "TM63",
+      "itemNumber": 350,
+      "move": "EMBARGO",
+      "name": "TM63",
+      "pocket": 4,
+      "price": 10000,
+      "description": "It prevents the target from using its held item. Its Trainer is also prevented from using items on it."
+    },
+    {
+      "itemId": "TM64",
+      "itemNumber": 351,
+      "move": "EXPLOSION",
+      "name": "TM64",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user explodes to inflict damage on those around it. The user faints upon using this move."
+    },
+    {
+      "itemId": "TM65",
+      "itemNumber": 352,
+      "move": "SHADOWCLAW",
+      "name": "TM65",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user slashes with a sharp claw made from shadows. It has a high critical-hit ratio."
+    },
+    {
+      "itemId": "TM66",
+      "itemNumber": 353,
+      "move": "PAYBACK",
+      "name": "TM66",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user stores power, then attacks. If the user can use this attack after the foe, its power is doubled."
+    },
+    {
+      "itemId": "TM67",
+      "itemNumber": 354,
+      "move": "RETALIATE",
+      "name": "TM67",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user gets revenge for a fainted ally. If an ally fainted in the previous turn, this attack's damage increases."
+    },
+    {
+      "itemId": "TM68",
+      "itemNumber": 355,
+      "move": "GIGAIMPACT",
+      "name": "TM68",
+      "pocket": 4,
+      "price": 50000,
+      "description": "The user charges at the target using every bit of its power. The user must rest on the next turn."
+    },
+    {
+      "itemId": "TM69",
+      "itemNumber": 356,
+      "move": "ROCKPOLISH",
+      "name": "TM69",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user polishes its body to reduce drag. It sharply raises the Speed stat."
+    },
+    {
+      "itemId": "TM70",
+      "itemNumber": 357,
+      "move": "ROOST",
+      "name": "TM70",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user lands and rests its body. It restores the user's HP by up to half of its max HP."
+    },
+    {
+      "itemId": "TM71",
+      "itemNumber": 358,
+      "move": "STONEEDGE",
+      "name": "TM71",
+      "pocket": 4,
+      "price": 30000,
+      "description": "The user stabs the foe with sharpened stones from below. It has a high critical-hit ratio."
+    },
+    {
+      "itemId": "TM72",
+      "itemNumber": 359,
+      "move": "VOLTSWITCH",
+      "name": "TM72",
+      "pocket": 4,
+      "price": 10000,
+      "description": "After making its attack, the user rushes back to switch places with a party Pokémon in waiting."
+    },
+    {
+      "itemId": "TM73",
+      "itemNumber": 360,
+      "move": "THUNDERWAVE",
+      "name": "TM73",
+      "pocket": 4,
+      "price": 5000,
+      "description": "A weak electric charge is launched at the target. It causes paralysis if it hits."
+    },
+    {
+      "itemId": "TM74",
+      "itemNumber": 361,
+      "move": "GYROBALL",
+      "name": "TM74",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user tackles the target with a high-speed spin. The slower the user, the greater the damage."
+    },
+    {
+      "itemId": "TM75",
+      "itemNumber": 362,
+      "move": "SWORDSDANCE",
+      "name": "TM75",
+      "pocket": 4,
+      "price": 10000,
+      "description": "A frenetic dance to uplift the fighting spirit. It sharply raises the user's Attack stat."
+    },
+    {
+      "itemId": "TM76",
+      "itemNumber": 363,
+      "move": "STRUGGLEBUG",
+      "name": "TM76",
+      "pocket": 4,
+      "price": 5000,
+      "description": "Resisting, the user attacks the opposing Pokémon. The targets' Sp. Atk stat is reduced."
+    },
+    {
+      "itemId": "TM77",
+      "itemNumber": 364,
+      "move": "PSYCHUP",
+      "name": "TM77",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user hypnotizes itself into copying any stat change made by the target."
+    },
+    {
+      "itemId": "TM78",
+      "itemNumber": 365,
+      "move": "BULLDOZE",
+      "name": "TM78",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user stomps down on the ground and attacks everything in the area. The targets' Speed stat is reduced."
+    },
+    {
+      "itemId": "TM79",
+      "itemNumber": 366,
+      "move": "FROSTBREATH",
+      "name": "TM79",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user blows a cold breath on the target. This attack always results in a critical hit."
+    },
+    {
+      "itemId": "TM80",
+      "itemNumber": 367,
+      "move": "ROCKSLIDE",
+      "name": "TM80",
+      "pocket": 4,
+      "price": 10000,
+      "description": "Large boulders are hurled at the opposing team to inflict damage. They may also make the targets flinch."
+    },
+    {
+      "itemId": "TM81",
+      "itemNumber": 368,
+      "move": "XSCISSOR",
+      "name": "TM81",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user slashes at the target by crossing its scythes or claws as if they were a pair of scissors."
+    },
+    {
+      "itemId": "TM82",
+      "itemNumber": 369,
+      "move": "DRAGONTAIL",
+      "name": "TM82",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user knocks away the target and drags out another Pokémon in its party. In the wild, the battle ends."
+    },
+    {
+      "itemId": "TM83",
+      "itemNumber": 370,
+      "move": "WORKUP",
+      "name": "TM83",
+      "pocket": 4,
+      "price": 20000,
+      "description": "The user is roused, and its Attack and Sp. Atk stats increase."
+    },
+    {
+      "itemId": "TM84",
+      "itemNumber": 371,
+      "move": "POISONJAB",
+      "name": "TM84",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The target is stabbed with a tentacle or arm steeped in poison. It may also poison the target."
+    },
+    {
+      "itemId": "TM85",
+      "itemNumber": 372,
+      "move": "DREAMEATER",
+      "name": "TM85",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user eats the dreams of a sleeping target. It absorbs half the damage caused to heal the user's HP."
+    },
+    {
+      "itemId": "TM86",
+      "itemNumber": 373,
+      "move": "GRASSKNOT",
+      "name": "TM86",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user snares the target with grass and trips it. The heavier the target, the greater the damage."
+    },
+    {
+      "itemId": "TM87",
+      "itemNumber": 374,
+      "move": "SWAGGER",
+      "name": "TM87",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user enrages and confuses the target. However, it also sharply raises the target's Attack stat."
+    },
+    {
+      "itemId": "TM88",
+      "itemNumber": 375,
+      "move": "SLEEPTALK",
+      "name": "TM88",
+      "pocket": 4,
+      "price": 10000,
+      "description": "While it is asleep, the user randomly uses one of the moves it knows."
+    },
+    {
+      "itemId": "TM89",
+      "itemNumber": 376,
+      "move": "UTURN",
+      "name": "TM89",
+      "pocket": 4,
+      "price": 10000,
+      "description": "After making its attack, the user rushes back to switch places with a party Pokémon in waiting."
+    },
+    {
+      "itemId": "TM90",
+      "itemNumber": 377,
+      "move": "SUBSTITUTE",
+      "name": "TM90",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user makes a copy of itself using some of its HP. The copy serves as the user's decoy."
+    },
+    {
+      "itemId": "TM91",
+      "itemNumber": 378,
+      "move": "FLASHCANNON",
+      "name": "TM91",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user gathers all its light energy and releases it at once. It may also lower the target's Sp. Def stat."
+    },
+    {
+      "itemId": "TM92",
+      "itemNumber": 379,
+      "move": "TRICKROOM",
+      "name": "TM92",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user creates a bizarre space in which slower Pokémon get to move first for five turns."
+    },
+    {
+      "itemId": "TM93",
+      "itemNumber": 380,
+      "move": "WILDCHARGE",
+      "name": "TM93",
+      "pocket": 4,
+      "price": 50000,
+      "description": "The user shrouds itself in electricity and smashes into its target. It also damages the user a little."
+    },
+    {
+      "itemId": "TM94",
+      "itemNumber": 381,
+      "move": "ROCKSMASH",
+      "name": "TM94",
+      "pocket": 4,
+      "price": 30000,
+      "description": "The user attacks with a punch that can shatter a rock. It may also lower the target's Defense stat."
+    },
+    {
+      "itemId": "TM95",
+      "itemNumber": 382,
+      "move": "SNARL",
+      "name": "TM95",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user yells as if it is ranting about something, making the target's Sp. Atk stat decrease."
+    },
+    {
+      "itemId": "TM96",
+      "itemNumber": 535,
+      "move": "MOONBLAST",
+      "name": "TM96",
+      "pocket": 4,
+      "price": 30000,
+      "description": "Borrowing the power of the moon, the user attacks the target. This may also lower the target's Sp. Atk stat."
+    },
+    {
+      "itemId": "TM97",
+      "itemNumber": 613,
+      "move": "NASTYPLOT",
+      "name": "TM97",
+      "pocket": 4,
+      "price": 30000,
+      "description": "The user stimulates its brain by thinking bad thoughts. It sharply raises the user's Sp. Atk."
+    },
+    {
+      "itemId": "TM98",
+      "itemNumber": 614,
+      "move": "BATONPASS",
+      "name": "TM98",
+      "pocket": 4,
+      "price": 30000,
+      "description": "The user switches places with a party Pokémon in waiting, passing along any stat changes."
+    },
+    {
+      "itemId": "TM99",
+      "itemNumber": 615,
+      "move": "QUIVERDANCE",
+      "name": "TM99",
+      "pocket": 4,
+      "price": 30000,
+      "description": "The user performs a beautiful dance. It boosts the user's Sp. Atk, Sp. Def, and Speed stats."
+    },
+    {
+      "itemId": "TM100",
+      "itemNumber": 616,
+      "move": "DEFOG",
+      "name": "TM100",
+      "pocket": 4,
+      "price": 30000,
+      "description": "A strong wind blows away the foe's obstacles such as Light Screen. It also lowers their evasion."
+    },
+    {
+      "itemId": "TM101",
+      "itemNumber": 617,
+      "move": "DRAGONDANCE",
+      "name": "TM101",
+      "pocket": 4,
+      "price": 30000,
+      "description": "The user vigorously performs a mystic, powerful dance that boosts its Attack and Speed stats."
+    },
+    {
+      "itemId": "TM102",
+      "itemNumber": 618,
+      "move": "SPORE",
+      "name": "TM102",
+      "pocket": 4,
+      "price": 30000,
+      "description": "The user scatters bursts of spores that induce sleep."
+    },
+    {
+      "itemId": "TM103",
+      "itemNumber": 619,
+      "move": "TOXICSPIKES",
+      "name": "TM103",
+      "pocket": 4,
+      "price": 30000,
+      "description": "The user lays a trap of poison spikes at the foe's feet. They poison foes that switch into battle."
+    },
+    {
+      "itemId": "TM104",
+      "itemNumber": 620,
+      "move": "RECOVER",
+      "name": "TM104",
+      "pocket": 4,
+      "price": 30000,
+      "description": "Restoring its own cells, the user restores its own HP by half of its max HP."
+    },
+    {
+      "itemId": "TM105",
+      "itemNumber": 621,
+      "move": "AQUAJET",
+      "name": "TM105",
+      "pocket": 4,
+      "price": 30000,
+      "description": "The user lunges at the target at a speed that makes it almost invisible. It is sure to strike first."
+    },
+    {
+      "itemId": "TM106",
+      "itemNumber": 625,
+      "move": "DRAININGKISS",
+      "name": "TM106",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user steals the target's HP with a kiss. The user's HP is restored by over half of the damage taken by the target."
+    },
+    {
+      "itemId": "TM107",
+      "itemNumber": 626,
+      "move": "PLAYROUGH",
+      "name": "TM107",
+      "pocket": 4,
+      "price": 40000,
+      "description": "The user plays rough with the target and attacks it."
+    },
+    {
+      "itemId": "TM108",
+      "itemNumber": 622,
+      "move": "SKYATTACK",
+      "name": "TM108",
+      "pocket": 4,
+      "price": 30000,
+      "description": "A second-turn attack move where critical hits land more easily. It may also make the target flinch."
+    },
+    {
+      "itemId": "TM109",
+      "itemNumber": 646,
+      "move": "BRUTALSWING",
+      "name": "TM109",
+      "pocket": 4,
+      "price": 30000,
+      "description": "The user swings its body around violently to inflict damage on everything in its vicinity."
+    },
+    {
+      "itemId": "TM110",
+      "itemNumber": 647,
+      "move": "AURORAVEIL",
+      "name": "TM110",
+      "pocket": 4,
+      "price": 30000,
+      "description": "This move reduces damage from attacks for five turns. This can be used only in a hailstorm."
+    },
+    {
+      "itemId": "TM111",
+      "itemNumber": 648,
+      "move": "DAZZLINGGLEAM",
+      "name": "TM111",
+      "pocket": 4,
+      "price": 30000,
+      "description": "The user damages opposing Pokémon by emitting a powerful flash."
+    },
+    {
+      "itemId": "TM112",
+      "itemNumber": 649,
+      "move": "FOCUSPUNCH",
+      "name": "TM112",
+      "pocket": 4,
+      "price": 30000,
+      "description": "The user focuses its mind before launching a punch. It will fail if the user is hit before it is used."
+    },
+    {
+      "itemId": "TM113",
+      "itemNumber": 650,
+      "move": "INFESTATION",
+      "name": "TM113",
+      "pocket": 4,
+      "price": 30000,
+      "description": "The target is infested and unable to flee for four to five turns."
+    },
+    {
+      "itemId": "TM114",
+      "itemNumber": 651,
+      "move": "LEECHLIFE",
+      "name": "TM114",
+      "pocket": 4,
+      "price": 30000,
+      "description": "The user drains the target's blood. The user's HP is restored by half the damage taken by the target."
+    },
+    {
+      "itemId": "TM115",
+      "itemNumber": 652,
+      "move": "POWERUPPUNCH",
+      "name": "TM115",
+      "pocket": 4,
+      "price": 30000,
+      "description": "Striking opponents repeatedly makes the user's fists harder, raising the user's Attack stat."
+    },
+    {
+      "itemId": "TM116",
+      "itemNumber": 653,
+      "move": "SHOCKWAVE",
+      "name": "TM116",
+      "pocket": 4,
+      "price": 30000,
+      "description": "The user strikes the target with a quick jolt of electricity. This attack cannot be evaded."
+    },
+    {
+      "itemId": "TM117",
+      "itemNumber": 654,
+      "move": "SMARTSTRIKE",
+      "name": "TM117",
+      "pocket": 4,
+      "price": 30000,
+      "description": "The user stabs the target with a sharp horn. This attack never misses."
+    },
+    {
+      "itemId": "TM118",
+      "itemNumber": 655,
+      "move": "STEELWING",
+      "name": "TM118",
+      "pocket": 4,
+      "price": 30000,
+      "description": "The target is hit with wings of steel. It may also raise the user's Defense stat."
+    },
+    {
+      "itemId": "TM119",
+      "itemNumber": 656,
+      "move": "STOMPINGTANTRUM",
+      "name": "TM119",
+      "pocket": 4,
+      "price": 30000,
+      "description": "The user attacks driven by frustration. Power increases if the user's previous move failed."
+    },
+    {
+      "itemId": "TM120",
+      "itemNumber": 657,
+      "move": "THROATCHOP",
+      "name": "TM120",
+      "pocket": 4,
+      "price": 30000,
+      "description": "The user attacks the target's throat. The target cannot use sound-based moves for two turns."
+    },
+    {
+      "itemId": "TM121",
+      "itemNumber": 659,
+      "move": "SCALD",
+      "name": "TM121",
+      "pocket": 4,
+      "price": 10000,
+      "description": "The user shoots boiling hot water at its target. It may also leave the target with a burn."
+    }
+  ],
+  "hms": [
+    {
+      "itemId": "HM01",
+      "itemNumber": 383,
+      "move": "CUT",
+      "name": "HM01",
+      "pocket": 4,
+      "price": 0,
+      "description": "The target is cut with a scythe or claw. It can also be used to cut down thin trees."
+    },
+    {
+      "itemId": "HM02",
+      "itemNumber": 384,
+      "move": "FLY",
+      "name": "HM02",
+      "pocket": 4,
+      "price": 0,
+      "description": "The user soars, then strikes on the second turn. It can also be used to fly to any familiar town."
+    },
+    {
+      "itemId": "HM03",
+      "itemNumber": 385,
+      "move": "SURF",
+      "name": "HM03",
+      "pocket": 4,
+      "price": 0,
+      "description": "It swamps the area around the user with a giant wave. It can also be used for crossing water."
+    },
+    {
+      "itemId": "HM04",
+      "itemNumber": 386,
+      "move": "STRENGTH",
+      "name": "HM04",
+      "pocket": 4,
+      "price": 0,
+      "description": "The target is slugged with a punch thrown at maximum power. This move can also be used to move boulders."
+    },
+    {
+      "itemId": "HM05",
+      "itemNumber": 387,
+      "move": "WATERFALL",
+      "name": "HM05",
+      "pocket": 4,
+      "price": 0,
+      "description": "The user charges the target at an awesome speed. It can also be used to climb a waterfall."
+    },
+    {
+      "itemId": "HM06",
+      "itemNumber": 388,
+      "move": "DIVE",
+      "name": "HM06",
+      "pocket": 4,
+      "price": 0,
+      "description": "The user dives on the first turn, and floats up and attacks on the second. It can be used to dive in the ocean."
+    },
+    {
+      "itemId": "HM07",
+      "itemNumber": 530,
+      "move": "TELEPORT",
+      "name": "HM07",
+      "pocket": 4,
+      "price": 0,
+      "description": "The user teleports out of sight. It can also be used to teleport to any familiar Pokémon Center"
+    },
+    {
+      "itemId": "HM08",
+      "itemNumber": 531,
+      "move": "FLASH",
+      "name": "HM08",
+      "pocket": 4,
+      "price": 0,
+      "description": "The user flashes a bright light that cuts the target's accuracy. It can also be used to illuminate caves."
+    },
+    {
+      "itemId": "HM09",
+      "itemNumber": 639,
+      "move": "BOUNCE",
+      "name": "HM09",
+      "pocket": 4,
+      "price": 0,
+      "description": "The user bounces up high, then drops on the foe on the second turn. It can also be used for jumping over holes."
+    },
+    {
+      "itemId": "HM10",
+      "itemNumber": 640,
+      "move": "ROCKCLIMB",
+      "name": "HM10",
+      "pocket": 4,
+      "price": 0,
+      "description": "The user attacks the target by smashing into it with incredible force. It can also be used to climb up cliffs."
+    }
+  ]
+}

@@ -8,6 +8,11 @@ import type { Ability } from "../lib/types/ability";
 import type { Move } from "../lib/types/moves";
 import type { PokedexFiltersState, SortBy, SortDir } from "../lib/types/pokedexFilters";
 
+type PokedexFilterBarProps = PokedexFiltersState & {
+  /** Current page, used to determine which buttons should be disabled */
+  currentPage?: "pokedex" | "boxTeam";
+};
+
 const speciesList = speciesRaw as Species[];
 const abilitiesList = abilitiesRaw as Ability[];
 const movesList = movesRaw as Move[];
@@ -22,8 +27,7 @@ const movesList = movesRaw as Move[];
  * - Sorting by various stats
  * - Legendary/sub-legendary exclusion
  */
-export default function PokedexFilterBar(props: PokedexFiltersState) {
-  // Extract all unique types from the species list
+export default function PokedexFilterBar(props: PokedexFilterBarProps) {
   // Extract all unique types from the species list
   const allTypes = useMemo(() => {
     const set = new Set<string>();
@@ -91,24 +95,23 @@ export default function PokedexFilterBar(props: PokedexFiltersState) {
         <datalist id="moves-datalist">
           {movesList.map((m) => <option key={m.ID} value={m.Name} />)}
         </datalist>
+
+        <span style={{ opacity: 0.75 }}>Apply to:</span>
+        <button
+          type="button"
+          onClick={() => props.setFilterTarget("pokedex")}
+          aria-pressed={props.filterTarget === "pokedex"}
+        >
+          Pokedex
+        </button>
+        <button
+          type="button"
+          onClick={() => props.setFilterTarget("box")}
+          aria-pressed={props.filterTarget === "box"}
+        >
+          Box
+        </button>
       </div>
-      <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
-  <span style={{ opacity: 0.75 }}>Apply to:</span>
-  <button
-    type="button"
-    onClick={() => props.setFilterTarget("pokedex")}
-    aria-pressed={props.filterTarget === "pokedex"}
-  >
-    Pokedex
-  </button>
-  <button
-    type="button"
-    onClick={() => props.setFilterTarget("box")}
-    aria-pressed={props.filterTarget === "box"}
-  >
-    Box
-  </button>
-</div>
 
 
       {/* Stage 2 Filters: Sorting and advanced filtering options */}

@@ -57,7 +57,7 @@ export default function App() {
       {/* Filter Bar (shown only on Pokedex and Box/Team pages) */}
       {(page === "pokedex" || page === "boxTeam") && (
   <PokedexFilterBar
-    // NEW: pass target + setter
+    currentPage={page}
     filterTarget={filterTarget}
     setFilterTarget={setFilterTarget}
 

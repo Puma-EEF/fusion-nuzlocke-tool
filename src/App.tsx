@@ -13,15 +13,15 @@ type Page = "pokedex" | "fusion" | "boxTeam";
  * Manages global state for filters and navigation between pages:
  * - Pokedex: Browse and filter all Pokemon
  * - Fusion Calculator: Calculate fusion combinations
- * - Box/Team: Manage caught Pokemon and party
+ * - Box Team: Manage caught Pokemon and party
  * 
- * Filter state is shared between Pokedex and Box/Team pages
+ * Filter state is shared between Pokedex and Box Team pages
  */
 export default function App() {
   // === Navigation State ===
   const [page, setPage] = useState<Page>("pokedex");
   
-  // === Box/Team State ===
+  // === Box Team State ===
   type FilterTarget = "pokedex" | "box";
   const [filterTarget, setFilterTarget] = useState<FilterTarget>("pokedex");
   const [boxIds, setBoxIds] = useState<number[]>([]);
@@ -50,11 +50,11 @@ export default function App() {
           Fusion Calculator
         </button>
         <button onClick={() => setPage("boxTeam")} style={{ padding: "8px 12px" }}>
-          Box/Team
+          Box Team
         </button>
       </header>
 
-      {/* Filter Bar (shown only on Pokedex and Box/Team pages) */}
+      {/* Filter Bar (shown only on Pokedex and Box Team pages) */}
       {(page === "pokedex" || page === "boxTeam") && (
   <PokedexFilterBar
     currentPage={page}

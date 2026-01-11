@@ -2,6 +2,25 @@ import type { Species } from "../types/species";
 import type { DetailsInput, DetailsVM, StatBlock } from "./detailsTypes";
 import { computeEffectiveStats } from "../effectiveStats";
 import { fusePokemon } from "../fusion";
+import abilitiesRaw from "../../data/abilities.json";
+import movesRaw from "../../data/moves.json";
+import learnsetsRaw from "../../data/learnsets.json";
+
+const movesList = movesRaw as any[];
+const abilitiesList = abilitiesRaw as any[];
+const learnsetsList = learnsetsRaw as any[];
+
+const moveNameByInternal = new Map<string, string>(movesList.map(m => [m.InternalName, m.Name]));
+const abilityNameByInternal = new Map<string, string>(abilitiesList.map(a => [a.InternalName, a.Name]));
+
+function listFromPipe(s?: string) {
+  if (!s) return [];
+  return s.split("|").map(x => x.trim()).filter(Boolean);
+}
+
+function dedupe(arr: string[]) {
+  return Array.from(new Set(arr));
+}
 
 function toStatBlock(stats: {
   hp: number;
@@ -37,6 +56,26 @@ export function resolveDetailsVM(params: {
       spd: Number(s.BaseSPD),
       spe: Number(s.BaseSPE),
     });
+    const abilities = dedupe(
+      [
+        s.Ability1,
+        s.Ability2,
+        s.HiddenAbility1,
+        s.HiddenAbility2,
+      ]
+        .filter(Boolean)
+        .map((a: string) => abilityNameByInternal.get(a) ?? a)
+    );
+
+    const learnset = learnsetsList.find((ls: any) => ls.InternalName === s.InternalName);
+
+    const moves = {
+      levelUp: dedupe(listFromPipe(learnset?.LevelUp).map((m) => moveNameByInternal.get(m) ?? m)),
+      tm: dedupe(listFromPipe(learnset?.TMMoves).map((m) => moveNameByInternal.get(m) ?? m)),
+      tutor: dedupe(listFromPipe(learnset?.TutorMoves).map((m) => moveNameByInternal.get(m) ?? m)),
+      egg: dedupe(listFromPipe(learnset?.EggMoves).map((m) => moveNameByInternal.get(m) ?? m)),
+      hm: dedupe(listFromPipe(learnset?.HMMoves).map((m) => moveNameByInternal.get(m) ?? m)),
+    };
 
     return {
       kind: "BASE",
@@ -44,6 +83,8 @@ export function resolveDetailsVM(params: {
       sprite: { headId: s.ID, bodyId: s.ID },
       typing: { type1: s.Type1, type2: s.Type2 ?? null },
       baseStats: base,
+      abilities,
+      moves,
     };
   }
 

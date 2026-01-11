@@ -151,6 +151,47 @@ export default function DetailsPanel({
           <StatBlockView title="Effective stats (Lvl 50, IV + Nature)" stats={vm.effectiveStats} />
         ) : null}
       </div>
+      {vm.abilities?.length ? (
+        <div style={{ border: "1px solid #eee", borderRadius: 12, padding: 10 }}>
+          <div style={{ fontSize: 12, fontWeight: 900, marginBottom: 8 }}>Abilities</div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+            {vm.abilities.map((a) => (
+              <span key={a} style={{ fontSize: 12, border: "1px solid #ddd", borderRadius: 999, padding: "2px 8px" }}>
+                {a}
+              </span>
+            ))}
+          </div>
+        </div>
+      ) : null}
+
+      {vm.moves ? (
+        <div style={{ border: "1px solid #eee", borderRadius: 12, padding: 10 }}>
+          <div style={{ fontSize: 12, fontWeight: 900, marginBottom: 8 }}>Moves</div>
+
+          {(
+            [
+              ["Level-up", vm.moves.levelUp],
+              ["TM", vm.moves.tm],
+              ["Tutor", vm.moves.tutor],
+              ["Egg", vm.moves.egg],
+              ["HM", vm.moves.hm],
+            ] as const
+          ).map(([label, arr]) =>
+            arr.length ? (
+              <div key={label} style={{ marginBottom: 10 }}>
+                <div style={{ fontSize: 12, fontWeight: 800, opacity: 0.85, marginBottom: 4 }}>{label}</div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                  {arr.map((m) => (
+                    <span key={m} style={{ fontSize: 12, border: "1px solid #ddd", borderRadius: 999, padding: "2px 8px" }}>
+                      {m}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ) : null
+          )}
+        </div>
+      ) : null}
     </div>
   );
 }

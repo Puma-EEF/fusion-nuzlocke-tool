@@ -23,6 +23,18 @@ export type DetailsVM = {
   /** Pure base stats derived from species or fusion engine */
   baseStats: StatBlock;
 
+  /** Optional abilities for display purposes */
+  abilities?: string[]; // display names
+
+  /** Optional move lists for display purposes */
+  moves?: {
+    levelUp: string[];
+    tm: string[];
+    tutor: string[];
+    egg: string[];
+    hm: string[];
+  };
+
   /** Only present when the source is a BoxMon (editable in Box/Team) */
   nature?: NatureId;
   ivs?: IVs;

@@ -22,6 +22,24 @@ function dedupe(arr: string[]) {
   return Array.from(new Set(arr));
 }
 
+function parseLevelUpMoves(raw?: string): { level: number; internal: string }[] {
+  if (!raw) return [];
+  // Format: "0:WINGATTACK|1:AIRSLASH|..."
+  return raw
+    .split("|")
+    .map((x) => x.trim())
+    .filter(Boolean)
+    .map((entry) => {
+      const [lvlStr, moveInternal] = entry.split(":");
+      const level = Number(lvlStr);
+      return {
+        level: Number.isFinite(level) ? level : 0,
+        internal: (moveInternal ?? "").trim(),
+      };
+    })
+    .filter((x) => x.internal.length > 0);
+}
+
 function toStatBlock(stats: {
   hp: number;
   atk: number;
@@ -70,7 +88,22 @@ export function resolveDetailsVM(params: {
     const learnset = learnsetsList.find((ls: any) => ls.InternalName === s.InternalName);
 
     const moves = {
-      levelUp: dedupe(listFromPipe(learnset?.LevelUp).map((m) => moveNameByInternal.get(m) ?? m)),
+      levelUp: (() => {
+        const parsed = parseLevelUpMoves(learnset?.LevelUp)
+          .map(({ level, internal }) => ({
+            level,
+            name: moveNameByInternal.get(internal) ?? internal,
+          }))
+          // dedupe by name, keep the lowest level if duplicates exist
+          .sort((a, b) => a.level - b.level);
+
+        const bestByName = new Map<string, { level: number; name: string }>();
+        for (const m of parsed) {
+          const prev = bestByName.get(m.name);
+          if (!prev || m.level < prev.level) bestByName.set(m.name, m);
+        }
+        return Array.from(bestByName.values()).sort((a, b) => a.level - b.level);
+      })(),
       tm: dedupe(listFromPipe(learnset?.TMMoves).map((m) => moveNameByInternal.get(m) ?? m)),
       tutor: dedupe(listFromPipe(learnset?.TutorMoves).map((m) => moveNameByInternal.get(m) ?? m)),
       egg: dedupe(listFromPipe(learnset?.EggMoves).map((m) => moveNameByInternal.get(m) ?? m)),

@@ -163,14 +163,32 @@ export default function DetailsPanel({
           </div>
         </div>
       ) : null}
-
       {vm.moves ? (
         <div style={{ border: "1px solid #eee", borderRadius: 12, padding: 10 }}>
           <div style={{ fontSize: 12, fontWeight: 900, marginBottom: 8 }}>Moves</div>
 
+          {/* Level-up (with levels) */}
+          {vm.moves.levelUp.length ? (
+            <div style={{ marginBottom: 10 }}>
+              <div style={{ fontSize: 12, fontWeight: 800, opacity: 0.85, marginBottom: 4 }}>
+                Level-up
+              </div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                {vm.moves.levelUp.map((m) => (
+                  <span
+                    key={`${m.name}-${m.level}`}
+                    style={{ fontSize: 12, border: "1px solid #ddd", borderRadius: 999, padding: "2px 8px" }}
+                  >
+                    {m.name} <span style={{ opacity: 0.7 }}>(Lv {m.level})</span>
+                  </span>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
+          {/* Other categories (strings) */}
           {(
             [
-              ["Level-up", vm.moves.levelUp],
               ["TM", vm.moves.tm],
               ["Tutor", vm.moves.tutor],
               ["Egg", vm.moves.egg],
@@ -181,9 +199,12 @@ export default function DetailsPanel({
               <div key={label} style={{ marginBottom: 10 }}>
                 <div style={{ fontSize: 12, fontWeight: 800, opacity: 0.85, marginBottom: 4 }}>{label}</div>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                  {arr.map((m) => (
-                    <span key={m} style={{ fontSize: 12, border: "1px solid #ddd", borderRadius: 999, padding: "2px 8px" }}>
-                      {m}
+                  {arr.map((name) => (
+                    <span
+                      key={`${label}-${name}`}
+                      style={{ fontSize: 12, border: "1px solid #ddd", borderRadius: 999, padding: "2px 8px" }}
+                    >
+                      {name}
                     </span>
                   ))}
                 </div>

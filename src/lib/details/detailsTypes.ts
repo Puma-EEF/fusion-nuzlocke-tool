@@ -28,7 +28,7 @@ export type DetailsVM = {
 
   /** Optional move lists for display purposes */
   moves?: {
-    levelUp: string[];
+    levelUp: { level: number; name: string }[];
     tm: string[];
     tutor: string[];
     egg: string[];

@@ -1,5 +1,3 @@
-import { DEFAULT_IVS, DEFAULT_NATURE } from "./types/box";
-
 export type BoxKind = "BASE" | "FUSION";
 export type RarityTier = "LEGENDARY" | "SUB_LEGENDARY" | "NORMAL";
 export type NatureId =

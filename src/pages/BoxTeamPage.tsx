@@ -72,6 +72,7 @@ type BoxTeamPageProps = {
 };
 
 const speciesList = speciesRaw as Species[];
+const LS_KEY = "fusion-nuzlocke-tool:box:v1";
 
 type BoxTab = "ALL" | "BASE" | "FUSED";
 

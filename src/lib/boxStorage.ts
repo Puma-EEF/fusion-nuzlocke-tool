@@ -12,6 +12,8 @@
  */
 
 import type { BoxMon } from "./types/box";
+import { DEFAULT_IVS, DEFAULT_NATURE } from "./types/box";
+import { fusePokemon } from "../lib/fusion";
 
 /** 
  * localStorage key for box data persistence

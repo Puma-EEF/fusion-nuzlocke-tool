@@ -29,11 +29,13 @@
 import { useMemo, useState } from "react";
 
 import type { SortBy, SortDir } from "../lib/types/pokedexFilters";
-import type { BoxMon, RarityTier } from "../lib/types/box";
+import type { RarityTier } from "../lib/types/box";
 import type { NatureId } from "../lib/types/box";
 import { UNDEFINED_ABILITY } from "../lib/types/box";
 import { newBoxId } from "../lib/boxStorage";
+import type { BoxMon } from "../lib/types/box";
 import { DEFAULT_IVS, DEFAULT_NATURE } from "../lib/types/box";
+import { computeEffectiveStats } from "../lib/effectiveStats";
 
 import speciesRaw from "../data/species.json";
 import type { Species } from "../lib/types/species";
@@ -168,6 +170,24 @@ export default function BoxTeamPage(props: BoxTeamPageProps) {
   const selectedBoxMon = activeBoxId
     ? props.box.find((b) => b.boxId === activeBoxId) ?? null
     : null;
+  
+  const baseSpecies =
+    selectedBoxMon?.kind === "BASE" ? speciesById.get(selectedBoxMon.dexId) : undefined;
+
+  const baseStats = baseSpecies
+    ? {
+        hp:  baseSpecies.BaseHP,
+        atk: baseSpecies.BaseATK,
+        def: baseSpecies.BaseDEF,
+        spa: baseSpecies.BaseSPA,
+        spd: baseSpecies.BaseSPD,
+        spe: baseSpecies.BaseSPE,
+      }
+    : null;
+
+  const eff = baseStats && selectedBoxMon
+    ? computeEffectiveStats(baseStats, selectedBoxMon.nature, selectedBoxMon.ivs, 50)
+    : null;
 
   function titleForBoxMon(b: BoxMon): string {
     if (b.kind === "BASE") {
@@ -250,11 +270,6 @@ export default function BoxTeamPage(props: BoxTeamPageProps) {
           <button type="button" onClick={() => props.setBox([])}>
             Clear box
           </button>
-
-          {/* Keep a simple test add for now */}
-          <button type="button" onClick={() => addBaseToBox(1)}>
-            + Add Bulbasaur
-          </button>
         </div>
 
         <div style={{ marginTop: 12 }}>
@@ -312,79 +327,92 @@ export default function BoxTeamPage(props: BoxTeamPageProps) {
       >
         <h3 style={{ marginTop: 0 }}>Info</h3>
 
-        {!selectedBoxMon ? (
-          <div style={{ fontSize: 12, opacity: 0.75 }}>
-            Select a Pokémon in the Box to edit Nature + IVs.
-          </div>
-        ) : (
-          <div style={{ display: "grid", gap: 12 }}>
-            <div style={{ fontSize: 12, opacity: 0.8 }}>
-              Editing: <b>{selectedBoxMon.boxId}</b>
+          {!selectedBoxMon ? (
+            <div style={{ fontSize: 12, opacity: 0.75 }}>
+              Select a Pokémon in the Box to edit Nature + IVs.
             </div>
+          ) : (
+            <div style={{ display: "grid", gap: 12 }}>
+              <div style={{ fontSize: 12, opacity: 0.8 }}>
+                Selected: <b>{selectedBoxMon.boxId}</b>
+              </div>
 
-            {/* Nature */}
-            <div style={{ display: "grid", gap: 6 }}>
-              <div style={{ fontSize: 12, fontWeight: 800 }}>Nature</div>
-              <select
-                value={selectedBoxMon.nature}
-                onChange={(e) =>
-                  updateBoxMon(selectedBoxMon.boxId, { nature: e.target.value as NatureId })
-                }
-                style={{ padding: 8, borderRadius: 10, border: "1px solid #ddd" }}
-              >
-                {NATURE_OPTIONS.map((n) => (
-                  <option key={n} value={n}>
-                    {n}
-                  </option>
-                ))}
-              </select>
-            </div>
+              <div style={{ display: "grid", gap: 6 }}>
+                <div style={{ fontSize: 12, fontWeight: 800 }}>Nature</div>
+                <select
+                  value={selectedBoxMon.nature}
+                  onChange={(e) =>
+                    updateBoxMon(selectedBoxMon.boxId, { nature: e.target.value as NatureId })
+                  }
+                  style={{ padding: 8, borderRadius: 10, border: "1px solid #ddd" }}
+                >
+                  {NATURE_OPTIONS.map((n) => (
+                    <option key={n} value={n}>
+                      {n}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-            {/* IVs */}
-            <div style={{ display: "grid", gap: 6 }}>
-              <div style={{ fontSize: 12, fontWeight: 800 }}>IVs (0–31)</div>
+              <div style={{ display: "grid", gap: 6 }}>
+                <div style={{ fontSize: 12, fontWeight: 800 }}>IVs (0–31)</div>
+                {eff ? (
+                  <div style={{ borderTop: "1px solid #eee", paddingTop: 10 }}>
+                    <div style={{ fontSize: 12, fontWeight: 800, marginBottom: 6 }}>
+                      Effective stats (Lvl 50, IV + Nature)
+                    </div>
+                    <div style={{ fontSize: 12, opacity: 0.9, lineHeight: 1.6 }}>
+                      HP <b>{eff.hp}</b> · Atk <b>{eff.atk}</b> · Def <b>{eff.def}</b> · SpA <b>{eff.spa}</b> · SpD <b>{eff.spd}</b> · Spe <b>{eff.spe}</b>
+                    </div>
+                  </div>
+                ) : (
+                  <div style={{ fontSize: 12, opacity: 0.7 }}>
+                    Effective stats display will be added for fusions next.
+                  </div>
+                )}
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
-                {(
-                  [
-                    ["hp", "HP"],
-                    ["atk", "Atk"],
-                    ["def", "Def"],
-                    ["spa", "SpA"],
-                    ["spd", "SpD"],
-                    ["spe", "Spe"],
-                  ] as const
-                ).map(([key, label]) => (
-                  <label
-                    key={key}
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns: "50px 1fr",
-                      gap: 8,
-                      alignItems: "center",
-                      fontSize: 12,
-                    }}
-                  >
-                    <span style={{ opacity: 0.8 }}>{label}</span>
-                    <input
-                      type="number"
-                      min={0}
-                      max={31}
-                      value={selectedBoxMon.ivs[key]}
-                      onChange={(e) => {
-                        const next = clampIV(Number(e.target.value));
-                        updateBoxMon(selectedBoxMon.boxId, {
-                          ivs: { ...selectedBoxMon.ivs, [key]: next },
-                        });
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+                  {(
+                    [
+                      ["hp", "HP"],
+                      ["atk", "Atk"],
+                      ["def", "Def"],
+                      ["spa", "SpA"],
+                      ["spd", "SpD"],
+                      ["spe", "Spe"],
+                    ] as const
+                  ).map(([key, label]) => (
+                    <label
+                      key={key}
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "50px 1fr",
+                        gap: 8,
+                        alignItems: "center",
+                        fontSize: 12,
                       }}
-                      style={{ padding: 8, borderRadius: 10, border: "1px solid #ddd" }}
-                    />
-                  </label>
-                ))}
+                    >
+                      <span style={{ opacity: 0.8 }}>{label}</span>
+                      <input
+                        type="number"
+                        min={0}
+                        max={31}
+                        value={selectedBoxMon.ivs[key]}
+                        onChange={(e) => {
+                          const next = clampIV(Number(e.target.value));
+                          updateBoxMon(selectedBoxMon.boxId, {
+                            ivs: { ...selectedBoxMon.ivs, [key]: next },
+                          });
+                        }}
+                        style={{ padding: 8, borderRadius: 10, border: "1px solid #ddd" }}
+                      />
+                    </label>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
+
       </aside>
 
     </div>

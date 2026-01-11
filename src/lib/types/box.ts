@@ -27,6 +27,8 @@ export type BoxMon =
       rarityTier: RarityTier;
       abilityId: string; // "UNDEFINED" if not chosen
       moveset?: string[]; // up to 4 internal move IDs
+      nature: NatureId;
+      ivs: IVs;
     }
   | {
       boxId: string;
@@ -36,6 +38,8 @@ export type BoxMon =
       rarityTier: RarityTier;
       abilityId: string;
       moveset?: string[];
+      nature: NatureId;
+      ivs: IVs;
     };
 
 export const UNDEFINED_ABILITY = "UNDEFINED" as const;

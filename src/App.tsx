@@ -52,6 +52,12 @@ export default function App() {
   /** User's box of caught Pokemon, loaded from localStorage on mount */
   const [box, setBox] = useState<BoxMon[]>(() => loadBox());
 
+  /** Clamp IV value to valid range of 0-31 */
+  function clampIV(n: number) {
+    if (Number.isNaN(n)) return 0;
+    return Math.max(0, Math.min(31, n));
+  }
+
   // Auto-save box to localStorage whenever it changes
   useEffect(() => {
   saveBox(box);

@@ -30,18 +30,23 @@ const STORAGE_KEY = "fusion-nuzlocke-tool:box:v1";
  * 
  * @returns Array of BoxMon objects, empty array if none found or on error
  */
-export function loadBox(): BoxMon[] {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw);
-    if (!Array.isArray(parsed)) return [];
-    return parsed as BoxMon[];
-  } catch {
-    // Fail silently on parse errors or localStorage access issues
-    return [];
+export function loadBox() {
+  const raw = localStorage.getItem(LS_KEY);
+  if (!raw) return [];
+
+  const parsed = JSON.parse(raw);
+
+  // Backfill defaults for older saves
+  if (Array.isArray(parsed)) {
+    for (const b of parsed) {
+      if (!b.nature) b.nature = DEFAULT_NATURE;
+      if (!b.ivs) b.ivs = { ...DEFAULT_IVS };
+    }
   }
+
+  return parsed;
 }
+
 
 /**
  * Save box data to browser localStorage

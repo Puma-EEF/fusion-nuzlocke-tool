@@ -30,8 +30,10 @@ import { useMemo, useState } from "react";
 
 import type { SortBy, SortDir } from "../lib/types/pokedexFilters";
 import type { BoxMon, RarityTier } from "../lib/types/box";
+import type { NatureId } from "../lib/types/box";
 import { UNDEFINED_ABILITY } from "../lib/types/box";
 import { newBoxId } from "../lib/boxStorage";
+import { DEFAULT_IVS, DEFAULT_NATURE } from "../lib/types/box";
 
 import speciesRaw from "../data/species.json";
 import type { Species } from "../lib/types/species";
@@ -105,6 +107,22 @@ function TabButton({
 export default function BoxTeamPage(props: BoxTeamPageProps) {
   const [boxTab, setBoxTab] = useState<BoxTab>("ALL");
   const [activeBoxId, setActiveBoxId] = useState<string | null>(null);
+  const NATURE_OPTIONS: NatureId[] = [
+    "HARDY","LONELY","BRAVE","ADAMANT","NAUGHTY",
+    "BOLD","DOCILE","RELAXED","IMPISH","LAX",
+    "TIMID","HASTY","SERIOUS","JOLLY","NAIVE",
+    "MODEST","MILD","QUIET","BASHFUL","RASH",
+    "CALM","GENTLE","SASSY","CAREFUL","QUIRKY",
+  ];
+
+  function updateBoxMon(boxId: string, patch: Partial<BoxMon>) {
+    props.setBox(props.box.map((b) => (b.boxId === boxId ? { ...b, ...patch } : b)));
+  }
+
+  function clampIV(n: number) {
+    if (Number.isNaN(n)) return 0;
+    return Math.max(0, Math.min(31, n));
+  }
 
   const speciesById = useMemo(() => {
     const m = new Map<number, Species>();
@@ -128,9 +146,12 @@ export default function BoxTeamPage(props: BoxTeamPageProps) {
       rarityTier: rarityForDexId(dexId),
       abilityId: UNDEFINED_ABILITY,
       moveset: [],
+      nature: DEFAULT_NATURE,
+      ivs: { ...DEFAULT_IVS },
     };
     props.setBox([...props.box, entry]);
   }
+
 
   const shownBox = useMemo(() => {
     switch (boxTab) {
@@ -142,6 +163,10 @@ export default function BoxTeamPage(props: BoxTeamPageProps) {
         return props.box;
     }
   }, [props.box, boxTab]);
+
+  const selectedBoxMon = activeBoxId
+    ? props.box.find((b) => b.boxId === activeBoxId) ?? null
+    : null;
 
   function titleForBoxMon(b: BoxMon): string {
     if (b.kind === "BASE") {
@@ -284,16 +309,83 @@ export default function BoxTeamPage(props: BoxTeamPageProps) {
           overflow: "auto",
         }}
       >
-        <h3 style={{ marginTop: 0 }}>Info (next)</h3>
-        <div style={{ fontSize: 12, opacity: 0.75 }}>
-          Next we’ll build the tabs + locked selection-engine caps here.
-        </div>
+        <h3 style={{ marginTop: 0 }}>Info</h3>
 
-        <div style={{ marginTop: 12, fontSize: 12, opacity: 0.8 }}>
-          Current selection (temporary):{" "}
-          <b>{activeBoxId ? activeBoxId : "none"}</b>
-        </div>
+        {!selectedBoxMon ? (
+          <div style={{ fontSize: 12, opacity: 0.75 }}>
+            Select a Pokémon in the Box to edit Nature + IVs.
+          </div>
+        ) : (
+          <div style={{ display: "grid", gap: 12 }}>
+            <div style={{ fontSize: 12, opacity: 0.8 }}>
+              Editing: <b>{selectedBoxMon.boxId}</b>
+            </div>
+
+            {/* Nature */}
+            <div style={{ display: "grid", gap: 6 }}>
+              <div style={{ fontSize: 12, fontWeight: 800 }}>Nature</div>
+              <select
+                value={selectedBoxMon.nature}
+                onChange={(e) =>
+                  updateBoxMon(selectedBoxMon.boxId, { nature: e.target.value as NatureId })
+                }
+                style={{ padding: 8, borderRadius: 10, border: "1px solid #ddd" }}
+              >
+                {NATURE_OPTIONS.map((n) => (
+                  <option key={n} value={n}>
+                    {n}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* IVs */}
+            <div style={{ display: "grid", gap: 6 }}>
+              <div style={{ fontSize: 12, fontWeight: 800 }}>IVs (0–31)</div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+                {(
+                  [
+                    ["hp", "HP"],
+                    ["atk", "Atk"],
+                    ["def", "Def"],
+                    ["spa", "SpA"],
+                    ["spd", "SpD"],
+                    ["spe", "Spe"],
+                  ] as const
+                ).map(([key, label]) => (
+                  <label
+                    key={key}
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "50px 1fr",
+                      gap: 8,
+                      alignItems: "center",
+                      fontSize: 12,
+                    }}
+                  >
+                    <span style={{ opacity: 0.8 }}>{label}</span>
+                    <input
+                      type="number"
+                      min={0}
+                      max={31}
+                      value={selectedBoxMon.ivs[key]}
+                      onChange={(e) => {
+                        const next = clampIV(Number(e.target.value));
+                        updateBoxMon(selectedBoxMon.boxId, {
+                          ivs: { ...selectedBoxMon.ivs, [key]: next },
+                        });
+                      }}
+                      style={{ padding: 8, borderRadius: 10, border: "1px solid #ddd" }}
+                    />
+                  </label>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
       </aside>
+
     </div>
   );
 }

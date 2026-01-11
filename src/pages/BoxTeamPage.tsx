@@ -1,3 +1,31 @@
+/**
+ * Box & Team Management Page Component
+ * 
+ * Manage your Pokemon box and active party for Nuzlocke runs.
+ * Integrates with the Pokedex for adding Pokemon and uses the same
+ * filter system for searching your collection.
+ * 
+ * Features:
+ * - Add base Pokemon or fusions to your box
+ * - Filter your box using the shared Pokedex filter bar
+ * - Tab system: View all Pokemon, base forms only, or fusions only
+ * - Build and manage your 6-Pokemon active party
+ * - Rarity tier tracking (Normal, Sub-Legendary, Legendary)
+ * - Persistent storage using browser localStorage
+ * 
+ * Box Entry Types:
+ * - BASE: Single base-form Pokemon (e.g., Pikachu)
+ * - FUSED: Fusion of two Pokemon (e.g., Pikachu/Charmander)
+ * 
+ * Data Flow:
+ * 1. Browse Pokedex with filters
+ * 2. Add Pokemon to box (stored in App state)
+ * 3. Move Pokemon from box to team (max 6)
+ * 4. All changes auto-save to localStorage
+ * 
+ * @module pages/BoxTeamPage
+ */
+
 import { useMemo, useState } from "react";
 
 import type { SortBy, SortDir } from "../lib/types/pokedexFilters";
@@ -10,6 +38,7 @@ import type { Species } from "../lib/types/species";
 import { isLegendary, isSubLegendary } from "../lib/legendary";
 
 import SpriteTile from "../components/SpriteTile";
+import Pokedex from "./Pokedex";
 
 type BoxTeamPageProps = {
   // shared filter state
@@ -135,19 +164,40 @@ export default function BoxTeamPage(props: BoxTeamPageProps) {
         gridTemplateColumns: "280px 1fr 360px",
       }}
     >
-      {/* Left panel placeholder (Dex panel comes next step) */}
-      <aside
-        style={{
-          borderRight: "1px solid #eee",
-          padding: 12,
-          overflow: "auto",
-        }}
-      >
-        <h3 style={{ marginTop: 0 }}>Pokédex (next)</h3>
-        <div style={{ fontSize: 12, opacity: 0.75 }}>
-          We’ll plug in Pokedex list + “+ add to box” here next.
-        </div>
-      </aside>
+      {/* Left panel Dex with "add to box" */}
+    <aside
+      style={{
+        borderRight: "1px solid #eee",
+        padding: 12,
+        overflow: "auto",
+      }}
+    >
+      <Pokedex
+        variant="panel"
+        applyFilters={props.filterTarget === "pokedex"}
+        onAddToBox={addBaseToBox}
+        filterTarget={props.filterTarget}
+        setFilterTarget={props.setFilterTarget}
+        nameQuery={props.nameQuery}
+        setNameQuery={props.setNameQuery}
+        typeA={props.typeA}
+        setTypeA={props.setTypeA}
+        typeB={props.typeB}
+        setTypeB={props.setTypeB}
+        abilityText={props.abilityText}
+        setAbilityText={props.setAbilityText}
+        moveText={props.moveText}
+        setMoveText={props.setMoveText}
+        sortBy={props.sortBy}
+        setSortBy={props.setSortBy}
+        sortDir={props.sortDir}
+        setSortDir={props.setSortDir}
+        excludeLegendary={props.excludeLegendary}
+        setExcludeLegendary={props.setExcludeLegendary}
+        excludeSubLegendary={props.excludeSubLegendary}
+        setExcludeSubLegendary={props.setExcludeSubLegendary}
+      />
+    </aside>
 
       {/* Middle panel: Box */}
       <main style={{ padding: 12, overflow: "auto" }}>

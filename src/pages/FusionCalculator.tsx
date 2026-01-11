@@ -1,3 +1,29 @@
+/**
+ * Fusion Calculator Page Component
+ * 
+ * Interactive calculator for Pokemon Infinite Fusion stat combinations.
+ * Allows users to select any two Pokemon and see both possible fusion results.
+ * 
+ * Features:
+ * - Search Pokemon by name or internal name with auto-suggestion
+ * - Calculate both fusion combinations:
+ *   - A (head) + B (body)
+ *   - B (head) + A (body)
+ * - Display detailed fusion results:
+ *   - Combined types
+ *   - Calculated base stats (physical favor body, special favor head)
+ *   - Base Stat Total (BST)
+ *   - Combined abilities from both parents
+ * - Visual sprite display for each fusion
+ * 
+ * Fusion Mechanics:
+ * - Head provides: Name prefix, primary type, 2/3 weight for special stats
+ * - Body provides: Physical form, secondary type, 2/3 weight for physical stats
+ * - All abilities from both parents are inherited
+ * 
+ * @module pages/FusionCalculator
+ */
+
 import { useMemo, useState } from "react";
 import speciesRaw from "../data/species.json";
 import type { Species } from "../lib/types/species";

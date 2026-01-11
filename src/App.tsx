@@ -1,3 +1,22 @@
+/**
+ * Main Application Component
+ * 
+ * Root component managing global state and navigation between pages:
+ * - Pokedex: Browse and filter all Pokemon with detailed information
+ * - Fusion Calculator: Calculate fusion stat combinations between any two Pokemon
+ * - Box & Team: Manage caught Pokemon box and active party for Nuzlocke runs
+ * 
+ * State Management:
+ * - Navigation state (current page)
+ * - Filter state (shared between Pokedex and Box pages)
+ * - Box/Team state (persisted to localStorage)
+ * 
+ * The filter bar is shared across pages, allowing users to apply the same
+ * filters to either the full Pokedex or their personal Box collection.
+ * 
+ * @module App
+ */
+
 import { useEffect, useState } from "react";
 import Pokedex from "./pages/Pokedex";
 import FusionCalculator from "./pages/FusionCalculator";
@@ -26,16 +45,20 @@ export default function App() {
   const [page, setPage] = useState<Page>("pokedex");
   
   // === Box Team State ===
+  /** Determines which dataset filters are applied to: full Pokedex or user's Box */
   type FilterTarget = "pokedex" | "box";
   const [filterTarget, setFilterTarget] = useState<FilterTarget>("pokedex");
+  
+  /** User's box of caught Pokemon, loaded from localStorage on mount */
   const [box, setBox] = useState<BoxMon[]>(() => loadBox());
 
+  // Auto-save box to localStorage whenever it changes
   useEffect(() => {
   saveBox(box);
   }, [box]);
 
 
-  // === Stage 1 Filter State (shared across pages) ===
+  // === Stage 1 Filter State (shared across Pokedex and Box pages) ===
   const [nameQuery, setNameQuery] = useState("");
   const [typeA, setTypeA] = useState<string>("ANY");
   const [typeB, setTypeB] = useState<string>("NONE");

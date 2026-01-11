@@ -1,3 +1,27 @@
+/**
+ * Pokedex Filter Bar Component
+ * 
+ * Comprehensive filtering and sorting interface for the Pokedex and Box views.
+ * Provides a two-stage filtering system:
+ * 
+ * Stage 1 - Search & Filter:
+ * - Name/InternalName search
+ * - Dual type filtering (primary and secondary types)
+ * - Ability search with autocomplete
+ * - Move search with autocomplete
+ * 
+ * Stage 2 - Sort & Exclude:
+ * - Sort by any base stat (HP, ATK, DEF, SPA, SPD, SPE, BST) or Dex #
+ * - Ascending/descending sort order
+ * - Exclude legendary Pokemon
+ * - Exclude sub-legendary Pokemon
+ * 
+ * The filter state is managed by the parent component and shared between
+ * multiple pages (Pokedex and BoxTeam).
+ * 
+ * @module components/PokedexFilterBar
+ */
+
 import { useMemo } from "react";
 import speciesRaw from "../data/species.json";
 import abilitiesRaw from "../data/abilities.json";
@@ -9,7 +33,7 @@ import type { Move } from "../lib/types/moves";
 import type { PokedexFiltersState, SortBy, SortDir } from "../lib/types/pokedexFilters";
 
 type PokedexFilterBarProps = PokedexFiltersState & {
-  /** Current page, used to determine which buttons should be disabled */
+  /** Current page, used to determine which filter target buttons should be visible */
   currentPage?: "pokedex" | "boxTeam";
 };
 
@@ -18,17 +42,21 @@ const abilitiesList = abilitiesRaw as Ability[];
 const movesList = movesRaw as Move[];
 
 /**
- * Filter bar component for the Pokedex
- * Provides comprehensive filtering options including:
- * - Name search
- * - Type filtering (dual type support)
- * - Ability search with autocomplete
- * - Move search with autocomplete
- * - Sorting by various stats
- * - Legendary/sub-legendary exclusion
+ * Filter bar component providing comprehensive Pokemon filtering
+ * 
+ * Features:
+ * - Text search for Pokemon names (display or internal name)
+ * - Type filtering with support for dual-type combinations
+ * - Ability and move search with HTML5 datalist autocomplete
+ * - Multi-criteria sorting (stats, BST, Dex number)
+ * - Rarity tier exclusion filters
+ * - Filter target toggle (Pokedex vs Box)
+ * 
+ * All filter state is managed by parent via props, making this a controlled component.
  */
 export default function PokedexFilterBar(props: PokedexFilterBarProps) {
-  // Extract all unique types from the species list
+  // Extract all unique types from the species data
+  // Sorted alphabetically with "ANY" as first option for Type A
   const allTypes = useMemo(() => {
     const set = new Set<string>();
     for (const s of speciesList) {

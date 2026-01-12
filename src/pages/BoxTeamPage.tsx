@@ -82,6 +82,19 @@ const LS_KEY = "fusion-nuzlocke-tool:box:v1";
 
 type BoxTab = "ALL" | "BASE" | "FUSED";
 
+type InfoTab = "STATS" | "FUSION" | "TEAM" | "COMPARE";
+
+type SelectionRef =
+  | { kind: "DEX"; dexId: number }
+  | { kind: "BOX"; boxId: string };
+
+const INFO_CAP: Record<InfoTab, number> = {
+  STATS: 1,
+  FUSION: 2,
+  COMPARE: 2,
+  TEAM: 6,
+};
+
 function TabButton({
   active,
   children,
@@ -113,7 +126,6 @@ function TabButton({
 
 export default function BoxTeamPage(props: BoxTeamPageProps) {
   const [boxTab, setBoxTab] = useState<BoxTab>("ALL");
-  const [activeBoxId, setActiveBoxId] = useState<string | null>(null);
   const NATURE_OPTIONS: NatureId[] = [
     "HARDY","LONELY","BRAVE","ADAMANT","NAUGHTY",
     "BOLD","DOCILE","RELAXED","IMPISH","LAX",
@@ -171,80 +183,16 @@ export default function BoxTeamPage(props: BoxTeamPageProps) {
     }
   }, [props.box, boxTab]);
 
-  const selectedBoxMon = activeBoxId
-    ? props.box.find((b) => b.boxId === activeBoxId) ?? null
-    : null;
-  
-  const detailsVm = selectedBoxMon
-    ? resolveDetailsVM({
-        input: { source: "boxMon", boxMon: selectedBoxMon },
-        speciesById,
-        level: 50,
-      })
-    : null;
+  const [infoTab, setInfoTab] = useState<InfoTab>("STATS");
 
-  const detailsEditor: DetailsEditor = selectedBoxMon
-    ? {
-        canEdit: true,
-        setNature: (nature) => {
-          props.setBox(
-            props.box.map((b) => (b.boxId === selectedBoxMon.boxId ? { ...b, nature } : b))
-          );
-        },
-        setIV: (stat, value) => {
-          const clamped = Math.max(0, Math.min(31, value));
-          props.setBox(
-            props.box.map((b) =>
-              b.boxId === selectedBoxMon.boxId
-                ? { ...b, ivs: { ...b.ivs, [stat]: clamped } }
-                : b
-            )
-          );
-        },
-      }
-    : { canEdit: false };
+  const [selections, setSelections] = useState<Record<InfoTab, SelectionRef[]>>({
+    STATS: [],
+    FUSION: [],
+    COMPARE: [],
+    TEAM: [],
+  });
 
-  const baseSpecies =
-    selectedBoxMon?.kind === "BASE" ? speciesById.get(selectedBoxMon.dexId) : undefined;
-
-  const baseStats =
-    !selectedBoxMon ? null
-    : selectedBoxMon.kind === "BASE"
-      ? (() => {
-          const s = speciesById.get(selectedBoxMon.dexId);
-          if (!s) return null;
-          return {
-            hp: s.BaseHP,
-            atk: s.BaseATK,
-            def: s.BaseDEF,
-            spa: s.BaseSPA,
-            spd: s.BaseSPD,
-            spe: s.BaseSPE,
-          };
-        })()
-      : (() => {
-          const head = speciesById.get(selectedBoxMon.headDexId);
-          const body = speciesById.get(selectedBoxMon.bodyDexId);
-          if (!head || !body) return null;
-          const fused = fusePokemon(head, body);
-          return fused.stats; // { hp, atk, def, spa, spd, spe }
-        })();
-
-  const eff = baseStats && selectedBoxMon
-    ? computeEffectiveStats(baseStats, selectedBoxMon.nature, selectedBoxMon.ivs, 50)
-    : null;
-
-  function titleForBoxMon(b: BoxMon): string {
-    if (b.kind === "BASE") {
-      const s = speciesById.get(b.dexId);
-      return s ? `#${b.dexId} ${s.Name}` : `BASE #${b.dexId}`;
-    }
-    const head = speciesById.get(b.headDexId);
-    const body = speciesById.get(b.bodyDexId);
-    const headName = head ? head.Name : `#${b.headDexId}`;
-    const bodyName = body ? body.Name : `#${b.bodyDexId}`;
-    return `FUSION ${b.headDexId}.${b.bodyDexId} (${headName} → ${bodyName})`;
-  }
+const [infoMessage, setInfoMessage] = useState<string | null>(null);
 
   return (
     <div
@@ -339,11 +287,11 @@ export default function BoxTeamPage(props: BoxTeamPageProps) {
                   <button
                     key={b.boxId}
                     type="button"
-                    onClick={() => setActiveBoxId(b.boxId)}
+                    onClick={() => {}}
                     title={titleForBoxMon(b)}
                     style={{
                       padding: 0,
-                      border: selected ? "2px solid #111" : "1px solid #ddd",
+                      border: "1px solid #ddd",
                       borderRadius: 14,
                       background: "white",
                       cursor: "pointer",
@@ -371,18 +319,10 @@ export default function BoxTeamPage(props: BoxTeamPageProps) {
         }}
       >
         <h3 style={{ marginTop: 0 }}>Info</h3>
-
-        {!selectedBoxMon || !detailsVm ? (
           <div style={{ fontSize: 12, opacity: 0.75 }}>
-            Select a Pokémon in the Box to view/edit details.
+            (Next step) Info tabs + selections will render here.
           </div>
-        ) : (
-          <DetailsPanel vm={detailsVm} editor={detailsEditor} />
-        )}
-
-
       </aside>
-
     </div>
   );
 }

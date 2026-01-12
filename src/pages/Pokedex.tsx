@@ -72,13 +72,14 @@ function getSortValue(s: Species, sortBy: SortBy) {
  * Extends PokedexFiltersState with optional filter control
  */
 type PokedexProps = PokedexFiltersState & {
-  /** Controls layout when used as a full page vs embedded panel. */
   variant?: "page" | "panel";
-  /** When false, show the full dex without applying any filter/sort/exclusions. */
   applyFilters?: boolean;
 
   /** When provided, shows an "add to box" button per entry. */
   onAddToBox?: (dexId: number) => void;
+
+  /** NEW: Notify parent when a row is clicked (dex selection/pick). */
+  onPick?: (dexId: number) => void;
 };
 
 
@@ -196,7 +197,10 @@ if (!apply) {
               {/* Row button */}
               <button
                 type="button"
-                onClick={() => setSelectedKey(key)}
+                onClick={() => {
+                  setSelectedKey(key);
+                  props.onPick?.(s.ID);
+                }}
                 style={{
                   width: "100%",
                   textAlign: "left",
@@ -291,7 +295,10 @@ if (!apply) {
                 {/* Select row */}
                 <button
                   type="button"
-                  onClick={() => setSelectedKey(key)}
+                  onClick={() => {
+                    setSelectedKey(key);
+                    props.onPick?.(s.ID);
+                  }}
                   style={{
                     textAlign: "left",
                     padding: 10,

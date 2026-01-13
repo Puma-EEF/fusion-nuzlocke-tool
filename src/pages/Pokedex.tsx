@@ -31,6 +31,8 @@ import { resolveDetailsVM } from "../lib/details/resolveDetails";
 import type { Species } from "../lib/types/species";
 import type { PokedexFiltersState, SortBy } from "../lib/types/pokedexFilters";
 import { isLegendary, isSubLegendary } from "../lib/legendary";
+import abilitiesRaw from "../data/abilities.json";
+import learnsetsRaw from "../data/learnsets.json";
 
 const speciesList = speciesRaw as Species[];
 
@@ -102,6 +104,15 @@ export default function Pokedex(props: PokedexProps) {
     return m;
   }, []);
 
+  const selectedAbilityInternal = useMemo(
+      () => abilitiesRaw(props.abilityText),
+      [props.abilityText]
+    );
+
+  const selectedMoveInternal = useMemo(
+      () => learnsetsRaw(props.moveText),
+      [props.moveText]
+    );
 
   // Apply all filters and sorting to create the results list
   const filtered = useMemo(() => {
@@ -137,19 +148,36 @@ if (!apply) {
         return (t1 === typeA && t2 === typeB) || (t1 === typeB && t2 === typeA);
       })
       
-      // Sort
+      // Ability (includes hidden)
       .filter((s) => {
-        if (props.excludeLegendary && isLegendary(s)) return false;
-        if (props.excludeSubLegendary && isSubLegendary(s)) return false;
-        return true;
+        if (!selectedAbilityInternal) return true;
+        return (
+          s.Ability1 === selectedAbilityInternal ||
+          s.Ability2 === selectedAbilityInternal ||
+          s.HiddenAbility1 === selectedAbilityInternal ||
+          s.HiddenAbility2 === selectedAbilityInternal
+        );
       })
-      .sort((a, b) => {
-        const av = getSortValue(a, props.sortBy);
-        const bv = getSortValue(b, props.sortBy);
-        if (av !== bv) return props.sortDir === "asc" ? av - bv : bv - av;
-        if (a.ID !== b.ID) return a.ID - b.ID;
-        return (a.Form ?? 0) - (b.Form ?? 0);
-      });
+      // Move (learnset)
+      .filter((s) => {
+        if (!selectedMoveInternal) return true;
+        const moves = learnsetIndex.get(s.InternalName);
+        if (!moves) return false;
+        return moves.has(selectedMoveInternal);
+      })
+      // Sort
+        .filter((s) => {
+          if (props.excludeLegendary && isLegendary(s)) return false;
+          if (props.excludeSubLegendary && isSubLegendary(s)) return false;
+          return true;
+        })
+        .sort((a, b) => {
+          const av = getSortValue(a, props.sortBy);
+          const bv = getSortValue(b, props.sortBy);
+          if (av !== bv) return props.sortDir === "asc" ? av - bv : bv - av;
+          if (a.ID !== b.ID) return a.ID - b.ID;
+          return (a.Form ?? 0) - (b.Form ?? 0);
+        });
 
     return result;
   }, [

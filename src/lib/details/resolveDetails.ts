@@ -5,10 +5,14 @@ import { fusePokemon } from "../fusion";
 import abilitiesRaw from "../../data/abilities.json";
 import movesRaw from "../../data/moves.json";
 import learnsetsRaw from "../../data/learnsets.json";
+import { speciesKeyFromParts } from "./speciesKey";
+import type { Learnset } from "../types/learnset";
+import type { Move } from "../types/moves";
+import type { Ability } from "../types/ability";
 
-const movesList = movesRaw as any[];
-const abilitiesList = abilitiesRaw as any[];
-const learnsetsList = learnsetsRaw as any[];
+const movesList = movesRaw as Move[];
+const abilitiesList = abilitiesRaw as Ability[];
+const learnsetsList = learnsetsRaw as Learnset[];
 
 const moveNameByInternal = new Map<string, string>(movesList.map(m => [m.InternalName, m.Name]));
 const abilityNameByInternal = new Map<string, string>(abilitiesList.map(a => [a.InternalName, a.Name]));
@@ -20,6 +24,18 @@ function listFromPipe(s?: string) {
 
 function dedupe(arr: string[]) {
   return Array.from(new Set(arr));
+}
+
+function getLearnsetFor(internalName: string, form?: number | null) {
+  const f = form ?? 0;
+
+  const exact = learnsetsList.find((ls) => ls.InternalName === internalName && (ls.Form ?? 0) === f);
+  if (exact) return exact;
+
+  const form0 = learnsetsList.find((ls) => ls.InternalName === internalName && (ls.Form ?? 0) === 0);
+  if (form0) return form0;
+
+  return learnsetsList.find((ls) => ls.InternalName === internalName) ?? null;
 }
 
 function parseLevelUpMoves(raw?: string): { level: number; internal: string }[] {
@@ -54,7 +70,7 @@ function toStatBlock(stats: {
 
 export function resolveDetailsVM(params: {
   input: DetailsInput;
-  speciesById: Map<number, Species>;
+  speciesByKey: Map<string, Species>;
   /** Display level used for effectiveStats. Only used when input is a BoxMon. */
   level?: number;
 }): DetailsVM | null {
@@ -63,7 +79,7 @@ export function resolveDetailsVM(params: {
 
   // Pokedex display-only
   if (input.source === "species") {
-    const s = speciesById.get(input.dexId);
+    const s = speciesByKey.get(speciesKeyFromParts(input.dexId, input.form));
     if (!s) return null;
 
     const base = toStatBlock({
@@ -85,7 +101,7 @@ export function resolveDetailsVM(params: {
         .map((a: string) => abilityNameByInternal.get(a) ?? a)
     );
 
-    const learnset = learnsetsList.find((ls: any) => ls.InternalName === s.InternalName);
+    const learnset = getLearnsetFor(s.InternalName, s.Form ?? 0);
 
     const moves = {
       levelUp: (() => {
@@ -125,7 +141,7 @@ export function resolveDetailsVM(params: {
   const b = input.boxMon;
 
   if (b.kind === "BASE") {
-    const s = speciesById.get(b.dexId);
+    const s = speciesByKey.get(speciesKeyFromParts(b.dexId, 0));
     if (!s) return null;
 
     const base = toStatBlock({

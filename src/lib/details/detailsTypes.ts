@@ -54,5 +54,5 @@ export type DetailsEditor =
   | { canEdit: false };
 
 export type DetailsInput =
-  | { source: "species"; dexId: number }
+  | { source: "species"; dexId: number; form?: number }
   | { source: "boxMon"; boxMon: BoxMon };

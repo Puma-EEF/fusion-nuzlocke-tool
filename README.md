@@ -114,7 +114,7 @@ Track your captured Pokemon and build your Nuzlocke team with full filter integr
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone https://github.com/Puma-EEF/fusion-nuzlocke-tool.git
 cd fusion-nuzlocke-tool
 ```
 
@@ -234,7 +234,7 @@ This is an open personal project. Contributions, suggestions, and bug reports ar
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
 3. Commit your changes (`git commit -m 'Add amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+5. [Open a Pull Request](https://github.com/Puma-EEF/fusion-nuzlocke-tool/compare)
 
 ## License
 

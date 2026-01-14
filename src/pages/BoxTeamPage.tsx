@@ -1,35 +1,9 @@
 /**
- * Box & Team Management Page Component
- * 
- * Manage your Pokemon box and active party for Nuzlocke runs.
- * Integrates with the Pokedex for adding Pokemon and uses the same
- * filter system for searching your collection.
- * 
- * Features:
- * - Add base Pokemon or fusions to your box
- * - Filter your box using the shared Pokedex filter bar
- * - Tab system: View all Pokemon, base forms only, or fusions only
- * - Build and manage your 6-Pokemon active party
- * - Rarity tier tracking (Normal, Sub-Legendary, Legendary)
- * - Persistent storage using browser localStorage
- * 
- * Box Entry Types:
- * - BASE: Single base-form Pokemon (e.g., Pikachu)
- * - FUSED: Fusion of two Pokemon (e.g., Pikachu/Charmander)
- * 
- * Data Flow:
- * 1. Browse Pokedex with filters
- * 2. Add Pokemon to box (stored in App state)
- * 3. Move Pokemon from box to team (max 6)
- * 4. All changes auto-save to localStorage
- * 
- * @module pages/BoxTeamPage
+ * Box & Team Management - Manage caught Pokemon and active party
+ * Supports base Pokemon and fusions with persistent localStorage
  */
 
 import { useMemo, useState } from "react";
-import DetailsPanel from "../components/DetailsPanel";
-import { resolveDetailsVM } from "../lib/details/resolveDetails";
-import type { DetailsEditor } from "../lib/details/detailsTypes";
 
 import type { SortBy, SortDir } from "../lib/types/pokedexFilters";
 import type { RarityTier } from "../lib/types/box";
@@ -49,7 +23,6 @@ import Pokedex from "./Pokedex";
 import { fusePokemon } from "../lib/fusion";
 
 type BoxTeamPageProps = {
-  // shared filter state
   filterTarget: "pokedex" | "box";
   setFilterTarget: (t: "pokedex" | "box") => void;
 
@@ -72,7 +45,6 @@ type BoxTeamPageProps = {
   excludeSubLegendary: boolean;
   setExcludeSubLegendary: (v: boolean) => void;
 
-  // box state
   box: BoxMon[];
   setBox: (next: BoxMon[]) => void;
 };
@@ -81,19 +53,6 @@ const speciesList = speciesRaw as Species[];
 const LS_KEY = "fusion-nuzlocke-tool:box:v1";
 
 type BoxTab = "ALL" | "BASE" | "FUSED";
-
-type InfoTab = "STATS" | "FUSION" | "TEAM" | "COMPARE";
-
-type SelectionRef =
-  | { kind: "DEX"; dexId: number }
-  | { kind: "BOX"; boxId: string };
-
-const INFO_CAP: Record<InfoTab, number> = {
-  STATS: 1,
-  FUSION: 2,
-  COMPARE: 2,
-  TEAM: 6,
-};
 
 function TabButton({
   active,
@@ -126,6 +85,7 @@ function TabButton({
 
 export default function BoxTeamPage(props: BoxTeamPageProps) {
   const [boxTab, setBoxTab] = useState<BoxTab>("ALL");
+  const [activeBoxId, setActiveBoxId] = useState<string | null>(null);
   const NATURE_OPTIONS: NatureId[] = [
     "HARDY","LONELY","BRAVE","ADAMANT","NAUGHTY",
     "BOLD","DOCILE","RELAXED","IMPISH","LAX",
@@ -183,16 +143,51 @@ export default function BoxTeamPage(props: BoxTeamPageProps) {
     }
   }, [props.box, boxTab]);
 
-  const [infoTab, setInfoTab] = useState<InfoTab>("STATS");
+  const selectedBoxMon = activeBoxId
+    ? props.box.find((b) => b.boxId === activeBoxId) ?? null
+    : null;
+  
+  const baseSpecies =
+    selectedBoxMon?.kind === "BASE" ? speciesById.get(selectedBoxMon.dexId) : undefined;
 
-  const [selections, setSelections] = useState<Record<InfoTab, SelectionRef[]>>({
-    STATS: [],
-    FUSION: [],
-    COMPARE: [],
-    TEAM: [],
-  });
+  const baseStats =
+    !selectedBoxMon ? null
+    : selectedBoxMon.kind === "BASE"
+      ? (() => {
+          const s = speciesById.get(selectedBoxMon.dexId);
+          if (!s) return null;
+          return {
+            hp: s.BaseHP,
+            atk: s.BaseATK,
+            def: s.BaseDEF,
+            spa: s.BaseSPA,
+            spd: s.BaseSPD,
+            spe: s.BaseSPE,
+          };
+        })()
+      : (() => {
+          const head = speciesById.get(selectedBoxMon.headDexId);
+          const body = speciesById.get(selectedBoxMon.bodyDexId);
+          if (!head || !body) return null;
+          const fused = fusePokemon(head, body);
+          return fused.stats; // { hp, atk, def, spa, spd, spe }
+        })();
 
-const [infoMessage, setInfoMessage] = useState<string | null>(null);
+  const eff = baseStats && selectedBoxMon
+    ? computeEffectiveStats(baseStats, selectedBoxMon.nature, selectedBoxMon.ivs, 50)
+    : null;
+
+  function titleForBoxMon(b: BoxMon): string {
+    if (b.kind === "BASE") {
+      const s = speciesById.get(b.dexId);
+      return s ? `#${b.dexId} ${s.Name}` : `BASE #${b.dexId}`;
+    }
+    const head = speciesById.get(b.headDexId);
+    const body = speciesById.get(b.bodyDexId);
+    const headName = head ? head.Name : `#${b.headDexId}`;
+    const bodyName = body ? body.Name : `#${b.bodyDexId}`;
+    return `FUSION ${b.headDexId}.${b.bodyDexId} (${headName} → ${bodyName})`;
+  }
 
   return (
     <div
@@ -287,11 +282,11 @@ const [infoMessage, setInfoMessage] = useState<string | null>(null);
                   <button
                     key={b.boxId}
                     type="button"
-                    onClick={() => {}}
+                    onClick={() => setActiveBoxId(b.boxId)}
                     title={titleForBoxMon(b)}
                     style={{
                       padding: 0,
-                      border: "1px solid #ddd",
+                      border: selected ? "2px solid #111" : "1px solid #ddd",
                       borderRadius: 14,
                       background: "white",
                       cursor: "pointer",
@@ -319,10 +314,95 @@ const [infoMessage, setInfoMessage] = useState<string | null>(null);
         }}
       >
         <h3 style={{ marginTop: 0 }}>Info</h3>
-          <div style={{ fontSize: 12, opacity: 0.75 }}>
-            (Next step) Info tabs + selections will render here.
-          </div>
+
+          {!selectedBoxMon ? (
+            <div style={{ fontSize: 12, opacity: 0.75 }}>
+              Select a Pokémon in the Box to edit Nature + IVs.
+            </div>
+          ) : (
+            <div style={{ display: "grid", gap: 12 }}>
+              <div style={{ fontSize: 12, opacity: 0.8 }}>
+                Selected: <b>{selectedBoxMon.boxId}</b>
+              </div>
+
+              <div style={{ display: "grid", gap: 6 }}>
+                <div style={{ fontSize: 12, fontWeight: 800 }}>Nature</div>
+                <select
+                  value={selectedBoxMon.nature}
+                  onChange={(e) =>
+                    updateBoxMon(selectedBoxMon.boxId, { nature: e.target.value as NatureId })
+                  }
+                  style={{ padding: 8, borderRadius: 10, border: "1px solid #ddd" }}
+                >
+                  {NATURE_OPTIONS.map((n) => (
+                    <option key={n} value={n}>
+                      {n}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div style={{ display: "grid", gap: 6 }}>
+                <div style={{ fontSize: 12, fontWeight: 800 }}>IVs (0–31)</div>
+                {eff ? (
+                  <div style={{ borderTop: "1px solid #eee", paddingTop: 10 }}>
+                    <div style={{ fontSize: 12, fontWeight: 800, marginBottom: 6 }}>
+                      Effective stats (Lvl 50, IV + Nature)
+                    </div>
+                    <div style={{ fontSize: 12, opacity: 0.9, lineHeight: 1.6 }}>
+                      HP <b>{eff.hp}</b> · Atk <b>{eff.atk}</b> · Def <b>{eff.def}</b> · SpA <b>{eff.spa}</b> · SpD <b>{eff.spd}</b> · Spe <b>{eff.spe}</b>
+                    </div>
+                  </div>
+                ) : (
+                  <div style={{ fontSize: 12, opacity: 0.7 }}>
+                    Effective stats display will be added for fusions next.
+                  </div>
+                )}
+
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+                  {(
+                    [
+                      ["hp", "HP"],
+                      ["atk", "Atk"],
+                      ["def", "Def"],
+                      ["spa", "SpA"],
+                      ["spd", "SpD"],
+                      ["spe", "Spe"],
+                    ] as const
+                  ).map(([key, label]) => (
+                    <label
+                      key={key}
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "50px 1fr",
+                        gap: 8,
+                        alignItems: "center",
+                        fontSize: 12,
+                      }}
+                    >
+                      <span style={{ opacity: 0.8 }}>{label}</span>
+                      <input
+                        type="number"
+                        min={0}
+                        max={31}
+                        value={selectedBoxMon.ivs[key]}
+                        onChange={(e) => {
+                          const next = clampIV(Number(e.target.value));
+                          updateBoxMon(selectedBoxMon.boxId, {
+                            ivs: { ...selectedBoxMon.ivs, [key]: next },
+                          });
+                        }}
+                        style={{ padding: 8, borderRadius: 10, border: "1px solid #ddd" }}
+                      />
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
       </aside>
+
     </div>
   );
 }

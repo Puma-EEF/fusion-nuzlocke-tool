@@ -1,27 +1,6 @@
 /**
- * Fusion Calculator Page Component
- * 
- * Interactive calculator for Pokemon Infinite Fusion stat combinations.
- * Allows users to select any two Pokemon and see both possible fusion results.
- * 
- * Features:
- * - Search Pokemon by name or internal name with auto-suggestion
- * - Calculate both fusion combinations:
- *   - A (head) + B (body)
- *   - B (head) + A (body)
- * - Display detailed fusion results:
- *   - Combined types
- *   - Calculated base stats (physical favor body, special favor head)
- *   - Base Stat Total (BST)
- *   - Combined abilities from both parents
- * - Visual sprite display for each fusion
- * 
- * Fusion Mechanics:
- * - Head provides: Name prefix, primary type, 2/3 weight for special stats
- * - Body provides: Physical form, secondary type, 2/3 weight for physical stats
- * - All abilities from both parents are inherited
- * 
- * @module pages/FusionCalculator
+ * Fusion Calculator - Calculate stat combinations for any two Pokemon
+ * Shows both possible fusion results with stats, types, and sprites
  */
 
 import { useMemo, useState } from "react";
@@ -30,19 +9,12 @@ import type { Species } from "../lib/types/species";
 import { fusePokemon } from "../lib/fusion";
 import SpriteTile from "../components/SpriteTile";
 
-// Filter to only base forms (Form 0) for simplicity
 const speciesList = (speciesRaw as Species[]).filter((s) => s.Form === 0);
 
-/**
- * Search for a Pokemon by name or internal name
- * @param input - User search text
- * @returns Matching Pokemon species or null if not found
- */
 function findByNameOrInternal(input: string): Species | null {
   const q = input.trim().toLowerCase();
   if (!q) return null;
 
-  // Try exact name match, then exact internal name, then partial match
   return (
     speciesList.find((s) => s.Name.toLowerCase() === q) ??
     speciesList.find((s) => s.InternalName.toLowerCase() === q) ??
@@ -51,10 +23,6 @@ function findByNameOrInternal(input: string): Species | null {
   );
 }
 
-/**
- * Card component displaying fusion results
- * Shows sprite, types, BST, and detailed stat breakdown
- */
 function FusionCard({
   title,
   head,
@@ -102,13 +70,6 @@ function FusionCard({
   );
 }
 
-/**
- * Fusion Calculator page component
- * Allows users to select two Pokemon and see both possible fusion combinations:
- * - A as head + B as body
- * - B as head + A as body
- * Shows how stats, types, and abilities combine for each fusion
- */
 export default function FusionCalculator() {
   const [aText, setAText] = useState("Bulbasaur");
   const [bText, setBText] = useState("Charmander");

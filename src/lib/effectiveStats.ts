@@ -17,8 +17,6 @@ function natureMultiplier(nature: NatureId, stat: StatKey) {
   return 1.0;
 }
 
-// Display formula (Gen 3+) without EVs.
-// We can pick a display level; 50 is common for comparisons.
 export function computeEffectiveStats(
   base: { hp: number; atk: number; def: number; spa: number; spd: number; spe: number },
   nature: NatureId,

@@ -23,65 +23,218 @@
  * @module pages/Pokedex
  */
 
-// src/pages/Pokedex.tsx
 import { useMemo, useState } from "react";
+import { createPokedexFilterEngine } from "../lib/pokedex/filterEngine";
+
 import speciesRaw from "../data/species.json";
-import DetailsPanel from "../components/DetailsPanel";
-import { resolveDetailsVM } from "../lib/details/resolveDetails";
-import type { Species } from "../lib/types/species";
-import type { PokedexFiltersState, SortBy } from "../lib/types/pokedexFilters";
-import { isLegendary, isSubLegendary } from "../lib/legendary";
+import movesRaw from "../data/moves.json";
 import abilitiesRaw from "../data/abilities.json";
 import learnsetsRaw from "../data/learnsets.json";
 
-const speciesList = speciesRaw as Species[];
+import type { Species } from "../lib/types/species";
+import type { Move } from "../lib/types/moves";
+import type { Ability } from "../lib/types/ability";
+import type { Learnset } from "../lib/types/learnset";
+import type { PokedexFiltersState } from "../lib/types/pokedexFilters";
 
-/** Normalize a string for case-insensitive comparison */
-function normalize(s: string) {
-  return s.trim().toLowerCase();
+import SpriteTile from "../components/SpriteTile";
+import EvolutionLine from "../components/EvolutionLine";
+
+
+const speciesList = speciesRaw as Species[];
+const movesList = movesRaw as Move[];
+const abilitiesList = abilitiesRaw as Ability[];
+const learnsetsList = learnsetsRaw as Learnset[];
+
+/**
+ * Parse level-up moves from encoded string format
+ * @param levelUp - Encoded string like "1:TACKLE|7:GROWL|..."
+ * @returns Array of {level, move} objects sorted by level
+ */
+function parseLevelUp(levelUp: string) {
+  if (!levelUp) return [];
+  const out: { level: number; move: string }[] = [];
+  for (const part of levelUp.split("|")) {
+    const i = part.indexOf(":");
+    if (i === -1) continue;
+    const lvl = Number(part.slice(0, i));
+    const move = part.slice(i + 1).trim();
+    if (!Number.isFinite(lvl) || !move) continue;
+    out.push({ level: lvl, move });
+  }
+  out.sort((a, b) => a.level - b.level);
+  return out;
 }
 
-/** Calculate Base Stat Total for a Pokemon */
+/**
+ * Parse pipe-separated list of moves
+ * @param s - Encoded string like "MOVE|MOVE|MOVE"
+ * @returns Array of move InternalNames
+ */
+function parsePipeList(s: string) {
+  if (!s) return [];
+  return s
+    .split("|")
+    .map((x) => x.trim())
+    .filter(Boolean);
+}
+
+/** Look up a Move by its InternalName */
+function moveByInternal(internal: string): Move | null {
+  return movesList.find((m) => m.InternalName === internal) ?? null;
+}
+
+/** Look up an Ability by its InternalName */
+function abilityByInternal(internal: string | null | undefined): Ability | null {
+  if (!internal) return null;
+  return abilitiesList.find((a) => a.InternalName === internal) ?? null;
+}
+
 function getBST(s: Species) {
   return s.BaseHP + s.BaseATK + s.BaseDEF + s.BaseSPA + s.BaseSPD + s.BaseSPE;
 }
 
-/** Get the numeric value to use for sorting a Pokemon by a specific stat */
-function getSortValue(s: Species, sortBy: SortBy) {
-  switch (sortBy) {
-    case "DEX":
-      return s.ID;
-    case "HP":
-      return s.BaseHP;
-    case "ATK":
-      return s.BaseATK;
-    case "DEF":
-      return s.BaseDEF;
-    case "SPA":
-      return s.BaseSPA;
-    case "SPD":
-      return s.BaseSPD;
-    case "SPE":
-      return s.BaseSPE;
-    case "BST":
-      return getBST(s);
-  }
+/**
+ * Reusable component for displaying key-value rows
+ */
+function KeyValueRow({ k, v }: { k: string; v: React.ReactNode }) {
+  return (
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "140px 1fr",
+        gap: 10,
+        padding: "6px 0",
+        borderBottom: "1px solid #f0f0f0",
+      }}
+    >
+      <div style={{ fontWeight: 900, opacity: 0.75 }}>{k}</div>
+      <div>{v}</div>
+    </div>
+  );
 }
 
+/**
+ * Component to display move information in a card format
+ * Shows name, type, category, power, accuracy, PP, and description
+ */
+function MoveCard({
+  internal,
+  prefix,
+}: {
+  internal: string;
+  prefix?: string;
+}) {
+  const m = moveByInternal(internal);
+
+  if (!m) {
+    return (
+      <div style={{ border: "1px solid #eee", borderRadius: 12, padding: 10 }}>
+        <div style={{ fontWeight: 900 }}>
+          {prefix ? <span style={{ opacity: 0.7 }}>{prefix} </span> : null}
+          {internal}
+        </div>
+        <div style={{ fontSize: 12, opacity: 0.75 }}>Move not found in moves.json</div>
+      </div>
+    );
+  }
+
+  const metaParts: string[] = [];
+  if (m.Type) metaParts.push(m.Type);
+  if (m.Category) metaParts.push(m.Category);
+  if (m.Power) metaParts.push(`Pow ${m.Power}`);
+  if (m.Accuracy) metaParts.push(`Acc ${m.Accuracy}`);
+  if (m.PP) metaParts.push(`PP ${m.PP}`);
+
+  return (
+    <div style={{ border: "1px solid #eee", borderRadius: 12, padding: 10 }}>
+      <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 10 }}>
+        <div style={{ fontWeight: 900 }}>
+          {prefix ? <span style={{ opacity: 0.7 }}>{prefix} </span> : null}
+          {m.Name}
+        </div>
+        <div style={{ fontSize: 12, opacity: 0.75 }}>{m.InternalName}</div>
+      </div>
+      <div style={{ fontSize: 12, opacity: 0.85, marginTop: 4 }}>
+        {metaParts.join(" • ")}
+      </div>
+      {m.Description ? (
+        <div style={{ marginTop: 6, fontSize: 13, opacity: 0.9 }}>{m.Description}</div>
+      ) : null}
+    </div>
+  );
+}
+
+/**
+ * Component to display ability information in a card format
+ * Shows name and description, handles missing abilities gracefully
+ */
+function AbilityCard({ internal }: { internal: string | null | undefined }) {
+  const a = abilityByInternal(internal);
+  if (!internal) {
+    return (
+      <div style={{ border: "1px solid #eee", borderRadius: 12, padding: 10, opacity: 0.75 }}>
+        —
+      </div>
+    );
+  }
+  if (!a) {
+    return (
+      <div style={{ border: "1px solid #eee", borderRadius: 12, padding: 10 }}>
+        <div style={{ fontWeight: 900 }}>{internal}</div>
+        <div style={{ fontSize: 12, opacity: 0.75 }}>Ability not found in abilities.json</div>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ border: "1px solid #eee", borderRadius: 12, padding: 10 }}>
+      <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 10 }}>
+        <div style={{ fontWeight: 900 }}>{a.Name}</div>
+        <div style={{ fontSize: 12, opacity: 0.75 }}>{a.InternalName}</div>
+      </div>
+      {a.Description ? (
+        <div style={{ marginTop: 6, fontSize: 13, opacity: 0.9 }}>{a.Description}</div>
+      ) : null}
+    </div>
+  );
+}
+
+/**
+ * Collapsible section component using HTML details/summary
+ * Used to organize Pokemon information into expandable sections
+ */
+function Section({
+  title,
+  defaultOpen = false,
+  children,
+}: {
+  title: string;
+  defaultOpen?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <details open={defaultOpen} style={{ border: "1px solid #eee", borderRadius: 12, padding: 10 }}>
+      <summary style={{ cursor: "pointer", fontWeight: 900, listStyle: "none" as any }}>
+        {title}
+      </summary>
+      <div style={{ marginTop: 10 }}>{children}</div>
+    </details>
+  );
+}
 
 /**
  * Props for the Pokedex component
  * Extends PokedexFiltersState with optional filter control
  */
 type PokedexProps = PokedexFiltersState & {
+  /** Controls layout when used as a full page vs embedded panel. */
   variant?: "page" | "panel";
+  /** When false, show the full dex without applying any filter/sort/exclusions. */
   applyFilters?: boolean;
 
   /** When provided, shows an "add to box" button per entry. */
   onAddToBox?: (dexId: number) => void;
-
-  /** NEW: Notify parent when a row is clicked (dex selection/pick). */
-  onPick?: (dexId: number) => void;
 };
 
 
@@ -98,97 +251,48 @@ export default function Pokedex(props: PokedexProps) {
   const variant = props.variant ?? "page";
 
   const [selectedKey, setSelectedKey] = useState<string>("1-0");
-    const speciesById = useMemo(() => {
-    const m = new Map<number, Species>();
-    for (const s of speciesList) m.set(s.ID, s);
-    return m;
-  }, []);
 
-  const selectedAbilityInternal = useMemo(
-      () => abilitiesRaw(props.abilityText),
-      [props.abilityText]
-    );
+  const filterEngine = useMemo(
+    () =>
+      createPokedexFilterEngine({
+        moves: movesList,
+        abilities: abilitiesList,
+        learnsets: learnsetsList,
+      }),
+    []
+  );
 
-  const selectedMoveInternal = useMemo(
-      () => learnsetsRaw(props.moveText),
-      [props.moveText]
-    );
 
-  // Apply all filters and sorting to create the results list
-  const filtered = useMemo(() => {
-    const apply = props.applyFilters ?? true;
-if (!apply) {
-  // full dex, stable default ordering
-  return speciesList
-    .slice()
-    .sort((a, b) => (a.ID - b.ID) || ((a.Form ?? 0) - (b.Form ?? 0)));
-}
+const filtered = useMemo(() => {
+  return filterEngine.apply(
+    speciesList,
+    {
+      nameQuery: props.nameQuery,
+      typeA: props.typeA,
+      typeB: props.typeB,
+      abilityText: props.abilityText,
+      moveText: props.moveText,
+      sortBy: props.sortBy,
+      sortDir: props.sortDir,
+      excludeLegendary: props.excludeLegendary,
+      excludeSubLegendary: props.excludeSubLegendary,
+    },
+    { applyFilters: props.applyFilters }
+  );
+}, [
+  filterEngine,
+  props.applyFilters,
+  props.nameQuery,
+  props.typeA,
+  props.typeB,
+  props.abilityText,
+  props.moveText,
+  props.sortBy,
+  props.sortDir,
+  props.excludeLegendary,
+  props.excludeSubLegendary,
+]);
 
-    const q = normalize(props.nameQuery);
-
-    const result = speciesList
-      // Name
-      .filter((s) => {
-        if (!q) return true;
-        return s.Name.toLowerCase().includes(q) || s.InternalName.toLowerCase().includes(q);
-      })
-      // Type A + optional Type B
-      .filter((s) => {
-        const typeA = props.typeA;
-        const typeB = props.typeB;
-
-        if (typeA === "ANY") return true;
-
-        const hasA = s.Type1 === typeA || s.Type2 === typeA;
-        if (typeB === "NONE" || !typeB) return hasA;
-
-        if (!s.Type2) return false;
-        const t1 = s.Type1;
-        const t2 = s.Type2;
-        return (t1 === typeA && t2 === typeB) || (t1 === typeB && t2 === typeA);
-      })
-      
-      // Ability (includes hidden)
-      .filter((s) => {
-        if (!selectedAbilityInternal) return true;
-        return (
-          s.Ability1 === selectedAbilityInternal ||
-          s.Ability2 === selectedAbilityInternal ||
-          s.HiddenAbility1 === selectedAbilityInternal ||
-          s.HiddenAbility2 === selectedAbilityInternal
-        );
-      })
-      // Move (learnset)
-      .filter((s) => {
-        if (!selectedMoveInternal) return true;
-        const moves = learnsetIndex.get(s.InternalName);
-        if (!moves) return false;
-        return moves.has(selectedMoveInternal);
-      })
-      // Sort
-        .filter((s) => {
-          if (props.excludeLegendary && isLegendary(s)) return false;
-          if (props.excludeSubLegendary && isSubLegendary(s)) return false;
-          return true;
-        })
-        .sort((a, b) => {
-          const av = getSortValue(a, props.sortBy);
-          const bv = getSortValue(b, props.sortBy);
-          if (av !== bv) return props.sortDir === "asc" ? av - bv : bv - av;
-          if (a.ID !== b.ID) return a.ID - b.ID;
-          return (a.Form ?? 0) - (b.Form ?? 0);
-        });
-
-    return result;
-  }, [
-    props.nameQuery,
-    props.typeA,
-    props.typeB,
-    props.sortBy,
-    props.sortDir,
-    props.excludeLegendary,
-    props.excludeSubLegendary,
-  ]);
 
   const selected = useMemo(() => {
     const [idStr, formStr] = selectedKey.split("-");
@@ -201,13 +305,39 @@ if (!apply) {
       null
     );
   }, [selectedKey, filtered]);
-  const vm = selected
-    ? resolveDetailsVM({
-        input: { source: "species", dexId: selected.ID },
-        speciesById,
-      })
-    : null;
 
+  const learnsetForSelected = useMemo(() => {
+    if (!selected) return null;
+
+    const exact = learnsetsList.find(
+      (ls) => ls.InternalName === selected.InternalName && (ls.Form ?? 0) === (selected.Form ?? 0)
+    );
+    if (exact) return exact;
+
+    const form0 = learnsetsList.find(
+      (ls) => ls.InternalName === selected.InternalName && (ls.Form ?? 0) === 0
+    );
+    return form0 ?? null;
+  }, [selected]);
+
+  const parsedMoves = useMemo(() => {
+    if (!learnsetForSelected) {
+      return {
+        levelUp: [] as { level: number; move: string }[],
+        tutor: [] as string[],
+        TMMoves: [] as string[],
+        HMMoves: [] as string[],
+        egg: [] as string[],
+      };
+    }
+    return {
+      levelUp: parseLevelUp(learnsetForSelected.LevelUp),
+      tutor: parsePipeList(learnsetForSelected.TutorMoves),
+      TMMoves: parsePipeList(learnsetForSelected.TMMoves),
+      HMMoves: parsePipeList(learnsetForSelected.HMMoves),
+      egg: parsePipeList(learnsetForSelected.EggMoves),
+    };
+  }, [learnsetForSelected]);
 
   if (variant === "panel") {
     return (
@@ -225,10 +355,7 @@ if (!apply) {
               {/* Row button */}
               <button
                 type="button"
-                onClick={() => {
-                  setSelectedKey(key);
-                  props.onPick?.(s.ID);
-                }}
+                onClick={() => setSelectedKey(key)}
                 style={{
                   width: "100%",
                   textAlign: "left",
@@ -323,10 +450,7 @@ if (!apply) {
                 {/* Select row */}
                 <button
                   type="button"
-                  onClick={() => {
-                    setSelectedKey(key);
-                    props.onPick?.(s.ID);
-                  }}
+                  onClick={() => setSelectedKey(key)}
                   style={{
                     textAlign: "left",
                     padding: 10,
@@ -385,10 +509,159 @@ if (!apply) {
       </aside>
 
       {/* Details */}
-      <div style={{ padding: 12, overflow: "auto" }}>
-        {vm ? <DetailsPanel vm={vm} editor={{ canEdit: false }} /> : null}
-      </div>
+      <main style={{ padding: 18, overflow: "auto" }}>
+        {!selected ? (
+          <p>No selection.</p>
+        ) : (
+          <>
+            {/* Header */}
+            <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+              <SpriteTile
+                headId={selected.ID}
+                bodyId={selected.ID}
+                title={`#${selected.ID} ${selected.Name}`}
+              />
+              <div>
+                <h1 style={{ margin: 0 }}>
+                  #{selected.ID} {selected.Name}
+                  {selected.FormName ? ` (${selected.FormName})` : ""}
+                </h1>
+                <div style={{ fontSize: 14, opacity: 0.75 }}>
+                  {selected.Type1}
+                  {selected.Type2 ? ` / ${selected.Type2}` : ""}
+                </div>
+              </div>
+            </div>
 
+            <div style={{ display: "grid", gap: 10, marginTop: 14 }}>
+              <Section title={`Stats (BST ${getBST(selected)})`} defaultOpen>
+                <div style={{ display: "grid", gap: 8 }}>
+                  <KeyValueRow k="HP" v={selected.BaseHP} />
+                  <KeyValueRow k="Atk" v={selected.BaseATK} />
+                  <KeyValueRow k="Def" v={selected.BaseDEF} />
+                  <KeyValueRow k="SpA" v={selected.BaseSPA} />
+                  <KeyValueRow k="SpD" v={selected.BaseSPD} />
+                  <KeyValueRow k="Spe" v={selected.BaseSPE} />
+                  <KeyValueRow k="BST" v={<b>{getBST(selected)}</b>} />
+                </div>
+              </Section>
+
+              <Section title="Moves" defaultOpen>
+                {!learnsetForSelected ? (
+                  <div style={{ opacity: 0.75 }}>No learnset found.</div>
+                ) : (
+                  <div style={{ display: "grid", gap: 14 }}>
+                    <Section title="Level-up" defaultOpen>
+                      {parsedMoves.levelUp.length === 0 ? (
+                        <div style={{ opacity: 0.75 }}>None</div>
+                      ) : (
+                        <div style={{ display: "grid", gap: 8 }}>
+                          {parsedMoves.levelUp.map((m) => (
+                            <MoveCard
+                              key={`${m.level}-${m.move}`}
+                              internal={m.move}
+                              prefix={`Lv ${m.level} •`}
+                            />
+                          ))}
+                        </div>
+                      )}
+                    </Section>
+
+                    <Section title="Tutor" defaultOpen>
+                      {parsedMoves.tutor.length === 0 ? (
+                        <div style={{ opacity: 0.75 }}>None</div>
+                      ) : (
+                        <div style={{ display: "grid", gap: 8 }}>
+                          {parsedMoves.tutor
+                            .slice()
+                            .sort((a, b) => a.localeCompare(b))
+                            .map((mv) => (
+                              <MoveCard key={mv} internal={mv} />
+                            ))}
+                        </div>
+                      )}
+                    </Section>
+
+                    <Section title="TM Moves" defaultOpen>
+                      {parsedMoves.TMMoves.length === 0 ? (
+                        <div style={{ opacity: 0.75 }}>None</div>
+                      ) : (
+                        <div style={{ display: "grid", gap: 8 }}>
+                          {parsedMoves.TMMoves
+                            .slice()
+                            .sort((a, b) => a.localeCompare(b))
+                            .map((mv) => (
+                              <MoveCard key={mv} internal={mv} />
+                            ))}
+                        </div>
+                      )}
+                    </Section>
+
+                    <Section title="HM Moves" defaultOpen>
+                      {parsedMoves.HMMoves.length === 0 ? (
+                        <div style={{ opacity: 0.75 }}>None</div>
+                      ) : (
+                        <div style={{ display: "grid", gap: 8 }}>
+                          {parsedMoves.HMMoves
+                            .slice()
+                            .sort((a, b) => a.localeCompare(b))
+                            .map((mv) => (
+                              <MoveCard key={mv} internal={mv} />
+                            ))}
+                        </div>
+                      )}
+                    </Section>
+
+                    <Section title="Egg Moves" defaultOpen>
+                      {parsedMoves.egg.length === 0 ? (
+                        <div style={{ opacity: 0.75 }}>None</div>
+                      ) : (
+                        <div style={{ display: "grid", gap: 8 }}>
+                          {parsedMoves.egg
+                            .slice()
+                            .sort((a, b) => a.localeCompare(b))
+                            .map((mv) => (
+                              <MoveCard key={mv} internal={mv} />
+                            ))}
+                        </div>
+                      )}
+                    </Section>
+                  </div>
+                )}
+              </Section>
+
+              <Section title="Abilities" defaultOpen>
+                <div style={{ display: "grid", gap: 10 }}>
+                  <div>
+                    <div style={{ fontWeight: 900, marginBottom: 6, opacity: 0.8 }}>Ability 1</div>
+                    <AbilityCard internal={selected.Ability1} />
+                  </div>
+                  <div>
+                    <div style={{ fontWeight: 900, marginBottom: 6, opacity: 0.8 }}>Ability 2</div>
+                    <AbilityCard internal={selected.Ability2} />
+                  </div>
+                  <div>
+                    <div style={{ fontWeight: 900, marginBottom: 6, opacity: 0.8 }}>Hidden Ability 1</div>
+                    <AbilityCard internal={selected.HiddenAbility1} />
+                  </div>
+                  <div>
+                    <div style={{ fontWeight: 900, marginBottom: 6, opacity: 0.8 }}>Hidden Ability 2</div>
+                    <AbilityCard internal={selected.HiddenAbility2} />
+                  </div>
+                </div>
+              </Section>
+
+              <Section title="Evolution" defaultOpen>
+                <EvolutionLine speciesList={speciesList} internalName={selected.InternalName} />
+              </Section>
+
+              <Section title="Dex Entry" defaultOpen>
+                <p style={{ maxWidth: 900, marginTop: 0 }}>{selected.PokedexEntry}</p>
+              </Section>
+            </div>
+          </>
+        )}
+      </main>
     </div>
   );
 }

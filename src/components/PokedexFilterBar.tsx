@@ -1,25 +1,5 @@
 /**
- * Pokedex Filter Bar Component
- * 
- * Comprehensive filtering and sorting interface for the Pokedex and Box views.
- * Provides a two-stage filtering system:
- * 
- * Stage 1 - Search & Filter:
- * - Name/InternalName search
- * - Dual type filtering (primary and secondary types)
- * - Ability search with autocomplete
- * - Move search with autocomplete
- * 
- * Stage 2 - Sort & Exclude:
- * - Sort by any base stat (HP, ATK, DEF, SPA, SPD, SPE, BST) or Dex #
- * - Ascending/descending sort order
- * - Exclude legendary Pokemon
- * - Exclude sub-legendary Pokemon
- * 
- * The filter state is managed by the parent component and shared between
- * multiple pages (Pokedex and BoxTeam).
- * 
- * @module components/PokedexFilterBar
+ * Filter Bar - Search, filter, and sort Pokemon by name, type, ability, move, and stats
  */
 
 import { useMemo } from "react";
@@ -33,7 +13,6 @@ import type { Move } from "../lib/types/moves";
 import type { PokedexFiltersState, SortBy, SortDir } from "../lib/types/pokedexFilters";
 
 type PokedexFilterBarProps = PokedexFiltersState & {
-  /** Current page, used to determine which filter target buttons should be visible */
   currentPage?: "pokedex" | "boxTeam";
 };
 
@@ -41,22 +20,7 @@ const speciesList = speciesRaw as Species[];
 const abilitiesList = abilitiesRaw as Ability[];
 const movesList = movesRaw as Move[];
 
-/**
- * Filter bar component providing comprehensive Pokemon filtering
- * 
- * Features:
- * - Text search for Pokemon names (display or internal name)
- * - Type filtering with support for dual-type combinations
- * - Ability and move search with HTML5 datalist autocomplete
- * - Multi-criteria sorting (stats, BST, Dex number)
- * - Rarity tier exclusion filters
- * - Filter target toggle (Pokedex vs Box)
- * 
- * All filter state is managed by parent via props, making this a controlled component.
- */
 export default function PokedexFilterBar(props: PokedexFilterBarProps) {
-  // Extract all unique types from the species data
-  // Sorted alphabetically with "ANY" as first option for Type A
   const allTypes = useMemo(() => {
     const set = new Set<string>();
     for (const s of speciesList) {
@@ -68,7 +32,6 @@ export default function PokedexFilterBar(props: PokedexFilterBarProps) {
 
   return (
     <div style={{ borderBottom: "1px solid #ddd", padding: 10 }}>
-      {/* Stage 1 Filters: Basic search and type/ability/move filtering */}
       <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
         <input
           value={props.nameQuery}
@@ -141,8 +104,6 @@ export default function PokedexFilterBar(props: PokedexFilterBarProps) {
         </button>
       </div>
 
-
-      {/* Stage 2 Filters: Sorting and advanced filtering options */}
       <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center", marginTop: 10 }}>
         <select
           value={props.sortBy}

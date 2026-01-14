@@ -10,10 +10,11 @@ import PokedexFilterBar from "./components/PokedexFilterBar";
 import BoxTeamPage from "./pages/BoxTeamPage";
 import type { BoxMon } from "./lib/types/box";
 import { loadBox, saveBox } from "./lib/boxStorage";
+import DebugMoves from "./pages/DebugMoves";
 
 import type { SortBy, SortDir } from "./lib/types/pokedexFilters";
 
-type Page = "pokedex" | "fusion" | "boxTeam";
+type Page = "pokedex" | "fusion" | "boxTeam" | "debugMoves";
 type FilterTarget = "pokedex" | "box";
 
 export default function App() {
@@ -102,6 +103,9 @@ export default function App() {
         <button onClick={() => setPage("boxTeam")} style={{ padding: "8px 12px" }}>
           Box Team
         </button>
+        <button onClick={() => setPage("debugMoves")} style={{ padding: "8px 12px" }}>
+          Debug Moves
+        </button>
       </header>
 
       {(page === "pokedex" || page === "boxTeam") && (
@@ -112,6 +116,7 @@ export default function App() {
         {page === "pokedex" && <Pokedex {...pokedexPageProps} />}
         {page === "fusion" && <FusionCalculator />}
         {page === "boxTeam" && <BoxTeamPage {...boxTeamPageProps} />}
+        {page === "debugMoves" && <DebugMoves />}
       </div>
     </div>
   );

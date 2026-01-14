@@ -4,6 +4,8 @@
  */
 
 import type { Species } from "./types/species";
+import type { Learnset } from "./types/learnset";
+import { parseLevelUp, parsePipeList } from "./pokedex/pokedexUtils";
 
 export type Stats = {
   hp: number;
@@ -90,4 +92,74 @@ export function fusePokemon(head: Species, body: Species): FusionResult {
   ]);
 
   return { head, body, types, stats, bst, abilities };
+}
+export type FusionLearnset = {
+  levelUp: Array<{ level: number; move: string }>;
+  tutor: string[];
+  tm: string[];
+  hm: string[];
+  egg: string[];
+  allMoves: string[]; // union of everything above
+};
+
+function fuseLevelUp(head: Learnset | null, body: Learnset | null) {
+  const a = head ? parseLevelUp(head.LevelUp) : [];
+  const b = body ? parseLevelUp(body.LevelUp) : [];
+
+  // move -> earliest level
+  const earliest = new Map<string, number>();
+
+  for (const { level, move } of [...a, ...b]) {
+    const prev = earliest.get(move);
+    if (prev === undefined || level < prev) earliest.set(move, level);
+  }
+
+  return Array.from(earliest.entries())
+    .map(([move, level]) => ({ move, level }))
+    .sort((x, y) => x.level - y.level || x.move.localeCompare(y.move));
+}
+
+function fusePipeField(
+  headVal: string | null | undefined,
+  bodyVal: string | null | undefined
+) {
+  const a = headVal ? parsePipeList(headVal) : [];
+  const b = bodyVal ? parsePipeList(bodyVal) : [];
+  return uniq([...a, ...b]).sort();
+}
+
+/**
+ * Compute fusion learnset as UNION(head, body).
+ * Safe: accepts null learnsets.
+ */
+export function fuseLearnset(head: Learnset | null, body: Learnset | null): FusionLearnset {
+  const levelUp = fuseLevelUp(head, body);
+  const tutor = fusePipeField(head?.TutorMoves, body?.TutorMoves);
+  const tm = fusePipeField(head?.TMMoves, body?.TMMoves);
+  const hm = fusePipeField(head?.HMMoves, body?.HMMoves);
+  const egg = fusePipeField(head?.EggMoves, body?.EggMoves);
+
+  const allMoves = uniq([
+    ...levelUp.map((x) => x.move),
+    ...tutor,
+    ...tm,
+    ...hm,
+    ...egg,
+  ]).sort();
+
+  return { levelUp, tutor, tm, hm, egg, allMoves };
+}
+
+/**
+ * Convenience helper if you already have a lookup map.
+ */
+export function fuseLearnsetByInternalName(
+  headInternal: string,
+  bodyInternal: string,
+  learnsetsByInternal: Map<string, Learnset>
+) {
+  return fuseLearnset(
+    learnsetsByInternal.get(headInternal) ?? null,
+    learnsetsByInternal.get(bodyInternal) ?? null
+  );
 }

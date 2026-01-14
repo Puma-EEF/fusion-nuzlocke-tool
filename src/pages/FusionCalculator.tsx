@@ -6,10 +6,16 @@
 import { useMemo, useState } from "react";
 import speciesRaw from "../data/species.json";
 import type { Species } from "../lib/types/species";
-import { fusePokemon } from "../lib/fusion";
+import learnsetsRaw from "../data/learnsets.json";
+import type { Learnset } from "../lib/types/learnset";
+import { fusePokemon, fuseLearnsetByInternalName } from "../lib/fusion";
 import SpriteTile from "../components/SpriteTile";
 
 const speciesList = (speciesRaw as Species[]).filter((s) => s.Form === 0);
+const learnsetsList = learnsetsRaw as Learnset[];
+const learnsetsByInternal = new Map<string, Learnset>(
+  learnsetsList.map((l) => [l.InternalName, l])
+);
 
 function findByNameOrInternal(input: string): Species | null {
   const q = input.trim().toLowerCase();
@@ -33,6 +39,11 @@ function FusionCard({
   body: Species;
 }) {
   const result = useMemo(() => fusePokemon(head, body), [head, body]);
+
+  const learnset = useMemo(
+    () => fuseLearnsetByInternalName(head.InternalName, body.InternalName, learnsetsByInternal),
+    [head.InternalName, body.InternalName]
+  );
 
   return (
     <div style={{ border: "1px solid #ddd", borderRadius: 14, padding: 14 }}>
@@ -66,6 +77,15 @@ function FusionCard({
         <li>SpD: {result.stats.spd}</li>
         <li>Spe: {result.stats.spe}</li>
       </ul>
+      <h3>Learnset (Union)</h3>
+        <ul>
+          <li>Total unique moves: {learnset.allMoves.length}</li>
+          <li>Level-up: {learnset.levelUp.length}</li>
+          <li>TM: {learnset.tm.length}</li>
+          <li>HM: {learnset.hm.length}</li>
+          <li>Tutor: {learnset.tutor.length}</li>
+          <li>Egg: {learnset.egg.length}</li>
+        </ul>
     </div>
   );
 }

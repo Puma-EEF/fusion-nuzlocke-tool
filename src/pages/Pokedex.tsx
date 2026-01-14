@@ -28,6 +28,7 @@ import { useMemo, useState } from "react";
 import { createPokedexFilterEngine } from "../lib/pokedex/filterEngine";
 import KeyValueRow from "../components/KeyValueRow";
 import { getBST, parseLevelUp, parsePipeList } from "../lib/pokedex/pokedexUtils";
+import { createPokedexLookups } from "../lib/pokedex/lookups";
 
 import speciesRaw from "../data/species.json";
 import movesRaw from "../data/moves.json";
@@ -49,25 +50,7 @@ const movesList = movesRaw as Move[];
 const abilitiesList = abilitiesRaw as Ability[];
 const learnsetsList = learnsetsRaw as Learnset[];
 
-
-/** 
- * Look up a Move by its InternalName 
- * @param internal - The internal name identifier for the move
- * @returns The Move object if found, null otherwise
- */
-function moveByInternal(internal: string): Move | null {
-  return movesList.find((m) => m.InternalName === internal) ?? null;
-}
-
-/** 
- * Look up an Ability by its InternalName 
- * @param internal - The internal name identifier for the ability
- * @returns The Ability object if found, null if not found or internal is null/undefined
- */
-function abilityByInternal(internal: string | null | undefined): Ability | null {
-  if (!internal) return null;
-  return abilitiesList.find((a) => a.InternalName === internal) ?? null;
-}
+const { moveByInternal, abilityByInternal } = createPokedexLookups(movesList, abilitiesList);
 
 /**
  * Component to display move information in a card format

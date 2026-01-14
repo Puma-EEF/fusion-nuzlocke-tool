@@ -1,7 +1,8 @@
 /**
- * Pokedex Page Component
+ * Pokedex Component
  * 
  * Comprehensive Pokemon browser with advanced filtering and detailed views.
+ * Supports both full-page layout and embedded panel mode.
  * 
  * Features:
  * - Browse all Pokemon with sprites
@@ -9,16 +10,16 @@
  * - Sort by any stat or BST
  * - Exclude legendary/sub-legendary Pokemon
  * - Expandable detail view for each Pokemon showing:
- *   - Complete base stats
- *   - All learnable moves by method (level-up, TM, tutor, egg)
+ *   - Complete base stats with BST
+ *   - All learnable moves by method (level-up, TM, HM, tutor, egg)
  *   - All abilities including hidden abilities
  *   - Complete evolution chains
+ *   - Pokedex entry text
+ * - Optional "add to box" functionality via callback
  * 
- * Data Processing Pipeline:
- * 1. Apply name/type/ability/move filters
- * 2. Apply legendary exclusions
- * 3. Sort by selected stat
- * 4. Render paginated grid with detail expansion
+ * Layout:
+ * - Page variant: Two-panel layout with results list on left and detailed info on right
+ * - Panel variant: Compact list view without detailed right panel
  * 
  * @module pages/Pokedex
  */
@@ -26,6 +27,7 @@
 import { useMemo, useState } from "react";
 import { createPokedexFilterEngine } from "../lib/pokedex/filterEngine";
 import KeyValueRow from "../components/KeyValueRow";
+import { getBST, parseLevelUp, parsePipeList } from "../lib/pokedex/pokedexUtils";
 
 import speciesRaw from "../data/species.json";
 import movesRaw from "../data/moves.json";
@@ -47,57 +49,38 @@ const movesList = movesRaw as Move[];
 const abilitiesList = abilitiesRaw as Ability[];
 const learnsetsList = learnsetsRaw as Learnset[];
 
-/**
- * Parse level-up moves from encoded string format
- * @param levelUp - Encoded string like "1:TACKLE|7:GROWL|..."
- * @returns Array of {level, move} objects sorted by level
- */
-function parseLevelUp(levelUp: string) {
-  if (!levelUp) return [];
-  const out: { level: number; move: string }[] = [];
-  for (const part of levelUp.split("|")) {
-    const i = part.indexOf(":");
-    if (i === -1) continue;
-    const lvl = Number(part.slice(0, i));
-    const move = part.slice(i + 1).trim();
-    if (!Number.isFinite(lvl) || !move) continue;
-    out.push({ level: lvl, move });
-  }
-  out.sort((a, b) => a.level - b.level);
-  return out;
-}
 
-/**
- * Parse pipe-separated list of moves
- * @param s - Encoded string like "MOVE|MOVE|MOVE"
- * @returns Array of move InternalNames
+/** 
+ * Look up a Move by its InternalName 
+ * @param internal - The internal name identifier for the move
+ * @returns The Move object if found, null otherwise
  */
-function parsePipeList(s: string) {
-  if (!s) return [];
-  return s
-    .split("|")
-    .map((x) => x.trim())
-    .filter(Boolean);
-}
-
-/** Look up a Move by its InternalName */
 function moveByInternal(internal: string): Move | null {
   return movesList.find((m) => m.InternalName === internal) ?? null;
 }
 
-/** Look up an Ability by its InternalName */
+/** 
+ * Look up an Ability by its InternalName 
+ * @param internal - The internal name identifier for the ability
+ * @returns The Ability object if found, null if not found or internal is null/undefined
+ */
 function abilityByInternal(internal: string | null | undefined): Ability | null {
   if (!internal) return null;
   return abilitiesList.find((a) => a.InternalName === internal) ?? null;
 }
 
-function getBST(s: Species) {
-  return s.BaseHP + s.BaseATK + s.BaseDEF + s.BaseSPA + s.BaseSPD + s.BaseSPE;
-}
-
 /**
  * Component to display move information in a card format
- * Shows name, type, category, power, accuracy, PP, and description
+ * 
+ * Shows move details including:
+ * - Display name and internal name
+ * - Type, category (Physical/Special/Status)
+ * - Power, accuracy, and PP
+ * - Move description
+ * - Optional prefix (e.g., "Lv 15 •" for level-up moves)
+ * 
+ * @param internal - The internal name of the move to display
+ * @param prefix - Optional prefix text to display before the move name
  */
 function MoveCard({
   internal,
@@ -148,7 +131,16 @@ function MoveCard({
 
 /**
  * Component to display ability information in a card format
- * Shows name and description, handles missing abilities gracefully
+ * 
+ * Shows ability details including:
+ * - Display name and internal name
+ * - Ability description
+ * 
+ * Handles edge cases:
+ * - Null/undefined values (shows placeholder)
+ * - Missing ability data (shows error message with internal name)
+ * 
+ * @param internal - The internal name of the ability to display
  */
 function AbilityCard({ internal }: { internal: string | null | undefined }) {
   const a = abilityByInternal(internal);
@@ -182,8 +174,14 @@ function AbilityCard({ internal }: { internal: string | null | undefined }) {
 }
 
 /**
- * Collapsible section component using HTML details/summary
- * Used to organize Pokemon information into expandable sections
+ * Collapsible section component using HTML details/summary elements
+ * 
+ * Used to organize Pokemon information into expandable/collapsible sections.
+ * Provides a clean way to group related data (stats, moves, abilities, etc.).
+ * 
+ * @param title - The section header text
+ * @param defaultOpen - Whether the section should be expanded by default (default: false)
+ * @param children - The content to display inside the section
  */
 function Section({
   title,
@@ -206,33 +204,47 @@ function Section({
 
 /**
  * Props for the Pokedex component
- * Extends PokedexFiltersState with optional filter control
+ * 
+ * Extends PokedexFiltersState with additional display and interaction options.
+ * Supports two main use cases:
+ * 1. Full-page Pokedex browser (variant="page")
+ * 2. Embedded panel for selection (variant="panel")
  */
 type PokedexProps = PokedexFiltersState & {
-  /** Controls layout when used as a full page vs embedded panel. */
+  /** Controls layout: "page" for two-panel layout, "panel" for compact list view. Default: "page" */
   variant?: "page" | "panel";
-  /** When false, show the full dex without applying any filter/sort/exclusions. */
+  /** When false, bypasses all filters and shows the complete unfiltered Pokedex. Default: true */
   applyFilters?: boolean;
 
-  /** When provided, shows an "add to box" button per entry. */
+  /** When provided, adds a Pokeball button to each entry that calls this callback with the Pokemon's dex ID */
   onAddToBox?: (dexId: number) => void;
 };
 
 
 /**
- * Main Pokedex page component
- * Two-panel layout: Results list on left, detailed info on right
- * Features:
- * - Comprehensive filtering by name, type, ability, moves
- * - Sorting by stats or Pokedex number
- * - Detailed Pokemon info including stats, moves, abilities, evolution
- * - Move learnsets with level requirements
+ * Main Pokedex component
+ * 
+ * Renders either a full two-panel layout (page variant) or a compact list (panel variant).
+ * 
+ * Data Flow:
+ * 1. Creates filter engine from move/ability/learnset data
+ * 2. Applies filters to species list based on props
+ * 3. Maintains selected Pokemon state for detail view
+ * 4. Parses and displays learnset data for selected Pokemon
+ * 
+ * Layout Variants:
+ * - "page": Two-panel layout with results list (left) and detailed info (right)
+ * - "panel": Compact list view without detailed panel
+ * 
+ * @param props - Component props including filters and display options
  */
 export default function Pokedex(props: PokedexProps) {
   const variant = props.variant ?? "page";
 
+  // Track selected Pokemon using "ID-Form" key format (e.g., "1-0" for Bulbasaur)
   const [selectedKey, setSelectedKey] = useState<string>("1-0");
 
+  // Create filter engine once with move/ability/learnset data
   const filterEngine = useMemo(
     () =>
       createPokedexFilterEngine({
@@ -243,9 +255,9 @@ export default function Pokedex(props: PokedexProps) {
     []
   );
 
-
-const filtered = useMemo(() => {
-  return filterEngine.apply(
+  // Apply all filters, sorts, and exclusions to get the final results list
+  const filtered = useMemo(() => {
+    return filterEngine.apply(
     speciesList,
     {
       nameQuery: props.nameQuery,
@@ -274,7 +286,7 @@ const filtered = useMemo(() => {
   props.excludeSubLegendary,
 ]);
 
-
+  // Find the currently selected Pokemon from the full species list by ID and form
   const selected = useMemo(() => {
     const [idStr, formStr] = selectedKey.split("-");
     const id = Number(idStr);
@@ -287,6 +299,7 @@ const filtered = useMemo(() => {
     );
   }, [selectedKey, filtered]);
 
+  // Look up learnset for selected Pokemon, falling back to Form 0 if specific form not found
   const learnsetForSelected = useMemo(() => {
     if (!selected) return null;
 
@@ -301,6 +314,7 @@ const filtered = useMemo(() => {
     return form0 ?? null;
   }, [selected]);
 
+  // Parse all move categories from learnset into structured format
   const parsedMoves = useMemo(() => {
     if (!learnsetForSelected) {
       return {
@@ -320,6 +334,7 @@ const filtered = useMemo(() => {
     };
   }, [learnsetForSelected]);
 
+  // Render compact list view for panel variant (no detail pane)
   if (variant === "panel") {
     return (
       <div style={{ display: "grid", gap: 6 }}>
@@ -333,7 +348,7 @@ const filtered = useMemo(() => {
 
           return (
             <div key={key} style={{ position: "relative" }}>
-              {/* Row button */}
+              {/* Pokemon selection button */}
               <button
                 type="button"
                 onClick={() => setSelectedKey(key)}
@@ -359,7 +374,7 @@ const filtered = useMemo(() => {
                 </div>
               </button>
 
-              {/* Add-to-box icon pinned to the right (always visible) */}
+              {/* Pokeball button - adds Pokemon to box when clicked */}
               {props.onAddToBox ? (
                 <button
                   type="button"
@@ -404,10 +419,10 @@ const filtered = useMemo(() => {
     );
 }
 
-
+  // Render two-panel layout for page variant (results list + detail view)
   return (
     <div style={{ display: "grid", gridTemplateColumns: "380px 1fr", height: "100%" }}>
-      {/* Results list */}
+      {/* Left panel: Scrollable results list */}
       <aside style={{ borderRight: "1px solid #ddd", padding: 12, overflow: "auto" }}>
         <div style={{ fontSize: 12, opacity: 0.75, marginBottom: 8 }}>
           Results: <b>{filtered.length}</b>
@@ -451,7 +466,7 @@ const filtered = useMemo(() => {
                   </div>
                 </button>
 
-                {/* Add to box (pokéball) */}
+                {/* Pokeball button - adds Pokemon to box when clicked */}
                 {props.onAddToBox ? (
                   <button
                     type="button"
@@ -489,13 +504,13 @@ const filtered = useMemo(() => {
         </div>
       </aside>
 
-      {/* Details */}
+      {/* Right panel: Scrollable detail view for selected Pokemon */}
       <main style={{ padding: 18, overflow: "auto" }}>
         {!selected ? (
           <p>No selection.</p>
         ) : (
           <>
-            {/* Header */}
+            {/* Pokemon header with sprite, name, and types */}
             <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
               <SpriteTile
                 headId={selected.ID}

@@ -27,8 +27,9 @@
 import { useMemo, useState } from "react";
 import { createPokedexFilterEngine } from "../lib/pokedex/filterEngine";
 import KeyValueRow from "../components/KeyValueRow";
-import { getBST, parseLevelUp, parsePipeList } from "../lib/pokedex/pokedexUtils";
-import { createPokedexLookups } from "../lib/pokedex/lookups";
+import { getBST } from "../lib/pokedex/pokedexUtils";
+import LearnsetViewer from "../components/moves/LearnsetViewer";
+import { fuseLearnset } from "../lib/fusion";
 
 import speciesRaw from "../data/species.json";
 import movesRaw from "../data/moves.json";
@@ -49,68 +50,20 @@ const speciesList = speciesRaw as Species[];
 const movesList = movesRaw as Move[];
 const abilitiesList = abilitiesRaw as Ability[];
 const learnsetsList = learnsetsRaw as Learnset[];
+const movesByInternal = new Map<string, Move>(
+  movesList.map((m) => [m.InternalName, m])
+);
+const learnsetsByInternal = new Map<string, Learnset>(
+  learnsetsList.map((l) => [l.InternalName, l])
+);
+const abilitiesByInternal = new Map<string, Ability>(
+  abilitiesList.map((a) => [a.InternalName, a])
+);
+const speciesByKey = new Map<string, Species>(
+  speciesList.map((s) => [`${s.ID}-${s.Form ?? 0}`, s])
+);
 
-const { moveByInternal, abilityByInternal } = createPokedexLookups(movesList, abilitiesList);
 
-/**
- * Component to display move information in a card format
- * 
- * Shows move details including:
- * - Display name and internal name
- * - Type, category (Physical/Special/Status)
- * - Power, accuracy, and PP
- * - Move description
- * - Optional prefix (e.g., "Lv 15 •" for level-up moves)
- * 
- * @param internal - The internal name of the move to display
- * @param prefix - Optional prefix text to display before the move name
- */
-function MoveCard({
-  internal,
-  prefix,
-}: {
-  internal: string;
-  prefix?: string;
-}) {
-  const m = moveByInternal(internal);
-
-  if (!m) {
-    return (
-      <div style={{ border: "1px solid #eee", borderRadius: 12, padding: 10 }}>
-        <div style={{ fontWeight: 900 }}>
-          {prefix ? <span style={{ opacity: 0.7 }}>{prefix} </span> : null}
-          {internal}
-        </div>
-        <div style={{ fontSize: 12, opacity: 0.75 }}>Move not found in moves.json</div>
-      </div>
-    );
-  }
-
-  const metaParts: string[] = [];
-  if (m.Type) metaParts.push(m.Type);
-  if (m.Category) metaParts.push(m.Category);
-  if (m.Power) metaParts.push(`Pow ${m.Power}`);
-  if (m.Accuracy) metaParts.push(`Acc ${m.Accuracy}`);
-  if (m.PP) metaParts.push(`PP ${m.PP}`);
-
-  return (
-    <div style={{ border: "1px solid #eee", borderRadius: 12, padding: 10 }}>
-      <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 10 }}>
-        <div style={{ fontWeight: 900 }}>
-          {prefix ? <span style={{ opacity: 0.7 }}>{prefix} </span> : null}
-          {m.Name}
-        </div>
-        <div style={{ fontSize: 12, opacity: 0.75 }}>{m.InternalName}</div>
-      </div>
-      <div style={{ fontSize: 12, opacity: 0.85, marginTop: 4 }}>
-        {metaParts.join(" • ")}
-      </div>
-      {m.Description ? (
-        <div style={{ marginTop: 6, fontSize: 13, opacity: 0.9 }}>{m.Description}</div>
-      ) : null}
-    </div>
-  );
-}
 
 /**
  * Component to display ability information in a card format
@@ -126,7 +79,7 @@ function MoveCard({
  * @param internal - The internal name of the ability to display
  */
 function AbilityCard({ internal }: { internal: string | null | undefined }) {
-  const a = abilityByInternal(internal);
+  const a = internal ? (abilitiesByInternal.get(internal) ?? null) : null;
   if (!internal) {
     return (
       <div style={{ border: "1px solid #eee", borderRadius: 12, padding: 10, opacity: 0.75 }}>
@@ -241,80 +194,49 @@ export default function Pokedex(props: PokedexProps) {
   // Apply all filters, sorts, and exclusions to get the final results list
   const filtered = useMemo(() => {
     return filterEngine.apply(
-    speciesList,
-    {
-      nameQuery: props.nameQuery,
-      typeA: props.typeA,
-      typeB: props.typeB,
-      abilityText: props.abilityText,
-      moveText: props.moveText,
-      sortBy: props.sortBy,
-      sortDir: props.sortDir,
-      excludeLegendary: props.excludeLegendary,
-      excludeSubLegendary: props.excludeSubLegendary,
-    },
-    { applyFilters: props.applyFilters }
-  );
-}, [
-  filterEngine,
-  props.applyFilters,
-  props.nameQuery,
-  props.typeA,
-  props.typeB,
-  props.abilityText,
-  props.moveText,
-  props.sortBy,
-  props.sortDir,
-  props.excludeLegendary,
-  props.excludeSubLegendary,
-]);
-
-  // Find the currently selected Pokemon from the full species list by ID and form
-  const selected = useMemo(() => {
-    const [idStr, formStr] = selectedKey.split("-");
-    const id = Number(idStr);
-    const form = Number(formStr);
-
-    return (
-      speciesList.find((s) => s.ID === id && (s.Form ?? 0) === form) ??
-      filtered[0] ??
-      null
+      speciesList,
+      {
+        nameQuery: props.nameQuery,
+        typeA: props.typeA,
+        typeB: props.typeB,
+        abilityText: props.abilityText,
+        moveText: props.moveText,
+        sortBy: props.sortBy,
+        sortDir: props.sortDir,
+        excludeLegendary: props.excludeLegendary,
+        excludeSubLegendary: props.excludeSubLegendary,
+      },
+      { applyFilters: props.applyFilters }
     );
-  }, [selectedKey, filtered]);
+  }, [
+    filterEngine,
+    props.applyFilters,
+    props.nameQuery,
+    props.typeA,
+    props.typeB,
+    props.abilityText,
+    props.moveText,
+    props.sortBy,
+    props.sortDir,
+    props.excludeLegendary,
+    props.excludeSubLegendary,
+  ]);
 
-  // Look up learnset for selected Pokemon, falling back to Form 0 if specific form not found
+  const selected = useMemo(() => {
+    if (!selectedKey) return null; // use your actual state var name
+    return speciesByKey.get(selectedKey) ?? null;
+  }, [selectedKey]);
+
   const learnsetForSelected = useMemo(() => {
     if (!selected) return null;
-
-    const exact = learnsetsList.find(
-      (ls) => ls.InternalName === selected.InternalName && (ls.Form ?? 0) === (selected.Form ?? 0)
-    );
-    if (exact) return exact;
-
-    const form0 = learnsetsList.find(
-      (ls) => ls.InternalName === selected.InternalName && (ls.Form ?? 0) === 0
-    );
-    return form0 ?? null;
+    return learnsetsByInternal.get(selected.InternalName) ?? null;
   }, [selected]);
 
-  // Parse all move categories from learnset into structured format
-  const parsedMoves = useMemo(() => {
-    if (!learnsetForSelected) {
-      return {
-        levelUp: [] as { level: number; move: string }[],
-        tutor: [] as string[],
-        TMMoves: [] as string[],
-        HMMoves: [] as string[],
-        egg: [] as string[],
-      };
-    }
-    return {
-      levelUp: parseLevelUp(learnsetForSelected.LevelUp),
-      tutor: parsePipeList(learnsetForSelected.TutorMoves),
-      TMMoves: parsePipeList(learnsetForSelected.TMMoves),
-      HMMoves: parsePipeList(learnsetForSelected.HMMoves),
-      egg: parsePipeList(learnsetForSelected.EggMoves),
-    };
+  const selectedBST = useMemo(() => (selected ? getBST(selected) : 0), [selected]);
+
+  const normalizedLearnset = useMemo(() => {
+    if (!learnsetForSelected) return null;
+    return fuseLearnset(learnsetForSelected, null);
   }, [learnsetForSelected]);
 
   // Render compact list view for panel variant (no detail pane)
@@ -400,7 +322,7 @@ export default function Pokedex(props: PokedexProps) {
         })}
       </div>
     );
-}
+  }
 
   // Render two-panel layout for page variant (results list + detail view)
   return (
@@ -513,7 +435,7 @@ export default function Pokedex(props: PokedexProps) {
             </div>
 
             <div style={{ display: "grid", gap: 10, marginTop: 14 }}>
-              <Section title={`Stats (BST ${getBST(selected)})`} defaultOpen>
+                <Section title={`Stats (BST ${selectedBST})`} defaultOpen>
                 <div style={{ display: "grid", gap: 8 }}>
                   <KeyValueRow k="HP" v={selected.BaseHP} />
                   <KeyValueRow k="Atk" v={selected.BaseATK} />
@@ -521,93 +443,22 @@ export default function Pokedex(props: PokedexProps) {
                   <KeyValueRow k="SpA" v={selected.BaseSPA} />
                   <KeyValueRow k="SpD" v={selected.BaseSPD} />
                   <KeyValueRow k="Spe" v={selected.BaseSPE} />
-                  <KeyValueRow k="BST" v={<b>{getBST(selected)}</b>} />
+                  <KeyValueRow k="BST" v={<b>{selectedBST}</b>} />
                 </div>
               </Section>
 
               <Section title="Moves" defaultOpen>
-                {!learnsetForSelected ? (
+                {!normalizedLearnset ? (
                   <div style={{ opacity: 0.75 }}>No learnset found.</div>
                 ) : (
-                  <div style={{ display: "grid", gap: 14 }}>
-                    <Section title="Level-up" defaultOpen>
-                      {parsedMoves.levelUp.length === 0 ? (
-                        <div style={{ opacity: 0.75 }}>None</div>
-                      ) : (
-                        <div style={{ display: "grid", gap: 8 }}>
-                          {parsedMoves.levelUp.map((m) => (
-                            <MoveCard
-                              key={`${m.level}-${m.move}`}
-                              internal={m.move}
-                              prefix={`Lv ${m.level} •`}
-                            />
-                          ))}
-                        </div>
-                      )}
-                    </Section>
-
-                    <Section title="Tutor" defaultOpen>
-                      {parsedMoves.tutor.length === 0 ? (
-                        <div style={{ opacity: 0.75 }}>None</div>
-                      ) : (
-                        <div style={{ display: "grid", gap: 8 }}>
-                          {parsedMoves.tutor
-                            .slice()
-                            .sort((a, b) => a.localeCompare(b))
-                            .map((mv) => (
-                              <MoveCard key={mv} internal={mv} />
-                            ))}
-                        </div>
-                      )}
-                    </Section>
-
-                    <Section title="TM Moves" defaultOpen>
-                      {parsedMoves.TMMoves.length === 0 ? (
-                        <div style={{ opacity: 0.75 }}>None</div>
-                      ) : (
-                        <div style={{ display: "grid", gap: 8 }}>
-                          {parsedMoves.TMMoves
-                            .slice()
-                            .sort((a, b) => a.localeCompare(b))
-                            .map((mv) => (
-                              <MoveCard key={mv} internal={mv} />
-                            ))}
-                        </div>
-                      )}
-                    </Section>
-
-                    <Section title="HM Moves" defaultOpen>
-                      {parsedMoves.HMMoves.length === 0 ? (
-                        <div style={{ opacity: 0.75 }}>None</div>
-                      ) : (
-                        <div style={{ display: "grid", gap: 8 }}>
-                          {parsedMoves.HMMoves
-                            .slice()
-                            .sort((a, b) => a.localeCompare(b))
-                            .map((mv) => (
-                              <MoveCard key={mv} internal={mv} />
-                            ))}
-                        </div>
-                      )}
-                    </Section>
-
-                    <Section title="Egg Moves" defaultOpen>
-                      {parsedMoves.egg.length === 0 ? (
-                        <div style={{ opacity: 0.75 }}>None</div>
-                      ) : (
-                        <div style={{ display: "grid", gap: 8 }}>
-                          {parsedMoves.egg
-                            .slice()
-                            .sort((a, b) => a.localeCompare(b))
-                            .map((mv) => (
-                              <MoveCard key={mv} internal={mv} />
-                            ))}
-                        </div>
-                      )}
-                    </Section>
-                  </div>
+                  <LearnsetViewer
+                    learnset={normalizedLearnset}
+                    movesByInternal={movesByInternal}
+                    defaultOpen={{ levelUp: true }}
+                  />
                 )}
               </Section>
+
 
               <Section title="Abilities" defaultOpen>
                 <div style={{ display: "grid", gap: 10 }}>

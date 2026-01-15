@@ -10,11 +10,18 @@ import learnsetsRaw from "../data/learnsets.json";
 import type { Learnset } from "../lib/types/learnset";
 import { fusePokemon, fuseLearnsetByInternalName } from "../lib/fusion";
 import SpriteTile from "../components/SpriteTile";
+import movesRaw from "../data/moves.json";
+import type { Move } from "../lib/types/moves";
+import LearnsetViewer from "../components/moves/LearnsetViewer";
 
 const speciesList = (speciesRaw as Species[]).filter((s) => s.Form === 0);
 const learnsetsList = learnsetsRaw as Learnset[];
 const learnsetsByInternal = new Map<string, Learnset>(
   learnsetsList.map((l) => [l.InternalName, l])
+);
+const movesList = movesRaw as Move[];
+const movesByInternal = new Map<string, Move>(
+  movesList.map((m) => [m.InternalName, m])
 );
 
 function findByNameOrInternal(input: string): Species | null {
@@ -77,15 +84,12 @@ function FusionCard({
         <li>SpD: {result.stats.spd}</li>
         <li>Spe: {result.stats.spe}</li>
       </ul>
-      <h3>Learnset (Union)</h3>
-        <ul>
-          <li>Total unique moves: {learnset.allMoves.length}</li>
-          <li>Level-up: {learnset.levelUp.length}</li>
-          <li>TM: {learnset.tm.length}</li>
-          <li>HM: {learnset.hm.length}</li>
-          <li>Tutor: {learnset.tutor.length}</li>
-          <li>Egg: {learnset.egg.length}</li>
-        </ul>
+      <h3>Learnset</h3>
+      <LearnsetViewer
+        learnset={learnset}
+        movesByInternal={movesByInternal}
+        defaultOpen={{ levelUp: true }} 
+      />
     </div>
   );
 }

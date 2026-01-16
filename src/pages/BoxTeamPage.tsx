@@ -1,6 +1,37 @@
 /**
- * Box & Team Management - Manage caught Pokemon and active party
- * Supports base Pokemon and fusions with persistent localStorage
+ * Box & Team Management Page
+ * 
+ * Complete Nuzlocke box and team management system with persistent storage.
+ * Supports both base Pokemon and custom fusions with IV/nature configuration.
+ * 
+ * @module pages/BoxTeamPage
+ * 
+ * ## Features
+ * **Box Management:**
+ * - Add base Pokemon or fusions to storage
+ * - Configure IVs (Individual Values) for each Pokemon
+ * - Set natures for stat calculations
+ * - Track rarity tiers (Normal, Sub-Legendary, Legendary)
+ * - Filter box contents using full Pokedex filter system
+ * - Tab views: All, Base forms only, Fusions only
+ * - Automatic localStorage persistence
+ * 
+ * **Team Building:**
+ * - Build active 6-Pokemon party
+ * - Add from box or create new entries
+ * - View effective stats with IV/nature modifiers
+ * - Visual team display with sprites
+ * 
+ * **Stat Calculation:**
+ * - Real-time effective stat computation at level 50
+ * - Nature-based stat modifiers (+10%/-10%)
+ * - IV influence on final stats
+ * 
+ * ## Data Flow
+ * 1. Box state lifted to App.tsx for persistence
+ * 2. Changes trigger automatic localStorage save
+ * 3. Filters apply to box contents when filterTarget === "box"
+ * 4. Team is derived subset of box entries
  */
 
 import { useMemo, useState } from "react";
@@ -54,6 +85,16 @@ const LS_KEY = "fusion-nuzlocke-tool:box:v1";
 
 type BoxTab = "ALL" | "BASE" | "FUSED";
 
+/**
+ * Tab Button Component
+ * 
+ * Styled button for switching between box view tabs.
+ * Active tab has inverted colors (black background, white text).
+ * 
+ * @param active - Whether this tab is currently selected
+ * @param children - Tab label text
+ * @param onClick - Handler for tab selection
+ */
 function TabButton({
   active,
   children,

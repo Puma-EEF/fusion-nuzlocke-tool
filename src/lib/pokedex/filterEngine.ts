@@ -1,3 +1,45 @@
+/**
+ * Pokedex Filter Engine
+ * 
+ * Multi-criteria filtering system for Pokemon with efficient lookups and sorting.
+ * Supports name search, type combinations, ability/move filtering, and rarity exclusions.
+ * 
+ * @module lib/pokedex/filterEngine
+ * 
+ * ## Filter Pipeline
+ * The engine applies filters in sequence:
+ * 1. Name matching (display name or internal name)
+ * 2. Type filtering (single or dual-type combinations)
+ * 3. Ability filtering (checks all ability slots including hidden)
+ * 4. Move filtering (checks complete learnset)
+ * 5. Rarity exclusions (legendary/sub-legendary)
+ * 6. Sorting by selected stat or Dex number
+ * 
+ * ## Performance Optimizations
+ * - Pre-built lookup maps for O(1) move/ability resolution
+ * - Move index for fast "Pokemon that learn X" queries
+ * - Normalized strings for case-insensitive matching
+ * - Partial matching with early exit
+ * 
+ * ## Usage
+ * ```typescript
+ * const engine = createPokedexFilterEngine({
+ *   moves: allMoves,
+ *   abilities: allAbilities,
+ *   learnsets: allLearnsets
+ * });
+ * 
+ * const filtered = engine.apply(allSpecies, {
+ *   nameQuery: "char",
+ *   typeA: "FIRE",
+ *   typeB: "FLYING",
+ *   sortBy: "BST",
+ *   sortDir: "desc"
+ *   // ... other filters
+ * });
+ * ```
+ */
+
 import type { Species } from "../types/species";
 import type { Move } from "../types/moves";
 import type { Ability } from "../types/ability";
@@ -7,13 +49,16 @@ import type { SortBy, SortDir } from "../types/pokedexFilters";
 import { buildLearnsetMoveIndex } from "../learnsetIndex";
 import { isLegendary, isSubLegendary } from "../legendary";
 
+/**
+ * Filter configuration values from user input
+ */
 export type PokedexFilterValues = {
   nameQuery: string;
-  typeA: string; // "ANY" or a type
-  typeB: string; // "NONE" or a type
+  typeA: string; // "ANY" or a specific type
+  typeB: string; // "NONE" or a specific type
 
-  abilityText: string;
-  moveText: string;
+  abilityText: string; // User-entered ability search
+  moveText: string; // User-entered move search
 
   sortBy: SortBy;
   sortDir: SortDir;
@@ -22,14 +67,23 @@ export type PokedexFilterValues = {
   excludeSubLegendary: boolean;
 };
 
+/**
+ * Normalize string for case-insensitive comparison
+ */
 function normalize(s: string) {
   return s.trim().toLowerCase();
 }
 
+/**
+ * Calculate Base Stat Total for sorting
+ */
 function getBST(s: Species) {
   return s.BaseHP + s.BaseATK + s.BaseDEF + s.BaseSPA + s.BaseSPD + s.BaseSPE;
 }
 
+/**
+ * Get numeric value for sorting based on sort key
+ */
 function getSortValue(s: Species, sortBy: SortBy) {
   switch (sortBy) {
     case "DEX":
@@ -51,12 +105,18 @@ function getSortValue(s: Species, sortBy: SortBy) {
   }
 }
 
+/**
+ * Dependencies required to build the filter engine
+ */
 type EngineDeps = {
   moves: Move[];
   abilities: Ability[];
   learnsets: Learnset[];
 };
 
+/**
+ * Filter engine interface
+ */
 export type PokedexFilterEngine = {
   apply: (
     species: Species[],
@@ -65,6 +125,17 @@ export type PokedexFilterEngine = {
   ) => Species[];
 };
 
+/**
+ * Create a Pokedex filter engine with pre-built lookup indices
+ * 
+ * Builds efficient data structures for filtering:
+ * - Move name → internal name maps (exact and partial)
+ * - Ability name → internal name maps (exact and partial)
+ * - Pokemon → learnable moves index
+ * 
+ * @param deps - Move, ability, and learnset data
+ * @returns Filter engine with apply() method
+ */
 export function createPokedexFilterEngine(deps: EngineDeps): PokedexFilterEngine {
   const moveByExactName = new Map<string, string>();
   const moveByExactInternal = new Map<string, string>();
@@ -92,6 +163,10 @@ export function createPokedexFilterEngine(deps: EngineDeps): PokedexFilterEngine
 
   const learnsetIndex = buildLearnsetMoveIndex(deps.learnsets);
 
+  /**
+   * Resolve user input to move internal name
+   * Priority: exact name > exact internal > partial name match
+   */
   function resolveMoveInternal(input: string): string | null {
     const q = normalize(input);
     if (!q) return null;
@@ -104,6 +179,10 @@ export function createPokedexFilterEngine(deps: EngineDeps): PokedexFilterEngine
     return partial ? partial.internal : null;
   }
 
+  /**
+   * Resolve user input to ability internal name
+   * Priority: exact name > exact internal > partial name match
+   */
   function resolveAbilityInternal(input: string): string | null {
     const q = normalize(input);
     if (!q) return null;
@@ -116,6 +195,14 @@ export function createPokedexFilterEngine(deps: EngineDeps): PokedexFilterEngine
     return partial ? partial.internal : null;
   }
 
+  /**
+   * Apply all filters to species array
+   * 
+   * @param species - Array of all Pokemon species
+   * @param filters - Filter configuration from user input
+   * @param opts - Options including applyFilters toggle
+   * @returns Filtered and sorted species array
+   */
   function apply(
     species: Species[],
     filters: PokedexFilterValues,
@@ -123,6 +210,7 @@ export function createPokedexFilterEngine(deps: EngineDeps): PokedexFilterEngine
   ): Species[] {
     const shouldApply = opts?.applyFilters ?? true;
 
+    // If filters disabled, return sorted by Dex number only
     if (!shouldApply) {
       return species
         .slice()
@@ -136,7 +224,7 @@ export function createPokedexFilterEngine(deps: EngineDeps): PokedexFilterEngine
     const selectedMoveInternal = resolveMoveInternal(filters.moveText);
 
     return species
-      // Name
+      // Filter by name (display or internal)
       .filter((s) => {
         if (!q) return true;
         return (
@@ -144,7 +232,7 @@ export function createPokedexFilterEngine(deps: EngineDeps): PokedexFilterEngine
           s.InternalName.toLowerCase().includes(q)
         );
       })
-      // Type A + optional Type B
+      // Filter by type combination (single or dual-type)
       .filter((s) => {
         const typeA = filters.typeA;
         const typeB = filters.typeB;
@@ -159,7 +247,7 @@ export function createPokedexFilterEngine(deps: EngineDeps): PokedexFilterEngine
         const t2 = s.Type2;
         return (t1 === typeA && t2 === typeB) || (t1 === typeB && t2 === typeA);
       })
-      // Ability (includes hidden)
+      // Filter by ability (checks all ability slots including hidden)
       .filter((s) => {
         if (!selectedAbilityInternal) return true;
         return (
@@ -169,20 +257,20 @@ export function createPokedexFilterEngine(deps: EngineDeps): PokedexFilterEngine
           s.HiddenAbility2 === selectedAbilityInternal
         );
       })
-      // Move (learnset)
+      // Filter by move (checks complete learnset)
       .filter((s) => {
         if (!selectedMoveInternal) return true;
         const moves = learnsetIndex.get(s.InternalName);
         if (!moves) return false;
         return moves.has(selectedMoveInternal);
       })
-      // Exclusions
+      // Exclude legendary/sub-legendary Pokemon if requested
       .filter((s) => {
         if (filters.excludeLegendary && isLegendary(s)) return false;
         if (filters.excludeSubLegendary && isSubLegendary(s)) return false;
         return true;
       })
-      // Sort
+      // Sort by selected stat/criteria and direction
       .sort((a, b) => {
         const av = getSortValue(a, filters.sortBy);
         const bv = getSortValue(b, filters.sortBy);

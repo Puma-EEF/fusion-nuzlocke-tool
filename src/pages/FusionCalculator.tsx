@@ -1,6 +1,31 @@
 /**
- * Fusion Calculator - Calculate stat combinations for any two Pokemon
- * Shows both possible fusion results with stats, types, and sprites
+ * Fusion Calculator Page
+ * 
+ * Interactive tool for calculating and comparing Pokemon fusion combinations.
+ * Allows users to select two Pokemon and view both possible fusion results
+ * with detailed stat breakdowns, type inheritance, and complete learnsets.
+ * 
+ * @module pages/FusionCalculator
+ * 
+ * ## Features
+ * - Bidirectional fusion preview (A+B and B+A)
+ * - Real-time stat calculations using fusion formulas
+ * - Type inheritance visualization
+ * - Combined ability pools from both parents
+ * - Complete fused learnset display
+ * - Sprite preview for each fusion
+ * 
+ * ## Fusion Mechanics
+ * **Stats:**
+ * - Physical (ATK, DEF, SPE): 2/3 body + 1/3 head
+ * - Special (HP, SPA, SPD): 2/3 head + 1/3 body
+ * 
+ * **Types:**
+ * - Primary type from head Pokemon
+ * - Secondary type from body Pokemon (with redundancy checks)
+ * 
+ * **Abilities:**
+ * - Union of all abilities from both Pokemon (including hidden abilities)
  */
 
 import { useMemo, useState } from "react";
@@ -24,6 +49,17 @@ const movesByInternal = new Map<string, Move>(
   movesList.map((m) => [m.InternalName, m])
 );
 
+/**
+ * Search for a Pokemon by name or internal name
+ * 
+ * Search priority:
+ * 1. Exact display name match (case-insensitive)
+ * 2. Exact internal name match (case-insensitive)
+ * 3. Partial display name match (case-insensitive)
+ * 
+ * @param input - User search query
+ * @returns Matching Species or null if not found
+ */
 function findByNameOrInternal(input: string): Species | null {
   const q = input.trim().toLowerCase();
   if (!q) return null;
@@ -36,6 +72,19 @@ function findByNameOrInternal(input: string): Species | null {
   );
 }
 
+/**
+ * Fusion Result Card Component
+ * 
+ * Displays a single fusion combination with:
+ * - Sprite preview
+ * - Type combination
+ * - Base stat breakdown
+ * - Complete learnset organized by method
+ * 
+ * @param title - Display title for the fusion (e.g., "Fusion A → B")
+ * @param head - Head Pokemon (provides primary type and special stats)
+ * @param body - Body Pokemon (provides physical stats and secondary type)
+ */
 function FusionCard({
   title,
   head,

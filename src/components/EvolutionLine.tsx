@@ -1,5 +1,29 @@
 /**
- * Evolution Line - Display complete evolution chains with conditions
+ * Evolution Line Component
+ * 
+ * Displays complete Pokemon evolution chains with visual sprites and evolution conditions.
+ * Handles linear evolutions (e.g., Charmander → Charmeleon → Charizard) and branching
+ * evolutions (e.g., Eevee → Vaporeon/Jolteon/Flareon/etc.).
+ * 
+ * @module components/EvolutionLine
+ * 
+ * ## Features
+ * - Recursive rendering of evolution trees
+ * - Visual sprites for each evolution stage
+ * - Evolution conditions displayed (level, item, trade, etc.)
+ * - Handles branching evolutions (Eevee, Tyrogue, etc.)
+ * - Support for Pokemon forms (Alolan, Galarian, etc.)
+ * 
+ * ## Architecture
+ * Uses recursion to build evolution trees:
+ * - Base case: Pokemon with no evolutions (leaf node)
+ * - Recursive case: Pokemon with evolutions (renders children recursively)
+ * 
+ * @example
+ * <EvolutionLine
+ *   speciesList={allSpecies}
+ *   internalName="CHARMANDER"
+ * />
  */
 
 import { useMemo } from "react";
@@ -7,16 +31,37 @@ import type { Species } from "../lib/types/species";
 import SpriteTile from "./SpriteTile";
 import { buildReverseIndex, getForwardEvos } from "../lib/evolutionMap";
 
+/**
+ * Get display name for a Pokemon, including form name if applicable
+ * @param speciesList - Array of all species data
+ * @param internalName - Internal name to look up (e.g., "CHARIZARD")
+ * @returns Display name like "Charizard" or "Charizard (Mega X)"
+ */
 function displayName(speciesList: Species[], internalName: string) {
   const s = speciesList.find((x) => x.InternalName === internalName);
   if (!s) return internalName;
   return s.FormName ? `${s.Name} (${s.FormName})` : s.Name;
 }
 
+/**
+ * Get Pokedex ID for a Pokemon by internal name
+ * @param speciesList - Array of all species data
+ * @param internalName - Internal name to look up
+ * @returns Pokedex number or null if not found
+ */
 function dexId(speciesList: Species[], internalName: string) {
   return speciesList.find((x) => x.InternalName === internalName)?.ID ?? null;
 }
 
+/**
+ * Evolution Node Component
+ * 
+ * Displays a single Pokemon in the evolution chain with sprite and name.
+ * Used as a building block for the recursive evolution tree.
+ * 
+ * @param speciesList - Array of all species for lookups
+ * @param internalName - Pokemon to display
+ */
 function Node({
   speciesList,
   internalName,

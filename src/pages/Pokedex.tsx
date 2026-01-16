@@ -435,7 +435,7 @@ export default function Pokedex(props: PokedexProps) {
             </div>
 
             <div style={{ display: "grid", gap: 10, marginTop: 14 }}>
-                <Section title={`Stats (BST ${selectedBST})`} defaultOpen>
+              <Section title={`Stats (BST ${selectedBST})`} defaultOpen>
                 <div style={{ display: "grid", gap: 8 }}>
                   <KeyValueRow k="HP" v={selected.BaseHP} />
                   <KeyValueRow k="Atk" v={selected.BaseATK} />

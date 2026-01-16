@@ -1,6 +1,32 @@
 /**
- * Pokemon Fusion - Combine two Pokemon with calculated stats and types
- * Head favors special stats, body favors physical stats
+ * Pokemon Fusion System
+ * 
+ * Core fusion mechanics for Pokemon Infinite Fusion.
+ * Implements stat calculations, type inheritance, ability combining, and learnset merging.
+ * 
+ * @module lib/fusion
+ * 
+ * ## Fusion Formulas
+ * 
+ * **Stats:**
+ * - Physical stats (ATK, DEF, SPE): floor(2/3 × body + 1/3 × head)
+ * - Special stats (HP, SPA, SPD): floor(2/3 × head + 1/3 × body)
+ * 
+ * **Types:**
+ * - Primary type: Always from head
+ * - Secondary type: Preferably from body's secondary, fallback to body's primary
+ * - Redundancy check: If types match, result is mono-type
+ * 
+ * **Abilities:**
+ * - Union of all abilities from both Pokemon (includes hidden abilities)
+ * - Duplicates automatically removed
+ * 
+ * **Learnset:**
+ * - Level-up: Union with earliest level for shared moves
+ * - TM/HM/Tutor/Egg: Union of all moves from both parents
+ * 
+ * @see fusePokemon - Main fusion function
+ * @see fuseLearnset - Learnset merging function
  */
 
 import type { Species } from "./types/species";
@@ -27,14 +53,28 @@ export type FusionResult = {
 
 const uniq = (arr: string[]) => Array.from(new Set(arr.filter(Boolean)));
 
+/**
+ * Floor division for stat calculations
+ * Ensures integer stats by flooring fractional results
+ */
 function statFloor(n: number) {
   return Math.floor(n);
 }
 
+/**
+ * Calculate physical stat for fusion (ATK, DEF, SPE)
+ * Formula: floor(2/3 × body + 1/3 × head)
+ * Physical stats favor the body Pokemon
+ */
 function fuseStatPhysical(head: number, body: number) {
   return statFloor((2 * body) / 3 + head / 3);
 }
 
+/**
+ * Calculate special stat for fusion (HP, SPA, SPD)
+ * Formula: floor(2/3 × head + 1/3 × body)
+ * Special stats favor the head Pokemon
+ */
 function fuseStatSpecial(head: number, body: number) {
   return statFloor((2 * head) / 3 + body / 3);
 }
@@ -71,6 +111,24 @@ export function fuseTypes(head: Species, body: Species) {
   return { type1, type2 };
 }
 
+/**
+ * Fuse two Pokemon to create a fusion result
+ * 
+ * Combines two Pokemon using Pokemon Infinite Fusion's fusion mechanics:
+ * - Head contributes primary type and special stats
+ * - Body contributes secondary type and physical stats
+ * - Abilities are pooled from both parents
+ * 
+ * @param head - Head Pokemon (determines primary type, favors special stats)
+ * @param body - Body Pokemon (determines secondary type, favors physical stats)
+ * @returns Complete fusion result with stats, types, BST, and abilities
+ * 
+ * @example
+ * const bulbasaur = getSpecies(1);
+ * const charmander = getSpecies(4);
+ * const fusion = fusePokemon(bulbasaur, charmander);
+ * // Result: Grass/Fire type with mixed stats
+ */
 export function fusePokemon(head: Species, body: Species): FusionResult {
   const types = fuseTypes(head, body);
 
@@ -93,15 +151,30 @@ export function fusePokemon(head: Species, body: Species): FusionResult {
 
   return { head, body, types, stats, bst, abilities };
 }
+
+/**
+ * Learnset data structure for fused Pokemon
+ * Contains all moves the fusion can learn, organized by method
+ */
 export type FusionLearnset = {
   levelUp: Array<{ level: number; move: string }>;
   tutor: string[];
   tm: string[];
   hm: string[];
   egg: string[];
-  allMoves: string[]; // union of everything above
+  allMoves: string[]; // Union of all moves from all methods
 };
 
+/**
+ * Merge level-up learnsets from two Pokemon
+ * 
+ * When both Pokemon learn the same move, the fusion learns it at the earliest level.
+ * Results are sorted by level, then alphabetically by move name.
+ * 
+ * @param head - Head Pokemon learnset
+ * @param body - Body Pokemon learnset
+ * @returns Merged level-up learnset with earliest levels for shared moves
+ */
 function fuseLevelUp(head: Learnset | null, body: Learnset | null) {
   const a = head ? parseLevelUp(head.LevelUp) : [];
   const b = body ? parseLevelUp(body.LevelUp) : [];
@@ -119,6 +192,15 @@ function fuseLevelUp(head: Learnset | null, body: Learnset | null) {
     .sort((x, y) => x.level - y.level || x.move.localeCompare(y.move));
 }
 
+/**
+ * Merge pipe-delimited move fields (TM, HM, Tutor, Egg)
+ * 
+ * Combines moves from both parents, removes duplicates, and sorts alphabetically.
+ * 
+ * @param headVal - Head Pokemon's move string (pipe-delimited)
+ * @param bodyVal - Body Pokemon's move string (pipe-delimited)
+ * @returns Sorted, deduplicated array of move internal names
+ */
 function fusePipeField(
   headVal: string | null | undefined,
   bodyVal: string | null | undefined
@@ -129,8 +211,20 @@ function fusePipeField(
 }
 
 /**
- * Compute fusion learnset as UNION(head, body).
- * Safe: accepts null learnsets.
+ * Compute complete fusion learnset from two parent Pokemon
+ * 
+ * Creates a union of all moves both Pokemon can learn, organized by method.
+ * Handles null learnsets gracefully (treats as empty).
+ * 
+ * @param head - Head Pokemon learnset (or null)
+ * @param body - Body Pokemon learnset (or null)
+ * @returns Complete fused learnset with all moves and methods
+ * 
+ * @example
+ * const headLearnset = getLearnset("BULBASAUR");
+ * const bodyLearnset = getLearnset("CHARMANDER");
+ * const fusedMoves = fuseLearnset(headLearnset, bodyLearnset);
+ * // fusedMoves.allMoves contains union of both learnsets
  */
 export function fuseLearnset(head: Learnset | null, body: Learnset | null): FusionLearnset {
   const levelUp = fuseLevelUp(head, body);
@@ -151,7 +245,15 @@ export function fuseLearnset(head: Learnset | null, body: Learnset | null): Fusi
 }
 
 /**
- * Convenience helper if you already have a lookup map.
+ * Convenience wrapper for fusing learnsets by internal name
+ * 
+ * Looks up learnsets from a map and fuses them.
+ * Useful when you have internal names but need to look up the learnset data.
+ * 
+ * @param headInternal - Head Pokemon internal name (e.g., "BULBASAUR")
+ * @param bodyInternal - Body Pokemon internal name (e.g., "CHARMANDER")
+ * @param learnsetsByInternal - Map of internal names to Learnset objects
+ * @returns Fused learnset result
  */
 export function fuseLearnsetByInternalName(
   headInternal: string,

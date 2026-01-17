@@ -1,45 +1,55 @@
+/**
+ * Evolution Map - Query Pokemon evolution chains and conditions
+ */
+
 import evolutionsRaw from "../data/evolutions_if.json";
 
-/**
- * Represents a single evolution possibility for a Pokemon
- */
 export type EvoEdge = {
-  /** InternalName of the Pokemon this evolves into */
   to: string;
-  /** Human-readable evolution condition (e.g., "Level 16", "Use Fire Stone") */
   text: string;
 };
 
-/**
- * Maps Pokemon InternalName to their possible evolutions
- * Key: Pokemon InternalName, Value: Array of evolution possibilities
- */
 export type EvoMap = Record<string, EvoEdge[]>;
 
 const evoMap = evolutionsRaw as EvoMap;
 
-/**
- * Get all forward evolutions (what this Pokemon can evolve into)
- * @param internalName - The InternalName of the Pokemon
- * @returns Array of evolution possibilities, empty if none
- */
 export function getForwardEvos(internalName: string): EvoEdge[] {
   return evoMap[internalName] ?? [];
 }
 
 /**
  * Build a reverse evolution index (what each Pokemon evolved from)
- * Useful for finding pre-evolutions
- * @returns Map where key is evolved Pokemon and value is array of pre-evolution sources
+ * 
+ * Creates an inverted map showing pre-evolutions for each Pokemon.
+ * Useful for displaying complete evolution chains or finding base forms.
+ * 
+ * @returns Map where:
+ *   - Key: Evolved Pokemon InternalName
+ *   - Value: Array of pre-evolution sources with their evolution methods
+ * 
+ * @example
+ * const reverseIndex = buildReverseIndex();
+ * reverseIndex.get("CHARIZARD")
+ * // Returns: [{ from: "CHARMELEON", text: "Level 36" }]
+ * 
+ * reverseIndex.get("VAPOREON")
+ * // Returns: [{ from: "EEVEE", text: "Use Water Stone" }]
+ * 
+ * @note For Pokemon with multiple pre-evolutions (rare but possible),
+ * returns all possible pre-evolution paths
  */
 export function buildReverseIndex(): Map<string, { from: string; text: string }[]> {
   const rev = new Map<string, { from: string; text: string }[]>();
+  
+  // Iterate through all Pokemon and their evolution edges
   for (const [from, edges] of Object.entries(evoMap)) {
     for (const e of edges) {
+      // For each evolution target, record where it came from
       const arr = rev.get(e.to) ?? [];
       arr.push({ from, text: e.text });
       rev.set(e.to, arr);
     }
   }
+  
   return rev;
 }

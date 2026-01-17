@@ -1,44 +1,83 @@
+/**
+ * Sprite Tile Component
+ * 
+ * Efficient Pokemon fusion sprite renderer using sprite sheet positioning.
+ * Renders a specific Pokemon fusion by extracting the correct tile from a large sprite sheet.
+ * 
+ * @module components/SpriteTile
+ * 
+ * ## Sprite Sheet System
+ * 
+ * **Format:**
+ * - Location: `/public/spriteless/{headId}.png`
+ * - Dimensions: 960×4896px (each head Pokemon has one sheet)
+ * - Grid: 10 columns × 51 rows = 510 tiles
+ * - Tile size: 96×96px
+ * 
+ * **How it works:**
+ * 1. Load sprite sheet for head Pokemon
+ * 2. Calculate tile position based on body ID
+ * 3. Use CSS `background-position` to show correct tile
+ * 4. Scale using `image-rendering: pixelated` for crisp pixel art
+ * 
+ * **Benefits:**
+ * - 1 HTTP request instead of 510 (massive performance gain)
+ * - Browser caching optimizes repeat views
+ * - Instant sprite switching without loading delays
+ * - Efficient memory usage
+ * 
+ * @example
+ * // Display Bulbasaur (1) with Charmander (4) body
+ * <SpriteTile headId={1} bodyId={4} size={128} title="Bulbasaur/Charmander" />
+ */
+
 import { useMemo, useState } from "react";
 
+/**
+ * Component props for SpriteTile
+ * @property headId - Pokedex number of the head Pokemon (determines which sprite sheet to load)
+ * @property bodyId - Pokedex number of the body Pokemon (determines tile position in sheet)
+ * @property size - Display size in pixels (default: 96)
+ * @property title - Tooltip text on hover
+ */
 type Props = {
-  /** ID determining which sprite sheet to use from /spriteless/{headId}.png */
   headId: number;
-  /** ID determining which tile position within the sheet (0-509) */
   bodyId: number;
-  /** Rendered size in pixels (defaults to 96px) */
   size?: number;
-  /** Tooltip text shown on hover */
   title?: string;
 };
 
 // Sprite sheet dimensions and layout constants
-const SHEET_W = 960;  // Total width of sprite sheet
-const SHEET_H = 4896; // Total height of sprite sheet
-const COLS = 10;      // Number of columns in grid
-const ROWS = 51;      // Number of rows in grid
-const TILE = 96;      // Size of each individual sprite tile
+const SHEET_W = 960;
+const SHEET_H = 4896;
+const COLS = 10;
+const ROWS = 51;
+const TILE = 96;
 
 /**
- * Component to display a Pokemon fusion sprite from a sprite sheet
- * Uses CSS background-position to show the correct tile from a large sprite sheet
- * Each head Pokemon has its own sprite sheet with all possible body combinations
- * Gracefully handles missing sprites with a fallback placeholder
+ * Sprite Tile Component Implementation
+ * 
+ * Renders a Pokemon fusion sprite by:
+ * 1. Loading the sprite sheet for the head Pokemon
+ * 2. Calculating tile position based on body ID
+ * 3. Using CSS background-position to display the correct tile
+ * 4. Scaling to requested size while maintaining pixel art quality
+ * 
+ * Gracefully handles missing sprite sheets with a fallback placeholder.
  */
 export default function SpriteTile({ headId, bodyId, size = 96, title }: Props) {
-  // Track if the sprite sheet failed to load
   const [broken, setBroken] = useState(false);
 
-  // Calculate which tile to show based on bodyId
+  // Calculate tile position in sprite sheet based on body ID
   const { x, y } = useMemo(() => {
-    // First cell in sheet is empty, so tileIndex directly equals bodyId
     const col = bodyId % COLS;
     const row = Math.floor(bodyId / COLS);
-    // Negative offsets for background-position to show the correct tile
     return { x: -(col * TILE), y: -(row * TILE) };
   }, [bodyId]);
 
   const url = `/spriteless/${headId}.png`;
 
+  // Fallback display when sprite sheet fails to load
   if (broken) {
     return (
       <div
@@ -52,6 +91,7 @@ export default function SpriteTile({ headId, bodyId, size = 96, title }: Props) 
           placeItems: "center",
           fontSize: 12,
           opacity: 0.7,
+          backgroundColor: "#f5f5f5",
         }}
       >
         missing
@@ -59,6 +99,7 @@ export default function SpriteTile({ headId, bodyId, size = 96, title }: Props) 
     );
   }
 
+  // Render sprite using CSS background-position trick
   return (
     <div
       title={title}
@@ -69,12 +110,12 @@ export default function SpriteTile({ headId, bodyId, size = 96, title }: Props) 
         border: "1px solid #ddd",
         backgroundImage: `url(${url})`,
         backgroundRepeat: "no-repeat",
-        backgroundSize: `${SHEET_W}px ${SHEET_H}px`,
-        backgroundPosition: `${x}px ${y}px`,
-        imageRendering: "pixelated",
+        backgroundSize: `${SHEET_W}px ${SHEET_H}px`, // Scale sheet to actual size
+        backgroundPosition: `${x}px ${y}px`, // Position to show correct tile
+        imageRendering: "pixelated", // Crisp pixel art (no anti-aliasing)
       }}
     >
-      {/* Preload check: if the sheet 404s, fall back */}
+      {/* Hidden img element for error detection */}
       <img
         src={url}
         alt=""

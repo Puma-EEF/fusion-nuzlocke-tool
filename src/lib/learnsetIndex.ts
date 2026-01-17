@@ -1,11 +1,52 @@
+/**
+ * Learnset Index Builder
+ * 
+ * Creates searchable indices for move learning data.
+ * Enables efficient "which Pokemon can learn this move?" queries.
+ * 
+ * @module lib/learnsetIndex
+ * 
+ * ## Purpose
+ * The learnset index maps move internal names to sets of Pokemon that can learn them.
+ * This powers the move filter in the Pokedex, allowing users to search for Pokemon
+ * by move name.
+ * 
+ * ## Index Structure
+ * ```
+ * Map<string, Set<string>>
+ *   ↓        ↓      ↓
+ *   Move     Set of Pokemon InternalNames that can learn it
+ * ```
+ * 
+ * ## Methods Indexed
+ * - Level-up moves
+ * - TM moves
+ * - HM moves
+ * - Tutor moves
+ * - Egg moves
+ * 
+ * @example
+ * const index = buildLearnsetMoveIndex(learnsets);
+ * const surfers = index.get("SURF");
+ * // Returns Set of all Pokemon that can learn Surf
+ */
+
 import type { Learnset } from "./types/learnset";
 
 /**
- * Builds a searchable index of all moves each Pokemon can learn
- * Combines moves from all learning methods: level-up, tutor, and egg moves
+ * Build an index mapping moves to Pokemon that can learn them
  * 
- * @param learnsets - Array of all Pokemon learnsets from data
- * @returns Map where key is Pokemon InternalName and value is Set of move InternalNames
+ * Parses all learnset data and creates a lookup structure for efficient
+ * move-based filtering. This enables "Show me all Pokemon that can learn Surf"
+ * type queries in O(1) time.
+ * 
+ * @param learnsets - Array of all Pokemon learnsets
+ * @returns Map where keys are Pokemon InternalNames and values are Sets of move InternalNames
+ * 
+ * @example
+ * const index = buildLearnsetMoveIndex(allLearnsets);
+ * const bulbasaurMoves = index.get("BULBASAUR");
+ * // Returns Set containing all moves Bulbasaur can learn
  */
 export function buildLearnsetMoveIndex(learnsets: Learnset[]) {
   const index = new Map<string, Set<string>>();
@@ -13,8 +54,7 @@ export function buildLearnsetMoveIndex(learnsets: Learnset[]) {
   for (const ls of learnsets) {
     const set = new Set<string>();
 
-    // Parse level-up moves: "1:TELEPORT|4:CONFUSION|..."
-    // Format: level:MOVENAME separated by pipes
+    // Parse level-up moves (format: "level:MOVE|level:MOVE")
     if (ls.LevelUp) {
       const parts = ls.LevelUp.split("|");
       for (const p of parts) {
@@ -26,9 +66,8 @@ export function buildLearnsetMoveIndex(learnsets: Learnset[]) {
       }
     }
 
-    // Parse tutor moves and egg moves: "MOVE|MOVE|..."
-    // Format: simple pipe-separated move names
-    for (const field of [ls.TutorMoves,ls.TMMoves, ls.HMMoves, ls.EggMoves]) {
+    // Parse pipe-delimited move lists (TM, HM, Tutor, Egg)
+    for (const field of [ls.TutorMoves, ls.TMMoves, ls.HMMoves, ls.EggMoves]) {
       if (!field) continue;
       for (const m of field.split("|")) {
         const moveInternal = m.trim();

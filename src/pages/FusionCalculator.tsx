@@ -1,22 +1,69 @@
+/**
+ * Fusion Calculator Page
+ * 
+ * Interactive tool for calculating and comparing Pokemon fusion combinations.
+ * Allows users to select two Pokemon and view both possible fusion results
+ * with detailed stat breakdowns, type inheritance, and complete learnsets.
+ * 
+ * @module pages/FusionCalculator
+ * 
+ * ## Features
+ * - Bidirectional fusion preview (A+B and B+A)
+ * - Real-time stat calculations using fusion formulas
+ * - Type inheritance visualization
+ * - Combined ability pools from both parents
+ * - Complete fused learnset display
+ * - Sprite preview for each fusion
+ * 
+ * ## Fusion Mechanics
+ * **Stats:**
+ * - Physical (ATK, DEF, SPE): 2/3 body + 1/3 head
+ * - Special (HP, SPA, SPD): 2/3 head + 1/3 body
+ * 
+ * **Types:**
+ * - Primary type from head Pokemon
+ * - Secondary type from body Pokemon (with redundancy checks)
+ * 
+ * **Abilities:**
+ * - Union of all abilities from both Pokemon (including hidden abilities)
+ */
+
 import { useMemo, useState } from "react";
 import speciesRaw from "../data/species.json";
 import type { Species } from "../lib/types/species";
-import { fusePokemon } from "../lib/fusion";
+import learnsetsRaw from "../data/learnsets.json";
+import type { Learnset } from "../lib/types/learnset";
+import { fusePokemon, fuseLearnsetByInternalName } from "../lib/fusion";
 import SpriteTile from "../components/SpriteTile";
+import movesRaw from "../data/moves.json";
+import type { Move } from "../lib/types/moves";
+import LearnsetViewer from "../components/moves/LearnsetViewer";
 
-// Filter to only base forms (Form 0) for simplicity
 const speciesList = (speciesRaw as Species[]).filter((s) => s.Form === 0);
+const learnsetsList = learnsetsRaw as Learnset[];
+const learnsetsByInternal = new Map<string, Learnset>(
+  learnsetsList.map((l) => [l.InternalName, l])
+);
+const movesList = movesRaw as Move[];
+const movesByInternal = new Map<string, Move>(
+  movesList.map((m) => [m.InternalName, m])
+);
 
 /**
  * Search for a Pokemon by name or internal name
- * @param input - User search text
- * @returns Matching Pokemon species or null if not found
+ * 
+ * Search priority:
+ * 1. Exact display name match (case-insensitive)
+ * 2. Exact internal name match (case-insensitive)
+ * 3. Partial display name match (case-insensitive)
+ * 
+ * @param input - User search query
+ * @returns Matching Species or null if not found
  */
 function findByNameOrInternal(input: string): Species | null {
   const q = input.trim().toLowerCase();
   if (!q) return null;
 
-  // Try exact name match, then exact internal name, then partial match
   return (
     speciesList.find((s) => s.Name.toLowerCase() === q) ??
     speciesList.find((s) => s.InternalName.toLowerCase() === q) ??
@@ -26,8 +73,17 @@ function findByNameOrInternal(input: string): Species | null {
 }
 
 /**
- * Card component displaying fusion results
- * Shows sprite, types, BST, and detailed stat breakdown
+ * Fusion Result Card Component
+ * 
+ * Displays a single fusion combination with:
+ * - Sprite preview
+ * - Type combination
+ * - Base stat breakdown
+ * - Complete learnset organized by method
+ * 
+ * @param title - Display title for the fusion (e.g., "Fusion A → B")
+ * @param head - Head Pokemon (provides primary type and special stats)
+ * @param body - Body Pokemon (provides physical stats and secondary type)
  */
 function FusionCard({
   title,
@@ -39,6 +95,11 @@ function FusionCard({
   body: Species;
 }) {
   const result = useMemo(() => fusePokemon(head, body), [head, body]);
+
+  const learnset = useMemo(
+    () => fuseLearnsetByInternalName(head.InternalName, body.InternalName, learnsetsByInternal),
+    [head.InternalName, body.InternalName]
+  );
 
   return (
     <div style={{ border: "1px solid #ddd", borderRadius: 14, padding: 14 }}>
@@ -72,17 +133,16 @@ function FusionCard({
         <li>SpD: {result.stats.spd}</li>
         <li>Spe: {result.stats.spe}</li>
       </ul>
+      <h3>Learnset</h3>
+      <LearnsetViewer
+        learnset={learnset}
+        movesByInternal={movesByInternal}
+        defaultOpen={{ levelUp: true }} 
+      />
     </div>
   );
 }
 
-/**
- * Fusion Calculator page component
- * Allows users to select two Pokemon and see both possible fusion combinations:
- * - A as head + B as body
- * - B as head + A as body
- * Shows how stats, types, and abilities combine for each fusion
- */
 export default function FusionCalculator() {
   const [aText, setAText] = useState("Bulbasaur");
   const [bText, setBText] = useState("Charmander");

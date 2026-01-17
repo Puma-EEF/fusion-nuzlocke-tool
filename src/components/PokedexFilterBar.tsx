@@ -1,3 +1,45 @@
+/**
+ * Pokedex Filter Bar Component
+ * 
+ * Comprehensive filtering and sorting controls for the Pokedex and Box views.
+ * Provides search, type filters, ability/move search with autocomplete, sorting,
+ * and rarity exclusion toggles.
+ * 
+ * @module components/PokedexFilterBar
+ * 
+ * ## Filter Capabilities
+ * 
+ * **Name Search:**
+ * - Searches both display name and internal name
+ * - Case-insensitive partial matching
+ * 
+ * **Type Filtering:**
+ * - Primary type: ANY or specific type
+ * - Secondary type: NONE, ANY, or specific type
+ * - Enables precise type combination searches
+ * 
+ * **Ability Search:**
+ * - Autocomplete with datalist
+ * - Searches by ability name or internal name
+ * - Finds Pokemon with matching abilities
+ * 
+ * **Move Search:**
+ * - Autocomplete with datalist
+ * - Searches by move name or internal name
+ * - Finds Pokemon that can learn the move (any method)
+ * 
+ * **Sorting:**
+ * - Sort by: DEX, HP, ATK, DEF, SPA, SPD, SPE, BST
+ * - Direction: Ascending or Descending
+ * 
+ * **Rarity Filters:**
+ * - Toggle to exclude legendary Pokemon
+ * - Toggle to exclude sub-legendary Pokemon
+ * 
+ * **Filter Target:**
+ * - Applies filters to Pokedex or Box depending on current view
+ */
+
 import { useMemo } from "react";
 import speciesRaw from "../data/species.json";
 import abilitiesRaw from "../data/abilities.json";
@@ -9,7 +51,6 @@ import type { Move } from "../lib/types/moves";
 import type { PokedexFiltersState, SortBy, SortDir } from "../lib/types/pokedexFilters";
 
 type PokedexFilterBarProps = PokedexFiltersState & {
-  /** Current page, used to determine which buttons should be disabled */
   currentPage?: "pokedex" | "boxTeam";
 };
 
@@ -17,18 +58,7 @@ const speciesList = speciesRaw as Species[];
 const abilitiesList = abilitiesRaw as Ability[];
 const movesList = movesRaw as Move[];
 
-/**
- * Filter bar component for the Pokedex
- * Provides comprehensive filtering options including:
- * - Name search
- * - Type filtering (dual type support)
- * - Ability search with autocomplete
- * - Move search with autocomplete
- * - Sorting by various stats
- * - Legendary/sub-legendary exclusion
- */
 export default function PokedexFilterBar(props: PokedexFilterBarProps) {
-  // Extract all unique types from the species list
   const allTypes = useMemo(() => {
     const set = new Set<string>();
     for (const s of speciesList) {
@@ -40,7 +70,6 @@ export default function PokedexFilterBar(props: PokedexFilterBarProps) {
 
   return (
     <div style={{ borderBottom: "1px solid #ddd", padding: 10 }}>
-      {/* Stage 1 Filters: Basic search and type/ability/move filtering */}
       <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
         <input
           value={props.nameQuery}
@@ -113,8 +142,6 @@ export default function PokedexFilterBar(props: PokedexFilterBarProps) {
         </button>
       </div>
 
-
-      {/* Stage 2 Filters: Sorting and advanced filtering options */}
       <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center", marginTop: 10 }}>
         <select
           value={props.sortBy}

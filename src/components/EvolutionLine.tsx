@@ -1,13 +1,41 @@
+/**
+ * Evolution Line Component
+ * 
+ * Displays complete Pokemon evolution chains with visual sprites and evolution conditions.
+ * Handles linear evolutions (e.g., Charmander → Charmeleon → Charizard) and branching
+ * evolutions (e.g., Eevee → Vaporeon/Jolteon/Flareon/etc.).
+ * 
+ * @module components/EvolutionLine
+ * 
+ * ## Features
+ * - Recursive rendering of evolution trees
+ * - Visual sprites for each evolution stage
+ * - Evolution conditions displayed (level, item, trade, etc.)
+ * - Handles branching evolutions (Eevee, Tyrogue, etc.)
+ * - Support for Pokemon forms (Alolan, Galarian, etc.)
+ * 
+ * ## Architecture
+ * Uses recursion to build evolution trees:
+ * - Base case: Pokemon with no evolutions (leaf node)
+ * - Recursive case: Pokemon with evolutions (renders children recursively)
+ * 
+ * @example
+ * <EvolutionLine
+ *   speciesList={allSpecies}
+ *   internalName="CHARMANDER"
+ * />
+ */
+
 import { useMemo } from "react";
 import type { Species } from "../lib/types/species";
 import SpriteTile from "./SpriteTile";
 import { buildReverseIndex, getForwardEvos } from "../lib/evolutionMap";
 
 /**
- * Get the display name for a Pokemon, including form name if applicable
- * @param speciesList - Full list of all Pokemon species
- * @param internalName - Internal name to look up
- * @returns Formatted display name (e.g., "Pikachu" or "Raichu (Alolan)")
+ * Get display name for a Pokemon, including form name if applicable
+ * @param speciesList - Array of all species data
+ * @param internalName - Internal name to look up (e.g., "CHARIZARD")
+ * @returns Display name like "Charizard" or "Charizard (Mega X)"
  */
 function displayName(speciesList: Species[], internalName: string) {
   const s = speciesList.find((x) => x.InternalName === internalName);
@@ -16,18 +44,23 @@ function displayName(speciesList: Species[], internalName: string) {
 }
 
 /**
- * Get the Pokedex ID for a Pokemon
- * @param speciesList - Full list of all Pokemon species
+ * Get Pokedex ID for a Pokemon by internal name
+ * @param speciesList - Array of all species data
  * @param internalName - Internal name to look up
- * @returns Pokedex ID or null if not found
+ * @returns Pokedex number or null if not found
  */
 function dexId(speciesList: Species[], internalName: string) {
   return speciesList.find((x) => x.InternalName === internalName)?.ID ?? null;
 }
 
 /**
- * Renders a single Pokemon node in the evolution tree
- * Shows sprite, name, and Pokedex number
+ * Evolution Node Component
+ * 
+ * Displays a single Pokemon in the evolution chain with sprite and name.
+ * Used as a building block for the recursive evolution tree.
+ * 
+ * @param speciesList - Array of all species for lookups
+ * @param internalName - Pokemon to display
  */
 function Node({
   speciesList,
@@ -53,6 +86,7 @@ function Node({
             placeItems: "center",
             fontSize: 12,
             opacity: 0.7,
+            backgroundColor: "#f5f5f5",
           }}
         >
           missing
@@ -71,7 +105,22 @@ function Node({
 
 /**
  * Recursively renders the evolution tree starting from a Pokemon
- * Shows the current Pokemon and all its forward evolutions with conditions
+ * 
+ * Renders:
+ * - Current Pokemon node
+ * - Arrow and evolution condition for each path
+ * - Recursive tree for each evolved form
+ * 
+ * Base case: If Pokemon has no forward evolutions, render just the node.
+ * Recursive case: Render node, then render each evolution path with conditions.
+ * 
+ * Handles branching evolutions (e.g., Eevee) by rendering multiple paths vertically.
+ * 
+ * @example
+ * Eevee → (Use Water Stone) → Vaporeon
+ *      → (Use Thunder Stone) → Jolteon
+ *      → (Use Fire Stone) → Flareon
+ *      ...
  */
 function Tree({
   speciesList,
@@ -108,8 +157,25 @@ function Tree({
 
 /**
  * Component that displays the complete evolution line for a Pokemon
- * Automatically finds the root of the evolution tree and displays all branches
- * Shows evolution conditions (level, items, etc.) between each stage
+ * 
+ * Algorithm:
+ * 1. Build reverse index of all evolutions (what each Pokemon evolved from)
+ * 2. Walk backward from current Pokemon to find root(s) of evolution tree
+ * 3. Render forward from each root using recursive Tree component
+ * 
+ * Features:
+ * - Automatically finds base form even when viewing evolved Pokemon
+ * - Handles Pokemon with multiple pre-evolutions (rare but possible)
+ * - Shows all evolution branches from the root
+ * - Displays evolution conditions between each stage
+ * - Graceful message when no evolution data exists
+ * 
+ * @example
+ * // Viewing Charizard will show: Charmander → Charmeleon → Charizard
+ * <EvolutionLine speciesList={species} internalName="CHARIZARD" />
+ * 
+ * // Viewing Eevee will show all 8+ evolution paths
+ * <EvolutionLine speciesList={species} internalName="EEVEE" />
  */
 export default function EvolutionLine({
   speciesList,
@@ -120,7 +186,6 @@ export default function EvolutionLine({
 }) {
   const reverseIndex = useMemo(() => buildReverseIndex(), []);
 
-  // Find root Pokemon by walking backward through the evolution tree
   const roots = useMemo(() => {
     const seen = new Set<string>();
     const stack = [internalName];

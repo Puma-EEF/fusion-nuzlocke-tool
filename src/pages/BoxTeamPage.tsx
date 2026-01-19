@@ -1,38 +1,28 @@
 /**
- * Box & Team Management Page
- * 
- * Complete Nuzlocke box and team management system with persistent storage.
- * Supports both base Pokemon and custom fusions with IV/nature configuration.
- * 
- * @module pages/BoxTeamPage
- * 
- * ## Features
- * **Box Management:**
- * - Add base Pokemon or fusions to storage
- * - Configure IVs (Individual Values) for each Pokemon
- * - Set natures for stat calculations
- * - Track rarity tiers (Normal, Sub-Legendary, Legendary)
- * - Filter box contents using full Pokedex filter system
- * - Tab views: All, Base forms only, Fusions only
- * - Automatic localStorage persistence
- * 
- * **Team Building:**
- * - Build active 6-Pokemon party
- * - Add from box or create new entries
- * - View effective stats with IV/nature modifiers
- * - Visual team display with sprites
- * 
- * **Stat Calculation:**
- * - Real-time effective stat computation at level 50
- * - Nature-based stat modifiers (+10%/-10%)
- * - IV influence on final stats
- * 
- * ## Data Flow
- * 1. Box state lifted to App.tsx for persistence
- * 2. Changes trigger automatic localStorage save
- * 3. Filters apply to box contents when filterTarget === "box"
- * 4. Team is derived subset of box entries
+ * BoxTeamPage (SKELETON / TESTING GROUND)
+ *
+ * Role (LOCKED)
+ * - Owns the 3-panel layout:
+ *   - Left: Pokedex panel (browse/filter, view-only source)
+ *   - Middle: Box panel (stored mons, editable source)
+ *   - Right: Info panel (BoxManagement)
+ *
+ * What this page should do
+ * - Render UI for left + middle panels.
+ * - Forward user clicks to BoxManagement as MonRefs:
+ *   - dex:<dexKey> when clicking a dex entry
+ *   - box:<boxId> when clicking a box entry
+ * - Add "Add to Box" button in Pokedex entries.
+ *   - create new BoxMon with default params to Box.
+ *
+ * What this page should NOT become
+ * - It should NOT implement tool selection logic or per-tab selection caps.
+ * - It should NOT implement the Info tools (Stats / Set Moninfo / Fusion...) directly.
+ *
+ * TEMP notes
+ * - activeBoxId can exist only as a middle-panel highlight until BoxManagement wiring is complete.
  */
+
 
 import { useMemo, useState } from "react";
 
@@ -44,6 +34,8 @@ import { newBoxId } from "../lib/boxStorage";
 import type { BoxMon } from "../lib/types/box";
 import { DEFAULT_IVS, DEFAULT_NATURE } from "../lib/types/box";
 import { computeEffectiveStats } from "../lib/effectiveStats";
+import { BoxManagement } from "../components/box/BoxManagement";
+import type { MonRef } from "../components/box/Tabs/tabTypes";
 
 import speciesRaw from "../data/species.json";
 import type { Species } from "../lib/types/species";
@@ -81,7 +73,6 @@ type BoxTeamPageProps = {
 };
 
 const speciesList = speciesRaw as Species[];
-const LS_KEY = "fusion-nuzlocke-tool:box:v1";
 
 type BoxTab = "ALL" | "BASE" | "FUSED";
 
@@ -134,6 +125,8 @@ export default function BoxTeamPage(props: BoxTeamPageProps) {
     "MODEST","MILD","QUIET","BASHFUL","RASH",
     "CALM","GENTLE","SASSY","CAREFUL","QUIRKY",
   ];
+  const [forwardedClick, setForwardedClick] = useState<MonRef | null>(null);
+  const [forwardNonce, setForwardNonce] = useState(0);
 
   function updateBoxMon(boxId: string, patch: Partial<BoxMon>) {
     props.setBox(props.box.map((b) => (b.boxId === boxId ? { ...b, ...patch } : b)));
@@ -323,7 +316,11 @@ export default function BoxTeamPage(props: BoxTeamPageProps) {
                   <button
                     key={b.boxId}
                     type="button"
-                    onClick={() => setActiveBoxId(b.boxId)}
+                    onClick={() => {
+                      setActiveBoxId(b.boxId);
+                      setForwardNonce((n) => n + 1);
+                      setForwardedClick(`box:${b.boxId}`);
+                    }}
                     title={titleForBoxMon(b)}
                     style={{
                       padding: 0,
@@ -347,101 +344,14 @@ export default function BoxTeamPage(props: BoxTeamPageProps) {
       </main>
 
       {/* Right panel placeholder (Info panel comes after Dex) */}
-      <aside
-        style={{
-          borderLeft: "1px solid #eee",
-          padding: 12,
-          overflow: "auto",
-        }}
-      >
+      <aside>
         <h3 style={{ marginTop: 0 }}>Info</h3>
 
-          {!selectedBoxMon ? (
-            <div style={{ fontSize: 12, opacity: 0.75 }}>
-              Select a Pokémon in the Box to edit Nature + IVs.
-            </div>
-          ) : (
-            <div style={{ display: "grid", gap: 12 }}>
-              <div style={{ fontSize: 12, opacity: 0.8 }}>
-                Selected: <b>{selectedBoxMon.boxId}</b>
-              </div>
-
-              <div style={{ display: "grid", gap: 6 }}>
-                <div style={{ fontSize: 12, fontWeight: 800 }}>Nature</div>
-                <select
-                  value={selectedBoxMon.nature}
-                  onChange={(e) =>
-                    updateBoxMon(selectedBoxMon.boxId, { nature: e.target.value as NatureId })
-                  }
-                  style={{ padding: 8, borderRadius: 10, border: "1px solid #ddd" }}
-                >
-                  {NATURE_OPTIONS.map((n) => (
-                    <option key={n} value={n}>
-                      {n}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div style={{ display: "grid", gap: 6 }}>
-                <div style={{ fontSize: 12, fontWeight: 800 }}>IVs (0–31)</div>
-                {eff ? (
-                  <div style={{ borderTop: "1px solid #eee", paddingTop: 10 }}>
-                    <div style={{ fontSize: 12, fontWeight: 800, marginBottom: 6 }}>
-                      Effective stats (Lvl 50, IV + Nature)
-                    </div>
-                    <div style={{ fontSize: 12, opacity: 0.9, lineHeight: 1.6 }}>
-                      HP <b>{eff.hp}</b> · Atk <b>{eff.atk}</b> · Def <b>{eff.def}</b> · SpA <b>{eff.spa}</b> · SpD <b>{eff.spd}</b> · Spe <b>{eff.spe}</b>
-                    </div>
-                  </div>
-                ) : (
-                  <div style={{ fontSize: 12, opacity: 0.7 }}>
-                    Effective stats display will be added for fusions next.
-                  </div>
-                )}
-
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
-                  {(
-                    [
-                      ["hp", "HP"],
-                      ["atk", "Atk"],
-                      ["def", "Def"],
-                      ["spa", "SpA"],
-                      ["spd", "SpD"],
-                      ["spe", "Spe"],
-                    ] as const
-                  ).map(([key, label]) => (
-                    <label
-                      key={key}
-                      style={{
-                        display: "grid",
-                        gridTemplateColumns: "50px 1fr",
-                        gap: 8,
-                        alignItems: "center",
-                        fontSize: 12,
-                      }}
-                    >
-                      <span style={{ opacity: 0.8 }}>{label}</span>
-                      <input
-                        type="number"
-                        min={0}
-                        max={31}
-                        value={selectedBoxMon.ivs[key]}
-                        onChange={(e) => {
-                          const next = clampIV(Number(e.target.value));
-                          updateBoxMon(selectedBoxMon.boxId, {
-                            ivs: { ...selectedBoxMon.ivs, [key]: next },
-                          });
-                        }}
-                        style={{ padding: 8, borderRadius: 10, border: "1px solid #ddd" }}
-                      />
-                    </label>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-
+        <BoxManagement
+          box={props.box}
+          setBox={props.setBox}
+          forwardedClick={forwardedClick ? { ref: forwardedClick, nonce: forwardNonce } : null}
+        />
       </aside>
 
     </div>
